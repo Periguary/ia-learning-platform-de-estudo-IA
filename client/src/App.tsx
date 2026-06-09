@@ -5,34 +5,51 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import LearningPath from "./pages/LearningPath";
+import CourseDetail from "./pages/CourseDetail";
+import Projects from "./pages/Projects";
+import ProjectDetail from "./pages/ProjectDetail";
+import Careers from "./pages/Careers";
+import CareerDetail from "./pages/CareerDetail";
+import Certifications from "./pages/Certifications";
+import Dashboard from "./pages/Dashboard";
+import Navigation from "./components/Navigation";
+import Footer from "./components/Footer";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/learning-path"} component={LearningPath} />
+      <Route path={"/course/:phase/:module"} component={CourseDetail} />
+      <Route path={"/projects"} component={Projects} />
+      <Route path={"/project/:id"} component={ProjectDetail} />
+      <Route path={"/careers"} component={Careers} />
+      <Route path={"/career/:id"} component={CareerDetail} />
+      <Route path={"/certifications"} component={Certifications} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider
-        defaultTheme="light"
-        // switchable
+        defaultTheme="dark"
+        switchable
       >
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <div className="min-h-screen flex flex-col bg-background text-foreground">
+            <Navigation />
+            <main className="flex-1">
+              <Router />
+            </main>
+            <Footer />
+          </div>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
