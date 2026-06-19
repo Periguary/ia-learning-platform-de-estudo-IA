@@ -1,11 +1,14 @@
-import { Link } from "wouter";
+'use client';
+
 import { ArrowRight, Zap, Users, Award, TrendingUp, BookOpen, Code2, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { useLocation } from "wouter";
 
 export default function Home() {
   const { user } = useAuth();
+  const [, navigate] = useLocation();
 
   const phases = [
     {
@@ -75,18 +78,21 @@ export default function Home() {
 
   const testimonials = [
     {
+      id: "testimonial-1",
       name: "Carlos Silva",
       role: "Data Scientist",
       content: "A plataforma me ajudou a fazer a transição de carreira. Conteúdo excelente e bem estruturado!",
       avatar: "👨‍💼",
     },
     {
+      id: "testimonial-2",
       name: "Ana Santos",
       role: "ML Engineer",
       content: "Os projetos práticos foram fundamentais para consolidar meu conhecimento em produção.",
       avatar: "👩‍💻",
     },
     {
+      id: "testimonial-3",
       name: "João Oliveira",
       role: "AI Specialist",
       content: "Melhor investimento que fiz em minha formação. Recomendo para todos!",
@@ -96,18 +102,22 @@ export default function Home() {
 
   const faqs = [
     {
+      id: "faq-1",
       question: "Qual é o tempo estimado para completar a trilha?",
       answer: "A trilha completa leva aproximadamente 12-18 meses, dependendo do seu ritmo. Você pode estudar no seu próprio tempo.",
     },
     {
+      id: "faq-2",
       question: "Preciso ter conhecimento prévio?",
       answer: "Não! A trilha começa do zero com fundamentos matemáticos. Qualquer pessoa pode começar.",
     },
     {
+      id: "faq-3",
       question: "Os certificados são reconhecidos?",
       answer: "Sim! Oferecemos certificações de provedores renomados como Google Cloud, Kaggle e DeepLearning.AI.",
     },
     {
+      id: "faq-4",
       question: "Há suporte durante o aprendizado?",
       answer: "Sim! Temos comunidade ativa, FAQ e recursos de suporte disponíveis.",
     },
@@ -140,11 +150,12 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               {user ? (
-                <Link href="/learning-path">
-                  <a className="btn-primary inline-flex items-center justify-center gap-2">
-                    Começar Trilha <ArrowRight className="w-5 h-5" />
-                  </a>
-                </Link>
+                <button
+                  onClick={() => navigate("/learning-path")}
+                  className="btn-primary inline-flex items-center justify-center gap-2"
+                >
+                  Começar Trilha <ArrowRight className="w-5 h-5" />
+                </button>
               ) : (
                 <Button
                   asChild
@@ -210,7 +221,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {phases.map((phase, index) => (
               <div
-                key={phase.number}
+                key={`phase-${phase.number}`}
                 className="group relative card-hover"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
@@ -228,11 +239,12 @@ export default function Home() {
           </div>
 
           <div className="mt-12 text-center">
-            <Link href="/learning-path">
-              <a className="btn-primary inline-flex items-center gap-2">
-                Explorar Trilha Completa <ArrowRight className="w-5 h-5" />
-              </a>
-            </Link>
+            <button
+              onClick={() => navigate("/learning-path")}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              Explorar Trilha Completa <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </section>
@@ -246,11 +258,10 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <div
-                key={testimonial.name}
+                key={testimonial.id}
                 className="p-6 border border-border rounded-xl bg-background card-hover"
-                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="text-4xl">{testimonial.avatar}</div>
@@ -275,9 +286,9 @@ export default function Home() {
           </div>
 
           <div className="max-w-3xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
+            {faqs.map((faq) => (
               <details
-                key={index}
+                key={faq.id}
                 className="group border border-border rounded-lg bg-card p-6 cursor-pointer hover:border-primary/50 transition-colors"
               >
                 <summary className="flex items-center justify-between font-semibold text-foreground">
@@ -303,11 +314,12 @@ export default function Home() {
           </div>
 
           {user ? (
-            <Link href="/learning-path">
-              <a className="btn-primary inline-flex items-center gap-2">
-                Acessar Trilha <ArrowRight className="w-5 h-5" />
-              </a>
-            </Link>
+            <button
+              onClick={() => navigate("/learning-path")}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              Acessar Trilha <ArrowRight className="w-5 h-5" />
+            </button>
           ) : (
             <Button
               asChild
