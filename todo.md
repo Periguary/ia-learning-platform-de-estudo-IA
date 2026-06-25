@@ -6,6 +6,11 @@
 - [x] Criar componentes base reutilizáveis (Card, Section, Badge, etc)
 - [x] Configurar animações globais e transições suaves
 - [x] Implementar navegação responsiva com menu mobile
+- [x] Adicionar animações hover e transições suaves aos botões de navegação
+- [x] Implementar efeito underline animado em links
+- [x] Criar efeito lift em botões primários
+- [x] Adicionar smooth scale em elementos interativos
+- [x] Respeitar prefers-reduced-motion para acessibilidade
 
 ## FASE 2: Página Inicial
 - [x] Criar hero section impactante com CTA

@@ -25,7 +25,7 @@ export default function Navigation() {
         {/* Logo */}
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 font-bold text-xl gradient-text hover:opacity-80 transition-opacity bg-transparent border-none cursor-pointer"
+          className="flex items-center gap-2 font-bold text-xl gradient-text bg-transparent border-none cursor-pointer nav-button"
         >
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold">AI</span>
@@ -39,7 +39,7 @@ export default function Navigation() {
             <button
               key={item.href}
               onClick={() => navigate(item.href)}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer"
+              className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer nav-underline color-transition"
             >
               {item.label}
             </button>
@@ -71,7 +71,7 @@ export default function Navigation() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate("/dashboard")}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer"
+                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer nav-underline color-transition"
               >
                 Dashboard
               </button>
@@ -118,7 +118,7 @@ export default function Navigation() {
                   navigate(item.href);
                   setIsOpen(false);
                 }}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer w-full text-left"
+                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer w-full text-left nav-button color-transition"
               >
                 {item.label}
               </button>

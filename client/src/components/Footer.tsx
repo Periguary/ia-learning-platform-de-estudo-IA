@@ -35,7 +35,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 font-bold text-lg gradient-text hover:opacity-80 transition-opacity mb-4 bg-transparent border-none cursor-pointer"
+              className="flex items-center gap-2 font-bold text-lg gradient-text mb-4 bg-transparent border-none cursor-pointer nav-button"
             >
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">AI</span>
@@ -86,7 +86,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <button
                       onClick={() => navigate(link.href)}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-left"
+                      className="text-sm text-muted-foreground bg-transparent border-none cursor-pointer text-left nav-underline color-transition"
                     >
                       {link.label}
                     </button>

@@ -205,7 +205,7 @@ export default function Dashboard() {
                 <button
                   key={phase.id}
                   onClick={() => navigate(`/course/${phase.id}/overview`)}
-                  className="group w-full p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all flex items-center justify-between text-left"
+                  className="group w-full p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 flex items-center justify-between text-left smooth-scale color-transition"
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">
@@ -236,7 +236,7 @@ export default function Dashboard() {
               <div className="space-y-3">
                 <button
                   onClick={() => navigate("/learning-path")}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors w-full text-left bg-transparent border-none cursor-pointer"
+                  className="flex items-center gap-3 p-3 rounded-lg w-full text-left bg-transparent border-none cursor-pointer nav-button color-transition"
                 >
                   <BookOpen className="w-5 h-5 text-primary" />
                   <div>
@@ -246,7 +246,7 @@ export default function Dashboard() {
                 </button>
                 <button
                   onClick={() => navigate("/projects")}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors w-full text-left bg-transparent border-none cursor-pointer"
+                  className="flex items-center gap-3 p-3 rounded-lg w-full text-left bg-transparent border-none cursor-pointer nav-button color-transition"
                 >
                   <Target className="w-5 h-5 text-secondary" />
                   <div>
@@ -274,7 +274,7 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Comece sua jornada de aprendizado em IA hoje mesmo.</p>
             <button
               onClick={() => navigate("/learning-path")}
-              className="btn-primary inline-flex items-center gap-2"
+              className="btn-primary inline-flex items-center gap-2 button-lift"
             >
               Ir para Trilha de Aprendizado
             </button>
