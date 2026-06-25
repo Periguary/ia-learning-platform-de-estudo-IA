@@ -1,7 +1,8 @@
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 
 export default function Footer() {
+  const [, navigate] = useLocation();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
@@ -32,14 +33,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="md:col-span-1">
-            <Link href="/">
-              <a className="flex items-center gap-2 font-bold text-lg gradient-text hover:opacity-80 transition-opacity mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">AI</span>
-                </div>
-                <span>IA Academy</span>
-              </a>
-            </Link>
+            <button
+              onClick={() => navigate("/")}
+              className="flex items-center gap-2 font-bold text-lg gradient-text hover:opacity-80 transition-opacity mb-4 bg-transparent border-none cursor-pointer"
+            >
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">AI</span>
+              </div>
+              <span>IA Academy</span>
+            </button>
             <p className="text-sm text-muted-foreground mb-4">
               Plataforma educacional completa para dominar Inteligência Artificial e Ciência de Dados.
             </p>
@@ -82,11 +84,12 @@ export default function Footer() {
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href}>
-                      <a className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                        {link.label}
-                      </a>
-                    </Link>
+                    <button
+                      onClick={() => navigate(link.href)}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-left"
+                    >
+                      {link.label}
+                    </button>
                   </li>
                 ))}
               </ul>

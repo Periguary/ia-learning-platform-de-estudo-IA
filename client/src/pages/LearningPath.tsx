@@ -1,8 +1,9 @@
-import { Link } from "wouter";
 import { ArrowRight, Lock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function LearningPath() {
+  const [, navigate] = useLocation();
   const phases = [
     {
       id: 1,
@@ -139,8 +140,8 @@ export default function LearningPath() {
       <section className="py-20">
         <div className="container">
           <div className="space-y-12">
-            {phases.map((phase, index) => (
-              <div key={phase.id} className="space-y-6">
+            {phases.map((phase) => (
+              <div key={`phase-${phase.id}`} className="space-y-6">
                 {/* Phase Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 border border-border rounded-xl bg-card hover:border-primary/50 transition-colors">
                   <div className="flex items-start gap-4">
@@ -162,27 +163,30 @@ export default function LearningPath() {
                       </div>
                     </div>
                   </div>
-                  <Link href={`/course/${phase.id}/overview`}>
-                    <a className="btn-primary inline-flex items-center gap-2 whitespace-nowrap">
-                      Explorar <ArrowRight className="w-5 h-5" />
-                    </a>
-                  </Link>
+                  <button
+                    onClick={() => navigate(`/course/${phase.id}/overview`)}
+                    className="btn-primary inline-flex items-center gap-2 whitespace-nowrap"
+                  >
+                    Explorar <ArrowRight className="w-5 h-5" />
+                  </button>
                 </div>
 
                 {/* Modules Grid */}
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 ml-0 md:ml-12">
                   {phase.modules.map((module) => (
-                    <Link key={module.id} href={`/course/${phase.id}/${module.id}`}>
-                      <a className="group p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all">
-                        <div className="flex items-start justify-between mb-3">
-                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                            {module.title}
-                          </h3>
-                          <CheckCircle2 className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                        </div>
-                        <p className="text-sm text-muted-foreground">{module.lessons} aulas</p>
-                      </a>
-                    </Link>
+                    <button
+                      key={`module-${module.id}`}
+                      onClick={() => navigate(`/course/${phase.id}/${module.id}`)}
+                      className="group p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all text-left w-full"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {module.title}
+                        </h3>
+                        <CheckCircle2 className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <p className="text-sm text-muted-foreground">{module.lessons} aulas</p>
+                    </button>
                   ))}
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import { Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { getLoginUrl } from "@/const";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [, navigate] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
 
@@ -22,23 +23,26 @@ export default function Navigation() {
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
       <div className="container flex items-center justify-between h-16">
         {/* Logo */}
-        <Link href="/">
-          <a className="flex items-center gap-2 font-bold text-xl gradient-text hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">AI</span>
-            </div>
-            <span>IA Academy</span>
-          </a>
-        </Link>
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 font-bold text-xl gradient-text hover:opacity-80 transition-opacity bg-transparent border-none cursor-pointer"
+        >
+          <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold">AI</span>
+          </div>
+          <span>IA Academy</span>
+        </button>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
-            <Link key={item.href} href={item.href}>
-              <a className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                {item.label}
-              </a>
-            </Link>
+            <button
+              key={item.href}
+              onClick={() => navigate(item.href)}
+              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer"
+            >
+              {item.label}
+            </button>
           ))}
         </div>
 
@@ -65,11 +69,12 @@ export default function Navigation() {
           {/* Auth Button */}
           {user ? (
             <div className="flex items-center gap-3">
-              <Link href="/dashboard">
-                <a className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                  Dashboard
-                </a>
-              </Link>
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer"
+              >
+                Dashboard
+              </button>
               <button
                 onClick={() => logout()}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -107,14 +112,16 @@ export default function Navigation() {
         <div className="md:hidden border-t border-border bg-card">
           <div className="container py-4 flex flex-col gap-4">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <a
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.label}
-                </a>
-              </Link>
+              <button
+                key={item.href}
+                onClick={() => {
+                  navigate(item.href);
+                  setIsOpen(false);
+                }}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer w-full text-left"
+              >
+                {item.label}
+              </button>
             ))}
             {!user && (
               <Button

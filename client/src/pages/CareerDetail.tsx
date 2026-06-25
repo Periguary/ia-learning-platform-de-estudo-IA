@@ -127,7 +127,7 @@ export default function CareerDetail() {
               <h2 className="text-2xl font-bold">Responsabilidades Principais</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {career.responsibilities.map((resp: string, index: number) => (
-                  <div key={index} className="flex items-start gap-3 p-4 border border-border rounded-lg bg-card">
+                  <div key={`resp-${index}`} className="flex items-start gap-3 p-4 border border-border rounded-lg bg-card">
                     <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                     <span className="text-muted-foreground">{resp}</span>
                   </div>
@@ -140,7 +140,7 @@ export default function CareerDetail() {
               <h2 className="text-2xl font-bold">Habilidades Necessárias</h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {career.skills.map((skill: string, index: number) => (
-                  <div key={index} className="p-3 border border-border rounded-lg bg-card hover:border-primary/50 transition-colors">
+                  <div key={`skill-${index}`} className="p-3 border border-border rounded-lg bg-card hover:border-primary/50 transition-colors">
                     <p className="font-medium text-foreground">{skill}</p>
                   </div>
                 ))}
@@ -167,7 +167,7 @@ export default function CareerDetail() {
               <h2 className="text-2xl font-bold">Um Dia na Vida</h2>
               <div className="space-y-3">
                 {career.dayInLife.map((item: string, index: number) => (
-                  <div key={index} className="flex items-start gap-4 p-4 border border-border rounded-lg bg-card">
+                  <div key={`day-${index}`} className="flex items-start gap-4 p-4 border border-border rounded-lg bg-card">
                     <span className="font-bold text-primary flex-shrink-0">{item.split(" - ")[0]}</span>
                     <span className="text-muted-foreground">{item.split(" - ")[1]}</span>
                   </div>

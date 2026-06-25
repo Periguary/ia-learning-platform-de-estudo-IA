@@ -1,8 +1,9 @@
-import { Link } from "wouter";
 import { ArrowRight, Code2, Database, Brain, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function Projects() {
+  const [, navigate] = useLocation();
   const projects = [
     {
       id: 1,
@@ -111,11 +112,12 @@ export default function Projects() {
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
-              <Link key={project.id} href={`/project/${project.id}`}>
-                <a
-                  className="group h-full p-6 border border-border rounded-xl bg-card hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex flex-col"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
+              <button
+                key={`project-${project.id}`}
+                onClick={() => navigate(`/project/${project.id}`)}
+                className="group h-full p-6 border border-border rounded-xl bg-card hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex flex-col text-left"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="text-5xl">{project.icon}</div>
@@ -172,8 +174,7 @@ export default function Projects() {
                       <ArrowRight className="w-4 h-4" />
                     </div>
                   </div>
-                </a>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -235,11 +236,12 @@ export default function Projects() {
             </p>
           </div>
 
-          <Link href="/learning-path">
-            <a className="btn-primary inline-flex items-center gap-2">
-              Voltar para Trilha <ArrowRight className="w-5 h-5" />
-            </a>
-          </Link>
+          <button
+            onClick={() => navigate("/learning-path")}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            Voltar para Trilha <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </section>
     </div>

@@ -1,10 +1,11 @@
-import { Link } from "wouter";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { BookOpen, TrendingUp, Award, Clock, CheckCircle2, Target } from "lucide-react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Dashboard() {
+  const [, navigate] = useLocation();
   const { user } = useAuth();
 
   // Mock data
@@ -201,27 +202,29 @@ export default function Dashboard() {
             <h2 className="text-xl font-bold">Progresso das Fases</h2>
             <div className="space-y-4">
               {phases.map((phase) => (
-                <Link key={phase.id} href={`/course/${phase.id}/overview`}>
-                  <a className="group p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all flex items-center justify-between">
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">
-                        {phase.id}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold group-hover:text-primary transition-colors">
-                          {phase.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">{phase.modules} módulos</p>
-                      </div>
+                <button
+                  key={phase.id}
+                  onClick={() => navigate(`/course/${phase.id}/overview`)}
+                  className="group w-full p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all flex items-center justify-between text-left"
+                >
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">
+                      {phase.id}
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full w-0 bg-gradient-to-r from-primary to-secondary"></div>
-                      </div>
-                      <span className="text-sm font-semibold text-muted-foreground">0%</span>
+                    <div className="flex-1">
+                      <h3 className="font-semibold group-hover:text-primary transition-colors">
+                        {phase.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">{phase.modules} módulos</p>
                     </div>
-                  </a>
-                </Link>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full w-0 bg-gradient-to-r from-primary to-secondary"></div>
+                    </div>
+                    <span className="text-sm font-semibold text-muted-foreground">0%</span>
+                  </div>
+                </button>
               ))}
             </div>
           </div>
@@ -231,24 +234,26 @@ export default function Dashboard() {
             <div className="p-6 border border-border rounded-xl bg-card space-y-4">
               <h2 className="text-xl font-bold">Próximos Passos</h2>
               <div className="space-y-3">
-                <Link href="/learning-path">
-                  <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
-                    <BookOpen className="w-5 h-5 text-primary" />
-                    <div>
-                      <p className="font-semibold text-sm">Comece a Fase 1</p>
-                      <p className="text-xs text-muted-foreground">Fundamentos Matemáticos</p>
-                    </div>
-                  </a>
-                </Link>
-                <Link href="/projects">
-                  <a className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors">
-                    <Target className="w-5 h-5 text-secondary" />
-                    <div>
-                      <p className="font-semibold text-sm">Explore Projetos</p>
-                      <p className="text-xs text-muted-foreground">Aprenda na prática</p>
-                    </div>
-                  </a>
-                </Link>
+                <button
+                  onClick={() => navigate("/learning-path")}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors w-full text-left bg-transparent border-none cursor-pointer"
+                >
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  <div>
+                    <p className="font-semibold text-sm">Comece a Fase 1</p>
+                    <p className="text-xs text-muted-foreground">Fundamentos Matemáticos</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => navigate("/projects")}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors w-full text-left bg-transparent border-none cursor-pointer"
+                >
+                  <Target className="w-5 h-5 text-secondary" />
+                  <div>
+                    <p className="font-semibold text-sm">Explore Projetos</p>
+                    <p className="text-xs text-muted-foreground">Aprenda na prática</p>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -267,11 +272,12 @@ export default function Dashboard() {
           <div className="p-8 border border-border rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10 text-center space-y-4">
             <h2 className="text-2xl font-bold">Pronto para Começar?</h2>
             <p className="text-muted-foreground">Comece sua jornada de aprendizado em IA hoje mesmo.</p>
-            <Link href="/learning-path">
-              <a className="btn-primary inline-flex items-center gap-2">
-                Ir para Trilha de Aprendizado
-              </a>
-            </Link>
+            <button
+              onClick={() => navigate("/learning-path")}
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              Ir para Trilha de Aprendizado
+            </button>
           </div>
         </div>
       </div>

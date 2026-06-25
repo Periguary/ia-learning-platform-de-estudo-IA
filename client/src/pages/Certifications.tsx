@@ -196,11 +196,10 @@ export default function Certifications() {
       <section className="py-20">
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {certifications.map((cert, index) => (
+            {certifications.map((cert) => (
               <div
-                key={cert.id}
+                key={`cert-${cert.id}`}
                 className="group border border-border rounded-xl bg-card hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 overflow-hidden"
-                style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Header */}
                 <div className={`p-6 bg-gradient-to-br ${cert.color} text-white`}>

@@ -200,7 +200,7 @@ rf_model.fit(X_train_scaled, y_train)
               <h2 className="text-2xl font-bold">Objetivos</h2>
               <ul className="space-y-3">
                 {project.objectives.map((objective: string, index: number) => (
-                  <li key={index} className="flex items-start gap-3">
+                  <li key={`obj-${index}`} className="flex items-start gap-3">
                     <span className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-sm font-bold flex-shrink-0">
                       {index + 1}
                     </span>
@@ -215,7 +215,7 @@ rf_model.fit(X_train_scaled, y_train)
               <h2 className="text-2xl font-bold">Requisitos</h2>
               <div className="p-6 border border-border rounded-xl bg-card space-y-3">
                 {project.requirements.map((req: string, index: number) => (
-                  <div key={index} className="flex items-center gap-3">
+                  <div key={`req-${index}`} className="flex items-center gap-3">
                     <span className="w-2 h-2 rounded-full bg-primary"></span>
                     <span className="text-muted-foreground">{req}</span>
                   </div>
@@ -227,7 +227,7 @@ rf_model.fit(X_train_scaled, y_train)
             <section className="space-y-6">
               <h2 className="text-2xl font-bold">Guia Passo a Passo</h2>
               {project.steps.map((step: any, index: number) => (
-                <div key={index} className="border border-border rounded-xl bg-card p-6 space-y-4">
+                <div key={`step-${index}`} className="border border-border rounded-xl bg-card p-6 space-y-4">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold">
                       {step.number}
@@ -251,7 +251,7 @@ rf_model.fit(X_train_scaled, y_train)
               <h2 className="text-2xl font-bold">Melhorias Possíveis</h2>
               <ul className="space-y-2">
                 {project.improvements.map((improvement: string, index: number) => (
-                  <li key={index} className="flex items-center gap-3 text-muted-foreground">
+                  <li key={`imp-${index}`} className="flex items-center gap-3 text-muted-foreground">
                     <span className="text-primary">→</span>
                     {improvement}
                   </li>
@@ -297,7 +297,7 @@ rf_model.fit(X_train_scaled, y_train)
                 <div className="space-y-3">
                   {project.resources.map((resource: any, index: number) => (
                     <a
-                      key={index}
+                      key={`res-${index}`}
                       href={resource.url}
                       className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors text-sm text-primary hover:text-primary/80"
                     >

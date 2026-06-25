@@ -1,8 +1,9 @@
-import { Link } from "wouter";
 import { ArrowRight, TrendingUp, Users, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function Careers() {
+  const [, navigate] = useLocation();
   const careers = [
     {
       id: 1,
@@ -208,11 +209,12 @@ export default function Careers() {
         <div className="container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {careers.map((career, index) => (
-              <Link key={career.id} href={`/career/${career.id}`}>
-                <a
-                  className="group h-full p-6 border border-border rounded-xl bg-card hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex flex-col"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
+              <button
+                key={`career-${career.id}`}
+                onClick={() => navigate(`/career/${career.id}`)}
+                className="group h-full p-6 border border-border rounded-xl bg-card hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 flex flex-col text-left"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
                   {/* Icon */}
                   <div className="text-5xl mb-4">{career.icon}</div>
 
@@ -248,8 +250,7 @@ export default function Careers() {
                       <ArrowRight className="w-4 h-4" />
                     </div>
                   </div>
-                </a>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -300,11 +301,12 @@ export default function Careers() {
             </p>
           </div>
 
-          <Link href="/learning-path">
-            <a className="btn-primary inline-flex items-center gap-2">
-              Explorar Trilha de Aprendizado <ArrowRight className="w-5 h-5" />
-            </a>
-          </Link>
+          <button
+            onClick={() => navigate("/learning-path")}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            Explorar Trilha de Aprendizado <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </section>
     </div>

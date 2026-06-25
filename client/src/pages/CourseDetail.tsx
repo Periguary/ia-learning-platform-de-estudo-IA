@@ -197,16 +197,16 @@ Aplique seus conhecimentos em projetos práticos.
                       3: "text-xl font-semibold",
                     }[level] || "text-lg font-semibold";
                     return (
-                      <h2 key={index} className={headingClass}>
+                      <h2 key={`heading-${index}`} className={headingClass}>
                         {text}
                       </h2>
                     );
                   }
                   if (paragraph.startsWith("-")) {
                     return (
-                      <ul key={index} className="space-y-2 list-disc list-inside text-muted-foreground">
+                      <ul key={`list-${index}`} className="space-y-2 list-disc list-inside text-muted-foreground">
                         {paragraph.split("\n").map((item, i) => (
-                          <li key={i} className="text-muted-foreground">
+                          <li key={`item-${index}-${i}`} className="text-muted-foreground">
                             {item.replace(/^-\s/, "")}
                           </li>
                         ))}
@@ -214,7 +214,7 @@ Aplique seus conhecimentos em projetos práticos.
                     );
                   }
                   return (
-                    <p key={index} className="text-muted-foreground leading-relaxed">
+                    <p key={`para-${index}`} className="text-muted-foreground leading-relaxed">
                       {paragraph}
                     </p>
                   );
