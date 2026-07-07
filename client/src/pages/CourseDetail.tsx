@@ -1,9 +1,9 @@
-import { useRoute } from "wouter";
-import { Link } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, BookOpen, Clock, CheckCircle2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function CourseDetail() {
+  const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
 
   if (!match) return null;
@@ -125,12 +125,13 @@ Aplique seus conhecimentos em projetos práticos.
       {/* Header */}
       <section className="py-8 border-b border-border bg-card/50">
         <div className="container">
-          <Link href="/learning-path">
-            <a className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6">
-              <ArrowLeft className="w-5 h-5" />
-              Voltar para Trilha
-            </a>
-          </Link>
+          <button
+            onClick={() => navigate("/learning-path")}
+            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6 bg-transparent border-none cursor-pointer"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Voltar para Trilha
+          </button>
 
           <div className="space-y-4">
             <div className="flex items-center gap-3">
