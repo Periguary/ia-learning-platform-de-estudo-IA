@@ -82,10 +82,10 @@ export default function Footer() {
             <div key={title}>
               <h4 className="font-semibold text-foreground mb-4">{title}</h4>
               <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link.href}>
+                {links.map((link, index) => (
+                  <li key={`${title}-link-${index}`}>
                     <button
-                      onClick={() => navigate(link.href)}
+                      onClick={() => link.href !== '#' && navigate(link.href)}
                       className="text-sm text-muted-foreground bg-transparent border-none cursor-pointer text-left nav-underline color-transition"
                     >
                       {link.label}
