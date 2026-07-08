@@ -6,15 +6,15 @@ import { useState } from "react";
 export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
-  const [selectedLesson, setSelectedLesson] = useState<number | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<number | string | null>(null);
 
   if (!match) return null;
 
   const phase = parseInt(params?.phase || "1");
   const module = params?.module || "overview";
 
-  // Conteúdo detalhado das aulas
-  const lessonsContent: Record<number, { title: string; content: string; examples: string[] }> = {
+  // Conteúdo detalhado das aulas e recursos
+  const lessonsContent: Record<number | string, { title: string; content: string; examples?: string[] }> = {
     1: {
       title: "O que é Álgebra Linear?",
       content: `
@@ -480,9 +480,24 @@ Exemplo: rotated_points = points @ rotation_matrix.T
         "Escala 2x: [[2, 0], [0, 2]]",
         "Composição: Rotação depois Escala = Escala @ Rotação"
       ]
+    },
+    notebooks: {
+      title: "Notebooks Python com Exemplos",
+      content: "# Notebooks Python com Exemplos\n\n## Conteúdo Disponível:\n\n### 1. Introdução a NumPy\n- Criação de arrays\n- Operações básicas\n- Broadcasting\n\n### 2. Vetores e Matrizes\n- Representação em NumPy\n- Operações vetoriais\n- Visualização com Matplotlib\n\n### 3. Transformações Lineares\n- Rotação, Escala, Reflexão\n- Composição de transformações\n\n### 4. Aplicações Práticas\n- PCA, Regressão linear, SVM"
+    },
+    exercises: {
+      title: "Exercícios Interativos",
+      content: "# Exercícios Interativos\n\n## Exercícios por Tópico:\n\n### Vetores (Nível Iniciante)\n1. Calcular magnitude de um vetor\n2. Normalizar um vetor\n3. Calcular produto escalar\n4. Verificar ortogonalidade\n\n### Matrizes (Nível Intermediário)\n1. Multiplicação de matrizes\n2. Calcular determinante\n3. Encontrar transposta\n4. Verificar simetria\n\n### Transformações (Nível Avançado)\n1. Implementar rotação\n2. Implementar escala\n3. Compor transformações\n4. Encontrar transformação inversa"
+    },
+    projects: {
+      title: "Projetos Práticos",
+      content: "# Projetos Práticos\n\n## Projeto 1: Análise de Imagem\n- Carregar imagem, Representar como matriz, Aplicar transformações\n\n## Projeto 2: Recomendação de Filmes\n- Fatorização de matrizes, Calcular similaridade\n\n## Projeto 3: Compressão de Imagem\n- SVD, Reduzir dimensionalidade, Reconstruir\n\n## Projeto 4: PCA\n- Implementar PCA, Reduzir dimensionalidade\n\n## Projeto 5: Rede Neural Simples\n- Forward pass, Operações matriciais, Calcular loss"
+    },
+    references: {
+      title: "Referências e Leitura Adicional",
+      content: "# Referências e Leitura Adicional\n\n## Livros Recomendados:\n\n### Introdutórios\n1. Linear Algebra Done Right - Sheldon Axler\n2. Introduction to Linear Algebra - Gilbert Strang\n\n### Intermediários\n3. Matrix Computations - Golub & Van Loan\n\n### Aplicados em IA\n4. Deep Learning - Goodfellow, Bengio, Courville\n\n## Cursos Online:\n- MIT OpenCourseWare: Linear Algebra\n- 3Blue1Brown: Essence of Linear Algebra\n- Coursera: Linear Algebra Specialization\n- edX: Linear Algebra Fundamentals"
     }
   };
-
   // Recursos adicionais com conteúdo
   const additionalResources = [
     {
@@ -799,11 +814,11 @@ Cada projeto inclui:
                   </div>
                 </div>
 
-                {lessonsContent[selectedLesson].examples.length > 0 && (
+                {lessonsContent[selectedLesson]?.examples && lessonsContent[selectedLesson].examples!.length > 0 && (
                   <div className="bg-muted/30 p-4 rounded-lg space-y-2">
                     <h4 className="font-semibold text-sm">Exemplos Práticos:</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      {lessonsContent[selectedLesson].examples.map((example, idx) => (
+                      {lessonsContent[selectedLesson].examples!.map((example, idx) => (
                         <li key={idx} className="flex gap-2">
                           <span className="text-primary">•</span>
                           <span>{example}</span>
