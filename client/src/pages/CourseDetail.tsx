@@ -1,4 +1,4 @@
-import { useRoute, useLocation } from "wouter";
+import { useLocation, useRoute } from "wouter";
 import { ArrowLeft, BookOpen, Clock, CheckCircle2, Star, ExternalLink, FileText, Code, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -118,15 +118,23 @@ export default function CourseDetail() {
                 {completedLessons} de {totalLessons} aulas completas
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Lesson Content */}
+      {/* Main Content */}
+      <section className="py-8 border-b border-border">
+        <div className="container grid lg:grid-cols-3 gap-8">
+          {/* Left: Lessons Content */}
+          <div className="lg:col-span-2">
             {selectedLesson && lessonsContent[selectedLesson] ? (
-              <div className="p-6 border border-border rounded-xl bg-card space-y-6 mt-6">
+              // Show lesson content
+              <div className="p-6 border border-border rounded-xl bg-card space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold">{lessonsContent[selectedLesson].title}</h2>
                   <button
                     onClick={() => setSelectedLesson(null)}
-                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer"
+                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl"
                   >
                     ✕
                   </button>
@@ -162,9 +170,9 @@ export default function CourseDetail() {
                 </div>
               </div>
             ) : (
+              // Show course overview
               <>
-                {/* Course Overview */}
-                <div className="prose prose-invert max-w-none mt-6">
+                <div className="prose prose-invert max-w-none">
                   <div className="text-foreground space-y-6">
                     <div>
                       <h2 className="text-2xl font-bold mb-4">Visão Geral do Curso</h2>
@@ -224,16 +232,6 @@ export default function CourseDetail() {
                 </div>
               </>
             )}
-          </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="py-8 border-b border-border">
-        <div className="container grid lg:grid-cols-3 gap-8">
-          {/* Left: Lessons Content */}
-          <div className="lg:col-span-2">
-            {/* This area is handled above in the conditional render */}
           </div>
 
           {/* Right: Lessons Sidebar */}
