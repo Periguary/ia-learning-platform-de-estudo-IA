@@ -21,9 +21,9 @@
 - [x] Adicionar rodapé com links e informações
 
 ## FASE 3: Trilha de Aprendizado - Fundamentos (Fases 1-4)
-- [ ] Criar layout base para páginas de conteúdo
+- [x] Criar layout base para páginas de conteúdo (CourseDetail.tsx)
 - [ ] Implementar Fase 1: Fundamentos Matemáticos (Álgebra Linear, Estatística, Probabilidade)
-  - [ ] Página de Álgebra Linear com tópicos e exercícios
+  - [x] Página de Álgebra Linear com tópicos e exercícios
   - [ ] Página de Estatística com conceitos e aplicações
   - [ ] Página de Probabilidade com teoremas e exemplos
 - [ ] Implementar Fase 2: Python Profissional (Básico, Intermediário, Avançado)
