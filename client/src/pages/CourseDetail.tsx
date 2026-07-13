@@ -127,7 +127,7 @@ export default function CourseDetail() {
         <div className="container grid lg:grid-cols-3 gap-8">
           {/* Left: Lessons Content */}
           <div className="lg:col-span-2">
-            {selectedLesson && lessonsContent[selectedLesson] ? (
+            {selectedLesson != null && lessonsContent[selectedLesson] != null ? (
               // Show lesson content
               <div className="p-6 border border-border rounded-xl bg-card space-y-6">
                 <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ export default function CourseDetail() {
                   </button>
                 </div>
 
-                <div className="prose prose-invert max-w-none">
+                <div className="max-w-none">
                   <div className="text-foreground space-y-4 whitespace-pre-wrap text-sm leading-relaxed">
                     {lessonsContent[selectedLesson].content}
                   </div>
