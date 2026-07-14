@@ -485,7 +485,29 @@ export const lessonsContentData: Record<string, Record<number | string, any>> = 
         "Desvio padrão: mede a dispersão dos dados em torno da média",
         "Correlação: mede a relação entre duas variáveis"
       ]
-    }
+    },
+    2: {
+      title: "Tipos de Dados",
+      content: `Em estatística, existem diferentes tipos de dados que requerem análises distintas.
+
+**Tipos Principais:**
+1. Dados Quantitativos: Numéricos (idade, peso, preço)
+2. Dados Qualitativos: Categóricos (cor, gênero, região)
+3. Dados Contínuos: Podem assumir qualquer valor em um intervalo
+4. Dados Discretos: Assumem valores específicos (contagem)
+
+**Escalas de Medição:**
+- Nominal: Categorias sem ordem
+- Ordinal: Categorias com ordem
+- Intervalo: Números com diferenças significativas
+- Razão: Números com zero absoluto`,
+      examples: [
+        "Quantitativo: Altura em cm, Salário em reais",
+        "Qualitativo: Cor de olhos, Marca de carro",
+        "Contínuo: Temperatura, Tempo",
+        "Discreto: Número de filhos, Quantidade de vendas"
+      ]
+    },
   },
   "probability": {
     1: {
