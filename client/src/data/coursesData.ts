@@ -1,560 +1,251 @@
-// Dados de todos os cursos da plataforma
+import { BookOpen, Code, Lightbulb, FileText, Users, Award } from "lucide-react";
+
 export const coursesData: Record<string, any> = {
   "linear-algebra": {
     title: "Álgebra Linear",
+    description: "Fundamentos de vetores, matrizes e transformações lineares",
     phase: 1,
-    module: "linear-algebra",
-    description: "Aprenda os fundamentos de Álgebra Linear essenciais para Machine Learning",
-    duration: "4 semanas",
-    lessons: 12,
     difficulty: "Iniciante",
-    rating: 4.8,
-    reviews: 234,
+    duration: "40 horas",
+    lessons: 12,
+    rating: 4.9,
+    reviews: 2340,
     sections: [
       {
         title: "Introdução",
         lessons: [
-          { id: 1, title: "O que é Álgebra Linear?", duration: "15 min", completed: false },
-          { id: 2, title: "Aplicações em IA", duration: "20 min", completed: false },
-          { id: 3, title: "Ferramentas e Bibliotecas", duration: "18 min", completed: false },
-        ],
+          { id: 1, title: "O que é Álgebra Linear?", completed: false },
+          { id: 2, title: "Aplicações em IA", completed: false },
+          { id: 3, title: "Ferramentas e Bibliotecas", completed: false }
+        ]
       },
       {
         title: "Vetores",
         lessons: [
-          { id: 4, title: "Conceito de Vetor", duration: "25 min", completed: false },
-          { id: 5, title: "Operações Vetoriais", duration: "30 min", completed: false },
-          { id: 6, title: "Produto Escalar", duration: "28 min", completed: false },
-          { id: 7, title: "Produto Vetorial", duration: "25 min", completed: false },
-        ],
+          { id: 4, title: "Conceito de Vetor", completed: false },
+          { id: 5, title: "Operações Vetoriais", completed: false },
+          { id: 6, title: "Produto Escalar", completed: false },
+          { id: 7, title: "Produto Vetorial", completed: false }
+        ]
       },
       {
         title: "Matrizes",
         lessons: [
-          { id: 8, title: "Conceito de Matriz", duration: "20 min", completed: false },
-          { id: 9, title: "Operações com Matrizes", duration: "35 min", completed: false },
-          { id: 10, title: "Determinantes", duration: "30 min", completed: false },
-          { id: 11, title: "Matrizes Inversas", duration: "28 min", completed: false },
-        ],
+          { id: 8, title: "Conceito de Matriz", completed: false },
+          { id: 9, title: "Operações com Matrizes", completed: false },
+          { id: 10, title: "Determinantes", completed: false },
+          { id: 11, title: "Matrizes Inversas", completed: false }
+        ]
       },
       {
-        title: "Aplicações Práticas",
+        title: "Projeto Final",
         lessons: [
-          { id: 12, title: "Projeto: Transformações Lineares", duration: "45 min", completed: false },
-        ],
-      },
-    ],
+          { id: 12, title: "Projeto: Transformações Lineares", completed: false }
+        ]
+      }
+    ]
   },
   "statistics": {
     title: "Estatística",
+    description: "Análise de dados, distribuições e testes estatísticos",
     phase: 1,
-    module: "statistics",
-    description: "Domine conceitos estatísticos fundamentais para análise de dados e IA",
-    duration: "5 semanas",
+    difficulty: "Intermediário",
+    duration: "45 horas",
     lessons: 14,
-    difficulty: "Iniciante",
-    rating: 4.7,
-    reviews: 189,
+    rating: 4.8,
+    reviews: 1890,
     sections: [
       {
         title: "Fundamentos",
         lessons: [
-          { id: 1, title: "O que é Estatística?", duration: "20 min", completed: false },
-          { id: 2, title: "Tipos de Dados", duration: "25 min", completed: false },
-          { id: 3, title: "Amostragem", duration: "30 min", completed: false },
-        ],
+          { id: 1, title: "O que é Estatística?", completed: false },
+          { id: 2, title: "Tipos de Dados", completed: false },
+          { id: 3, title: "Amostragem", completed: false }
+        ]
       },
       {
-        title: "Estatística Descritiva",
+        title: "Medidas Descritivas",
         lessons: [
-          { id: 4, title: "Medidas de Tendência Central", duration: "35 min", completed: false },
-          { id: 5, title: "Medidas de Dispersão", duration: "40 min", completed: false },
-          { id: 6, title: "Distribuições", duration: "45 min", completed: false },
-        ],
+          { id: 4, title: "Medidas de Tendência Central", completed: false },
+          { id: 5, title: "Medidas de Dispersão", completed: false },
+          { id: 6, title: "Distribuições", completed: false }
+        ]
       },
       {
-        title: "Estatística Inferencial",
+        title: "Inferência Estatística",
         lessons: [
-          { id: 7, title: "Testes de Hipótese", duration: "50 min", completed: false },
-          { id: 8, title: "Intervalos de Confiança", duration: "40 min", completed: false },
-          { id: 9, title: "Regressão Linear", duration: "50 min", completed: false },
-        ],
+          { id: 7, title: "Testes de Hipótese", completed: false },
+          { id: 8, title: "Intervalos de Confiança", completed: false },
+          { id: 9, title: "Regressão Linear", completed: false }
+        ]
       },
       {
-        title: "Aplicações em IA",
+        title: "Análise Avançada",
         lessons: [
-          { id: 10, title: "Análise Exploratória", duration: "45 min", completed: false },
-          { id: 11, title: "Detecção de Outliers", duration: "35 min", completed: false },
-          { id: 12, title: "Correlação e Causalidade", duration: "40 min", completed: false },
-          { id: 13, title: "Testes Estatísticos", duration: "45 min", completed: false },
-          { id: 14, title: "Projeto: Análise Estatística", duration: "60 min", completed: false },
-        ],
-      },
-    ],
+          { id: 10, title: "Análise Exploratória", completed: false },
+          { id: 11, title: "Detecção de Outliers", completed: false },
+          { id: 12, title: "Correlação e Causalidade", completed: false },
+          { id: 13, title: "Testes Estatísticos", completed: false },
+          { id: 14, title: "Projeto: Análise Estatística", completed: false }
+        ]
+      }
+    ]
   },
   "probability": {
     title: "Probabilidade",
+    description: "Teoria das probabilidades e distribuições",
     phase: 1,
-    module: "probability",
-    description: "Compreenda a teoria da probabilidade essencial para algoritmos de IA",
-    duration: "4 semanas",
-    lessons: 12,
     difficulty: "Intermediário",
-    rating: 4.6,
-    reviews: 156,
+    duration: "38 horas",
+    lessons: 12,
+    rating: 4.7,
+    reviews: 1650,
     sections: [
       {
-        title: "Fundamentos",
+        title: "Conceitos Básicos",
         lessons: [
-          { id: 1, title: "Conceitos Básicos", duration: "25 min", completed: false },
-          { id: 2, title: "Espaço Amostral e Eventos", duration: "30 min", completed: false },
-          { id: 3, title: "Axiomas da Probabilidade", duration: "35 min", completed: false },
-        ],
+          { id: 1, title: "Conceitos Básicos de Probabilidade", completed: false },
+          { id: 2, title: "Probabilidade Condicional", completed: false },
+          { id: 3, title: "Teorema de Bayes", completed: false }
+        ]
       },
       {
-        title: "Probabilidade Condicional",
+        title: "Variáveis Aleatórias",
         lessons: [
-          { id: 4, title: "Probabilidade Condicional", duration: "40 min", completed: false },
-          { id: 5, title: "Teorema de Bayes", duration: "45 min", completed: false },
-          { id: 6, title: "Independência", duration: "35 min", completed: false },
-        ],
+          { id: 4, title: "Independência", completed: false },
+          { id: 5, title: "Variáveis Aleatórias", completed: false },
+          { id: 6, title: "Distribuições Discretas", completed: false },
+          { id: 7, title: "Distribuições Contínuas", completed: false }
+        ]
       },
       {
-        title: "Distribuições",
+        title: "Teoremas Importantes",
         lessons: [
-          { id: 7, title: "Variáveis Aleatórias", duration: "40 min", completed: false },
-          { id: 8, title: "Distribuições Discretas", duration: "50 min", completed: false },
-          { id: 9, title: "Distribuições Contínuas", duration: "50 min", completed: false },
-        ],
+          { id: 8, title: "Esperança e Variância", completed: false },
+          { id: 9, title: "Lei dos Grandes Números", completed: false },
+          { id: 10, title: "Teorema Central do Limite", completed: false }
+        ]
       },
       {
         title: "Aplicações",
         lessons: [
-          { id: 10, title: "Esperança e Variância", duration: "40 min", completed: false },
-          { id: 11, title: "Lei dos Grandes Números", duration: "35 min", completed: false },
-          { id: 12, title: "Projeto: Simulações Probabilísticas", duration: "60 min", completed: false },
-        ],
-      },
-    ],
+          { id: 11, title: "Distribuições Conjuntas", completed: false },
+          { id: 12, title: "Projeto: Simulações Probabilísticas", completed: false }
+        ]
+      }
+    ]
   },
   "python-basics": {
     title: "Python Básico",
+    description: "Fundamentos de programação em Python",
     phase: 2,
-    module: "python-basics",
-    description: "Aprenda Python do zero com foco em ciência de dados",
-    duration: "6 semanas",
-    lessons: 16,
     difficulty: "Iniciante",
+    duration: "50 horas",
+    lessons: 16,
     rating: 4.9,
-    reviews: 312,
+    reviews: 5420,
     sections: [
       {
         title: "Fundamentos",
         lessons: [
-          { id: 1, title: "Configuração do Ambiente", duration: "20 min", completed: false },
-          { id: 2, title: "Variáveis e Tipos", duration: "30 min", completed: false },
-          { id: 3, title: "Operadores", duration: "25 min", completed: false },
-          { id: 4, title: "Controle de Fluxo", duration: "35 min", completed: false },
-        ],
+          { id: 1, title: "Configuração do Ambiente Python", completed: false },
+          { id: 2, title: "Variáveis e Tipos", completed: false },
+          { id: 3, title: "Estruturas de Controle", completed: false }
+        ]
       },
       {
-        title: "Estruturas de Dados",
+        title: "Funções e Coleções",
         lessons: [
-          { id: 5, title: "Listas", duration: "40 min", completed: false },
-          { id: 6, title: "Tuplas e Conjuntos", duration: "35 min", completed: false },
-          { id: 7, title: "Dicionários", duration: "40 min", completed: false },
-          { id: 8, title: "Compreensão de Listas", duration: "30 min", completed: false },
-        ],
+          { id: 4, title: "Funções", completed: false },
+          { id: 5, title: "Listas e Tuplas", completed: false },
+          { id: 6, title: "Dicionários", completed: false },
+          { id: 7, title: "Strings", completed: false }
+        ]
       },
       {
-        title: "Funções e Módulos",
+        title: "Programação Avançada",
         lessons: [
-          { id: 9, title: "Definindo Funções", duration: "40 min", completed: false },
-          { id: 10, title: "Escopo e Closure", duration: "35 min", completed: false },
-          { id: 11, title: "Módulos e Pacotes", duration: "40 min", completed: false },
-          { id: 12, title: "Tratamento de Erros", duration: "35 min", completed: false },
-        ],
+          { id: 8, title: "Compreensões de Lista", completed: false },
+          { id: 9, title: "Tratamento de Erros", completed: false },
+          { id: 10, title: "Módulos e Pacotes", completed: false },
+          { id: 11, title: "Orientação a Objetos", completed: false }
+        ]
       },
       {
-        title: "Programação Orientada a Objetos",
+        title: "Prática e Projetos",
         lessons: [
-          { id: 13, title: "Classes e Objetos", duration: "45 min", completed: false },
-          { id: 14, title: "Herança e Polimorfismo", duration: "50 min", completed: false },
-          { id: 15, title: "Métodos Especiais", duration: "40 min", completed: false },
-          { id: 16, title: "Projeto: Aplicação Python", duration: "60 min", completed: false },
-        ],
-      },
-    ],
-  },
+          { id: 12, title: "Entrada e Saída", completed: false },
+          { id: 13, title: "Expressões Regulares", completed: false },
+          { id: 14, title: "Debugging", completed: false },
+          { id: 15, title: "Testes Unitários", completed: false },
+          { id: 16, title: "Projeto: Aplicação Python", completed: false }
+        ]
+      }
+    ]
+  }
 };
 
 export const lessonsContentData: Record<string, Record<number | string, any>> = {
   "linear-algebra": {
-    1: {
-      title: "O que é Álgebra Linear?",
-      content: `Álgebra Linear é o ramo da matemática que estuda vetores, matrizes e transformações lineares. É fundamental para entender como os algoritmos de Machine Learning funcionam.
-
-**Definição Formal:**
-Álgebra Linear é o estudo de espaços vetoriais e transformações lineares entre eles. Um espaço vetorial é um conjunto de objetos (vetores) que podem ser adicionados e multiplicados por escalares.
-
-**Conceitos Fundamentais:**
-1. Vetores: Representações de direção e magnitude em espaço multidimensional
-2. Matrizes: Arranjos retangulares de números usados para representar transformações
-3. Transformações Lineares: Funções que preservam operações de adição e multiplicação
-4. Espaços Vetoriais: Conjuntos de vetores com operações bem definidas
-
-**Por que é importante em IA?**
-- Dados são representados como vetores
-- Modelos de rede neural usam matrizes para pesos
-- Otimização usa conceitos de gradientes
-- Processamento de imagens e linguagem natural dependem de álgebra linear`,
-      examples: [
-        "Vetor 2D: [3, 4] representa um ponto no plano cartesiano",
-        "Matriz 2x2: [[1, 2], [3, 4]] pode representar uma transformação",
-        "Em redes neurais: cada camada aplica uma transformação linear y = Wx + b"
-      ]
-    },
-    2: {
-      title: "Aplicações em IA",
-      content: `Álgebra Linear é a base matemática de praticamente todos os algoritmos de IA modernos.
-
-**Machine Learning:** Representação de dados como vetores, transformações de features, redes neurais com transformações lineares (y = Wx + b), regressão linear.
-
-**Processamento de Imagens:** Imagens como matrizes de pixels, filtros como matrizes, transformações geométricas com matrizes de rotação/escala, compressão com SVD.
-
-**Processamento de Linguagem Natural:** Embeddings como vetores, Transformers com operações matriciais, Word2Vec baseado em álgebra linear.
-
-**Otimização:** Gradientes como vetores, Hessiana como matriz, métodos de otimização baseados em álgebra linear.`,
-      examples: [
-        "CNN: Filtro 3x3 convoluciona com imagem para detectar features",
-        "Transformer: Q, K, V são matrizes que calculam atenção",
-        "PCA: Encontra direções de máxima variância usando SVD",
-        "Regressão: Solução β = (X^T X)^-1 X^T y"
-      ]
-    },
-    3: {
-      title: "Ferramentas e Bibliotecas",
-      content: `Existem várias bibliotecas Python otimizadas para operações de álgebra linear.
-
-**NumPy:** Biblioteca fundamental com arrays N-dimensionais, operações vetorizadas, funções em numpy.linalg.
-
-**SciPy:** Funções avançadas, decomposições (SVD, QR, Cholesky), solucionadores de sistemas.
-
-**PyTorch e TensorFlow:** Deep learning com operações otimizadas para GPU, autograd para gradientes automáticos.
-
-**Scikit-learn:** Machine learning com algoritmos usando álgebra linear (PCA, SVM, Regressão Linear).
-
-**Instalação:** pip install numpy scipy scikit-learn torch tensorflow`,
-      examples: [
-        "import numpy as np; a = np.array([[1, 2], [3, 4]])",
-        "Determinante: np.linalg.det(a)",
-        "Autovalores: np.linalg.eig(a)",
-        "Inversa: np.linalg.inv(a)"
-      ]
-    },
-    4: {
-      title: "Conceito de Vetor",
-      content: `Um vetor é uma quantidade com magnitude e direção, representado como lista ordenada de números.
-
-**Definição:** v = [v1, v2, ..., vn] em R^n
-
-**Representação Geométrica:** Em 2D é um ponto (x, y), em 3D é (x, y, z), em dimensões maiores é conceito abstrato.
-
-**Propriedades:** Magnitude ||v|| = sqrt(v1² + v2² + ... + vn²), direção, vetor unitário com magnitude 1.
-
-**Operações:** Adição [1,2]+[3,4]=[4,6], subtração, multiplicação por escalar 2*[1,2]=[2,4].
-
-**Aplicações em IA:** Cada amostra é um vetor, embeddings de palavras, pesos de redes neurais.`,
-      examples: [
-        "Vetor 2D: v = [3, 4], magnitude = 5",
-        "Vetor normalizado: v / ||v|| = [0.6, 0.8]",
-        "Vetor zero: [0, 0, 0]",
-        "Vetor unitário em x: [1, 0, 0]"
-      ]
-    },
-    5: {
-      title: "Operações Vetoriais",
-      content: `Operações que realizamos com vetores.
-
-**Adição:** v + w = [v1+w1, v2+w2, ..., vn+wn]. Geometricamente: coloque w na ponta de v.
-
-**Subtração:** v - w = [v1-w1, v2-w2, ..., vn-wn]. Geometricamente: vetor de w para v.
-
-**Multiplicação por Escalar:** α*v = [α*v1, α*v2, ..., α*vn]. Muda magnitude mantendo direção.
-
-**Combinação Linear:** α1*v1 + α2*v2 + ... + αn*vn
-
-**Propriedades:** Comutativa, associativa, distributiva.
-
-**Aplicações:** Transformações de dados, mudanças de base, representação de movimentos.`,
-      examples: [
-        "[1, 2] + [3, 4] = [4, 6]",
-        "2 * [1, 2] = [2, 4]",
-        "0.5 * [1, 2] + 0.5 * [3, 4] = [2, 3]",
-        "[5, 5] - [1, 2] = [4, 3]"
-      ]
-    },
-    6: {
-      title: "Produto Escalar",
-      content: `O produto escalar combina dois vetores e retorna um número.
-
-**Definição:** v · w = v1*w1 + v2*w2 + ... + vn*wn
-
-**Interpretação Geométrica:** v · w = ||v|| * ||w|| * cos(θ) onde θ é o ângulo entre vetores.
-
-**Propriedades:** Se v·w=0 são ortogonais, se >0 ângulo agudo, se <0 ângulo obtuso, v·v=||v||².
-
-**Normalização:** v_normalizado = v / ||v||
-
-**Aplicações em IA:** Similaridade entre vetores, ângulos entre dados, projeção, atenção em Transformers.
-
-**Exemplo:** v=[1,2], w=[3,4], v·w=1*3+2*4=11`,
-      examples: [
-        "[1, 0] · [0, 1] = 0 (ortogonais)",
-        "[1, 1] · [1, 1] = 2 = ||[1, 1]||²",
-        "Similaridade de cosseno: (u · v) / (||u|| * ||v||)",
-        "Projeção: (v · w / ||w||²) * w"
-      ]
-    },
-    7: {
-      title: "Produto Vetorial",
-      content: `Operação em 3D que retorna vetor perpendicular a ambos.
-
-**Definição:** v × w = [v2*w3-v3*w2, v3*w1-v1*w3, v1*w2-v2*w1]
-
-**Propriedades:** Resultado perpendicular a v e w, magnitude ||v×w||=||v||*||w||*sin(θ), direção pela regra da mão direita.
-
-**Interpretação:** Magnitude = área do paralelogramo, direção = perpendicular ao plano.
-
-**Aplicações:** Gráficos 3D (normais), física (torque), visão computacional, detecção de orientação.
-
-**Nota:** Só definido em 3D. Em outras dimensões usamos produto exterior.`,
-      examples: [
-        "[1, 0, 0] × [0, 1, 0] = [0, 0, 1]",
-        "Magnitude = ||v|| * ||w|| * sin(90°) = ||v|| * ||w||",
-        "Normal a um plano: (v - p1) × (w - p1)",
-        "Torque = r × F (posição × força)"
-      ]
-    },
-    8: {
-      title: "Conceito de Matriz",
-      content: `Arranjo retangular de números em linhas e colunas.
-
-**Definição:** Matriz m×n com m linhas e n colunas.
-
-**Tipos:** Quadrada (m=n), Identidade (diagonal=1), Nula (todos=0), Transposta (linhas↔colunas), Simétrica (A=A^T), Diagonal.
-
-**Notação:** aij (elemento linha i coluna j), Ai* (linha i), A*j (coluna j).
-
-**Aplicações em IA:** Dados (linhas=amostras, colunas=features), pesos de redes, transformações, imagens/vídeos.
-
-**Exemplo:** A=[[1,2,3],[4,5,6]] é 2×3, a23=6`,
-      examples: [
-        "Matriz Identidade 2×2: [[1, 0], [0, 1]]",
-        "Transposta: [[1, 2], [3, 4]]^T = [[1, 3], [2, 4]]",
-        "Matriz diagonal: [[2, 0, 0], [0, 3, 0], [0, 0, 5]]",
-        "Dados: 100 amostras × 50 features = matriz 100×50"
-      ]
-    },
-    9: {
-      title: "Operações com Matrizes",
-      content: `Operações que realizamos com matrizes.
-
-**Adição:** A+B soma elemento a elemento (mesmo tamanho).
-
-**Multiplicação por Escalar:** α*A multiplica cada elemento.
-
-**Multiplicação:** C=A×B (A m×n, B n×p → C m×p), cij=Σ(aik*bkj).
-
-**Propriedades:** Não comutativa, associativa, distributiva.
-
-**Transposta:** (A^T)ij = Aji, propriedades: (A^T)^T=A, (A+B)^T=A^T+B^T, (A*B)^T=B^T*A^T.
-
-**Complexidade:** O(m*n*p) para multiplicação.`,
-      examples: [
-        "[[1, 2], [3, 4]] + [[5, 6], [7, 8]] = [[6, 8], [10, 12]]",
-        "2 * [[1, 2], [3, 4]] = [[2, 4], [6, 8]]",
-        "[[1, 2], [3, 4]] * [[5, 6], [7, 8]] = [[19, 22], [43, 50]]",
-        "[[1, 2], [3, 4]]^T = [[1, 3], [2, 4]]"
-      ]
-    },
-    10: {
-      title: "Determinantes",
-      content: `Número calculado de uma matriz quadrada.
-
-**Definição 2×2:** det([[a,b],[c,d]]) = ad-bc
-
-**Definição 3×3:** Regra de Sarrus com expansão de menores.
-
-**Interpretação:** Magnitude = volume do paralelepípedo, sinal = orientação.
-
-**Propriedades:** det(A*B)=det(A)*det(B), det(A^T)=det(A), det(α*A)=α^n*det(A), det(A)=0 → singular.
-
-**Aplicações:** Verificar invertibilidade, resolver sistemas (Cramer), mudança de variáveis, cálculo de volume.
-
-**Exemplo:** A=[[1,2],[3,4]], det(A)=1*4-2*3=-2`,
-      examples: [
-        "det([[1, 0], [0, 1]]) = 1 (identidade)",
-        "det([[1, 2], [2, 4]]) = 0 (singular)",
-        "det([[2, 0], [0, 3]]) = 6 (diagonal)",
-        "det(2*A) = 4*det(A) para matriz 2×2"
-      ]
-    },
-    11: {
-      title: "Matrizes Inversas",
-      content: `Matriz A^-1 tal que A*A^-1 = I (identidade).
-
-**Definição:** A*A^-1 = A^-1*A = I
-
-**Condições:** A quadrada, det(A)≠0 (não-singular).
-
-**Cálculo 2×2:** A=[[a,b],[c,d]], A^-1=(1/det(A))*[[d,-b],[-c,a]]
-
-**Propriedades:** (A^-1)^-1=A, (A*B)^-1=B^-1*A^-1, (A^T)^-1=(A^-1)^T, det(A^-1)=1/det(A).
-
-**Aplicações:** Resolver Ax=b→x=A^-1*b, regressão linear, transformações inversas.
-
-**Aviso:** Nunca calcule A^-1 explicitamente. Use LU ou QR.`,
-      examples: [
-        "I * A = A (identidade)",
-        "A * A^-1 = I",
-        "Resolver Ax = b: x = A^-1 * b",
-        "Regressão: β = (X^T X)^-1 X^T y"
-      ]
-    },
-    12: {
-      title: "Projeto: Transformações Lineares",
-      content: `Implemente transformações lineares e visualize geometricamente.
-
-**Objetivo:** Implementar e visualizar: Rotação, Escala, Reflexão, Cisalhamento, Composição.
-
-**Rotação 2D:** R(θ)=[[cos(θ),-sin(θ)],[sin(θ),cos(θ)]]
-
-**Escala:** S(sx,sy)=[[sx,0],[0,sy]]
-
-**Reflexão em x:** F=[[1,0],[0,-1]]
-
-**Cisalhamento:** H(k)=[[1,k],[0,1]]
-
-**Composição:** T=T1*T2*T3*...
-
-**Tarefas:** 1) Implementar cada transformação, 2) Aplicar a pontos, 3) Visualizar com matplotlib, 4) Calcular determinantes, 5) Verificar propriedades.
-
-**Desafio:** Rotação 3D com plotly.`,
-      examples: [
-        "Rotação de 90°: [[0, -1], [1, 0]]",
-        "Escala 2x: [[2, 0], [0, 2]]",
-        "Reflexão em x: [[1, 0], [0, -1]]",
-        "Composição: Rotação depois Escala = Escala @ Rotação"
-      ]
-    },
-    notebooks: {
-      title: "Notebooks Python com Exemplos",
-      content: "# Notebooks Python com Exemplos\n\n## Conteúdo Disponível:\n\n### 1. Introdução a NumPy\n- Criação de arrays\n- Operações básicas\n- Broadcasting\n\n### 2. Vetores e Matrizes\n- Representação em NumPy\n- Operações vetoriais\n- Visualização com Matplotlib\n\n### 3. Transformações Lineares\n- Rotação, Escala, Reflexão\n- Composição de transformações\n\n### 4. Aplicações Práticas\n- PCA, Regressão linear, SVM"
-    },
-    exercises: {
-      title: "Exercícios Interativos",
-      content: "# Exercícios Interativos\n\n## Exercícios por Tópico:\n\n### Vetores (Nível Iniciante)\n1. Calcular magnitude de um vetor\n2. Normalizar um vetor\n3. Calcular produto escalar\n4. Verificar ortogonalidade\n\n### Matrizes (Nível Intermediário)\n1. Multiplicação de matrizes\n2. Calcular determinante\n3. Encontrar transposta\n4. Verificar simetria\n\n### Transformações (Nível Avançado)\n1. Implementar rotação\n2. Implementar escala\n3. Compor transformações\n4. Encontrar transformação inversa"
-    },
-    projects: {
-      title: "Projetos Práticos",
-      content: "# Projetos Práticos\n\n## Projeto 1: Análise de Imagem\n- Carregar imagem, Representar como matriz, Aplicar transformações\n\n## Projeto 2: Recomendação de Filmes\n- Fatorização de matrizes, Calcular similaridade\n\n## Projeto 3: Compressão de Imagem\n- SVD, Reduzir dimensionalidade, Reconstruir\n\n## Projeto 4: PCA\n- Implementar PCA, Reduzir dimensionalidade\n\n## Projeto 5: Rede Neural Simples\n- Forward pass, Operações matriciais, Calcular loss"
-    },
-    references: {
-      title: "Referências e Leitura Adicional",
-      content: "# Referências e Leitura Adicional\n\n## Livros Recomendados:\n\n### Introdutórios\n1. Linear Algebra Done Right - Sheldon Axler\n2. Introduction to Linear Algebra - Gilbert Strang\n\n### Intermediários\n3. Matrix Computations - Golub & Van Loan\n\n### Aplicados em IA\n4. Deep Learning - Goodfellow, Bengio, Courville\n\n## Cursos Online:\n- MIT OpenCourseWare: Linear Algebra\n- 3Blue1Brown: Essence of Linear Algebra\n- Coursera: Linear Algebra Specialization\n- edX: Linear Algebra Fundamentals"
-    }
+    1: { title: "O que é Álgebra Linear?", content: "Álgebra Linear é o ramo da matemática que estuda vetores, matrizes e transformações lineares. É fundamental para entender como os algoritmos de Machine Learning funcionam.\n\n**Definição Formal:**\nÁlgebra Linear é o estudo de espaços vetoriais e transformações lineares entre eles.\n\n**Conceitos Fundamentais:**\n1. Vetores: Representações de direção e magnitude\n2. Matrizes: Arranjos retangulares de números\n3. Transformações Lineares: Funções que preservam operações\n4. Espaços Vetoriais: Conjuntos de vetores com operações bem definidas", examples: ["Vetor 2D: [3, 4]", "Matriz 2x2: [[1, 2], [3, 4]]", "Redes neurais: y = Wx + b"] },
+    2: { title: "Aplicações em IA", content: "Álgebra Linear é a base matemática de praticamente todos os algoritmos de IA modernos.\n\n**Aplicações Principais:**\n1. Redes Neurais: Multiplicação de matrizes\n2. Processamento de Imagens: Transformações de pixels\n3. NLP: Embeddings e representações vetoriais\n4. Visão Computacional: Transformações geométricas", examples: ["Redes Neurais Convolucionais", "Word2Vec embeddings", "Transformações de imagem"] },
+    3: { title: "Ferramentas e Bibliotecas", content: "Bibliotecas Python para trabalhar com álgebra linear.\n\n**Principais:**\n1. NumPy: Operações com arrays\n2. SciPy: Computação científica\n3. Pandas: Manipulação de dados\n4. TensorFlow/PyTorch: Deep Learning", examples: ["import numpy as np", "from scipy import linalg", "import pandas as pd"] },
+    4: { title: "Conceito de Vetor", content: "Um vetor é uma sequência ordenada de números que representa uma direção e magnitude em espaço multidimensional.\n\n**Representação:**\nv = [v1, v2, ..., vn]\n\n**Propriedades:**\n1. Magnitude: Comprimento do vetor\n2. Direção: Ângulo em relação aos eixos\n3. Componentes: Valores individuais", examples: ["Vetor 2D: [3, 4]", "Vetor 3D: [1, 2, 3]", "Magnitude: sqrt(3² + 4²) = 5"] },
+    5: { title: "Operações Vetoriais", content: "Operações básicas com vetores.\n\n**Operações:**\n1. Adição: v + u = [v1+u1, v2+u2]\n2. Subtração: v - u = [v1-u1, v2-u2]\n3. Multiplicação por escalar: k*v = [k*v1, k*v2]\n4. Magnitude: ||v|| = sqrt(v1² + v2²)", examples: ["[1,2] + [3,4] = [4,6]", "[5,5] - [2,1] = [3,4]", "2 * [1,2] = [2,4]"] },
+    6: { title: "Produto Escalar", content: "O produto escalar (dot product) mede a similaridade entre dois vetores.\n\n**Fórmula:**\nv · u = v1*u1 + v2*u2 + ... + vn*un\n\n**Propriedades:**\n1. Resultado é um escalar (número)\n2. Mede ângulo entre vetores\n3. Se perpendiculares: produto = 0", examples: ["[1,2] · [3,4] = 1*3 + 2*4 = 11", "Vetores perpendiculares: produto = 0", "Similaridade entre embeddings"] },
+    7: { title: "Produto Vetorial", content: "O produto vetorial (cross product) produz um novo vetor perpendicular aos dois originais.\n\n**Fórmula (3D):**\nv × u = [v2*u3 - v3*u2, v3*u1 - v1*u3, v1*u2 - v2*u1]\n\n**Propriedades:**\n1. Resultado é um vetor\n2. Perpendicular aos dois originais\n3. Magnitude: ||v × u|| = ||v|| * ||u|| * sin(θ)", examples: ["[1,0,0] × [0,1,0] = [0,0,1]", "Direção perpendicular", "Cálculo de área de paralelogramo"] },
+    8: { title: "Conceito de Matriz", content: "Uma matriz é um arranjo retangular de números organizado em linhas e colunas.\n\n**Notação:**\nA = [[a11, a12], [a21, a22]]\n\n**Tipos:**\n1. Quadrada: m = n\n2. Retangular: m ≠ n\n3. Identidade: Diagonal com 1s\n4. Nula: Todos zeros", examples: ["Matriz 2x3: [[1,2,3], [4,5,6]]", "Matriz identidade: [[1,0], [0,1]]", "Matriz nula: [[0,0], [0,0]]"] },
+    9: { title: "Operações com Matrizes", content: "Operações básicas com matrizes.\n\n**Operações:**\n1. Adição: A + B (elemento a elemento)\n2. Multiplicação: A * B (produto de linhas e colunas)\n3. Transposição: A^T (troca linhas e colunas)\n4. Multiplicação por escalar: k*A", examples: ["[[1,2],[3,4]] + [[5,6],[7,8]] = [[6,8],[10,12]]", "Transposição: [[1,2],[3,4]]^T = [[1,3],[2,4]]", "Produto de matrizes: (m×n) * (n×p) = m×p"] },
+    10: { title: "Determinantes", content: "O determinante é um número que caracteriza uma matriz quadrada.\n\n**Propriedades:**\n1. Mede se a matriz é invertível\n2. Se det = 0: matriz singular (não invertível)\n3. Fórmula 2x2: det = ad - bc\n4. Relacionado ao volume de transformação", examples: ["Matriz [[a,b],[c,d]]: det = ad - bc", "Matriz singular: det = 0", "Matriz invertível: det ≠ 0"] },
+    11: { title: "Matrizes Inversas", content: "A matriz inversa A^-1 é tal que A * A^-1 = I (identidade).\n\n**Propriedades:**\n1. Existe apenas se det(A) ≠ 0\n2. (A^-1)^-1 = A\n3. (A*B)^-1 = B^-1 * A^-1\n4. Fórmula 2x2: A^-1 = (1/det) * [[d,-b],[-c,a]]", examples: ["Matriz 2x2 invertível", "Cálculo de A^-1", "Resolução de sistemas lineares"] },
+    12: { title: "Projeto: Transformações Lineares", content: "Aplicar conceitos de álgebra linear em transformações geométricas.\n\n**Projeto:**\n1. Implementar rotação de pontos\n2. Escalar vetores\n3. Refletir pontos em eixos\n4. Visualizar transformações\n\n**Tecnologias:**\nNumPy, Matplotlib", examples: ["Rotação: matriz de rotação", "Escala: matriz diagonal", "Reflexão: matriz de reflexão"] }
   },
   "statistics": {
-    1: {
-      title: "O que é Estatística?",
-      content: `Estatística é a ciência que coleta, analisa e interpreta dados para extrair informações significativas. É essencial para tomar decisões baseadas em dados em IA e ciência de dados.
-
-**Ramos da Estatística:**
-1. Estatística Descritiva: Resumo e visualização de dados
-2. Estatística Inferencial: Fazer conclusões sobre populações a partir de amostras
-3. Estatística Bayesiana: Usar probabilidades para atualizar crenças
-
-**Aplicações em IA:**
-- Análise exploratória de dados (EDA)
-- Validação de modelos
-- Detecção de anomalias
-- Testes de significância`,
-      examples: [
-        "Média de um dataset: soma de todos os valores dividida pelo número de elementos",
-        "Desvio padrão: mede a dispersão dos dados em torno da média",
-        "Correlação: mede a relação entre duas variáveis"
-      ]
-    },
-    2: {
-      title: "Tipos de Dados",
-      content: `Em estatística, existem diferentes tipos de dados que requerem análises distintas.
-
-**Tipos Principais:**
-1. Dados Quantitativos: Numéricos (idade, peso, preço)
-2. Dados Qualitativos: Categóricos (cor, gênero, região)
-3. Dados Contínuos: Podem assumir qualquer valor em um intervalo
-4. Dados Discretos: Assumem valores específicos (contagem)
-
-**Escalas de Medição:**
-- Nominal: Categorias sem ordem
-- Ordinal: Categorias com ordem
-- Intervalo: Números com diferenças significativas
-- Razão: Números com zero absoluto`,
-      examples: [
-        "Quantitativo: Altura em cm, Salário em reais",
-        "Qualitativo: Cor de olhos, Marca de carro",
-        "Contínuo: Temperatura, Tempo",
-        "Discreto: Número de filhos, Quantidade de vendas"
-      ]
-    },
+    1: { title: "O que é Estatística?", content: "Estatística é a ciência que coleta, analisa e interpreta dados.\n\n**Ramos:**\n1. Descritiva: Resumo de dados\n2. Inferencial: Conclusões sobre populações\n3. Bayesiana: Usar probabilidades\n\n**Aplicações em IA:**\nAnálise exploratória, validação de modelos, detecção de anomalias", examples: ["Média de dataset", "Desvio padrão", "Correlação entre variáveis"] },
+    2: { title: "Tipos de Dados", content: "Diferentes tipos de dados requerem análises distintas.\n\n**Tipos:**\n1. Quantitativos: Numéricos (idade, peso)\n2. Qualitativos: Categóricos (cor, gênero)\n3. Contínuos: Qualquer valor em intervalo\n4. Discretos: Valores específicos (contagem)", examples: ["Quantitativo: Altura em cm", "Qualitativo: Cor de olhos", "Contínuo: Temperatura", "Discreto: Número de filhos"] },
+    3: { title: "Amostragem", content: "Amostragem é selecionar um subconjunto da população.\n\n**Tipos:**\n1. Aleatória Simples: Cada elemento tem igual chance\n2. Estratificada: Divide população em grupos\n3. Sistemática: Seleciona a cada k-ésimo\n4. Por Conglomerados: Seleciona grupos inteiros", examples: ["Pesquisa eleitoral: 2000 eleitores", "Controle de qualidade: 5% dos produtos", "Estudo de renda: Estratificar por região"] },
+    4: { title: "Medidas de Tendência Central", content: "Resumem dados em um único valor.\n\n**Principais:**\n1. Média: Soma/quantidade\n2. Mediana: Valor do meio\n3. Moda: Valor mais frequente\n\n**Quando usar:**\nMédia: Dados normais, sem outliers\nMediana: Dados com outliers\nModa: Dados categóricos", examples: ["Média de notas: 7.5", "Mediana de salários", "Moda de cores"] },
+    5: { title: "Medidas de Dispersão", content: "Medem a variabilidade dos dados.\n\n**Principais:**\n1. Amplitude: Máximo - Mínimo\n2. Variância: Dispersão ao quadrado\n3. Desvio Padrão: Raiz da variância\n4. Coeficiente de Variação: Desvio/Média", examples: ["Amplitude: 100-0 = 100", "Variância: 25", "Desvio padrão: 5", "CV: 0.2 ou 20%"] },
+    6: { title: "Distribuições", content: "Padrões de frequência dos dados.\n\n**Tipos:**\n1. Normal: Sino simétrico\n2. Uniforme: Igualmente distribuído\n3. Exponencial: Decaimento rápido\n4. Bimodal: Dois picos", examples: ["Normal: Altura das pessoas", "Uniforme: Dado justo", "Exponencial: Tempo de vida", "Bimodal: Duas populações"] },
+    7: { title: "Testes de Hipótese", content: "Verificam afirmações sobre dados.\n\n**Processo:**\n1. Hipótese nula (H0): Afirmação padrão\n2. Hipótese alternativa (H1): Afirmação alternativa\n3. Teste estatístico: Calcula p-value\n4. Decisão: Rejeita ou não H0", examples: ["H0: Média = 100", "H1: Média ≠ 100", "P-value: 0.05", "Rejeitar H0 se p < 0.05"] },
+    8: { title: "Intervalos de Confiança", content: "Faixa de valores prováveis para um parâmetro.\n\n**Conceito:**\n1. Intervalo com 95% de confiança\n2. Margem de erro\n3. Nível de significância (α)\n4. Quanto maior a confiança, maior o intervalo", examples: ["IC 95%: [95, 105]", "Margem: ±5", "Confiança: 95%", "Significância: α = 0.05"] },
+    9: { title: "Regressão Linear", content: "Relação entre variáveis.\n\n**Equação:**\ny = a + bx\n\n**Conceitos:**\n1. Variável independente (x)\n2. Variável dependente (y)\n3. Coeficiente angular (b)\n4. Intercepto (a)", examples: ["Preço vs Tamanho", "Vendas vs Publicidade", "Temperatura vs Altitude"] },
+    10: { title: "Análise Exploratória", content: "Investigar dados antes de análise profunda.\n\n**Técnicas:**\n1. Gráficos: Histogramas, box plots\n2. Resumos: Média, mediana, desvio\n3. Correlações: Relações entre variáveis\n4. Visualizações: Scatter plots, heatmaps", examples: ["Histogramas", "Box plots", "Scatter plots", "Heatmaps de correlação"] },
+    11: { title: "Detecção de Outliers", content: "Identificar valores anormais.\n\n**Métodos:**\n1. Z-score: |z| > 3\n2. IQR: Fora de [Q1 - 1.5*IQR, Q3 + 1.5*IQR]\n3. Isolation Forest: Algoritmo de ML\n4. Visualização: Box plots", examples: ["Z-score > 3", "IQR 1.5x", "Isolation Forest", "Anomalias em série temporal"] },
+    12: { title: "Correlação e Causalidade", content: "Relação entre variáveis.\n\n**Importante:**\nCorrelação ≠ Causalidade\n\n**Coeficiente de Correlação:**\n-1 a 1 (Pearson)\n\n**Tipos:**\n1. Positiva: Aumenta junto\n2. Negativa: Uma aumenta, outra diminui\n3. Nula: Sem relação", examples: ["Correlação: 0.8", "Causalidade: Prova necessária", "Confundidor: Variável extra"] },
+    13: { title: "Testes Estatísticos", content: "Validar hipóteses com testes específicos.\n\n**Testes:**\n1. T-test: Comparar duas médias\n2. Chi-square: Variáveis categóricas\n3. ANOVA: Múltiplos grupos\n4. Mann-Whitney: Não paramétrico", examples: ["T-test: Comparar médias", "Chi-square: Categorias", "ANOVA: Múltiplos grupos", "Mann-Whitney: Distribuições"] },
+    14: { title: "Projeto: Análise Estatística", content: "Aplicar conceitos em dados reais.\n\n**Etapas:**\n1. Coleta de dados\n2. Limpeza e preparação\n3. Análise exploratória\n4. Testes estatísticos\n5. Visualização e conclusões", examples: ["Dataset: Vendas", "Análise: Tendências", "Resultado: Insights", "Recomendações"] }
   },
   "probability": {
-    1: {
-      title: "Conceitos Básicos de Probabilidade",
-      content: `Probabilidade é a medida da chance de um evento ocorrer. É fundamental para entender algoritmos de IA, especialmente em aprendizado bayesiano e modelos probabilísticos.
-
-**Definições Fundamentais:**
-1. Experimento Aleatório: Processo com resultado incerto
-2. Espaço Amostral: Conjunto de todos os resultados possíveis
-3. Evento: Subconjunto do espaço amostral
-4. Probabilidade: Número entre 0 e 1 que mede a chance de um evento
-
-**Fórmula Básica:**
-P(A) = (Número de resultados favoráveis) / (Número total de resultados possíveis)
-
-**Aplicações em IA:**
-- Classificação probabilística
-- Redes Bayesianas
-- Modelos generativos`,
-      examples: [
-        "Lançar um dado: P(número par) = 3/6 = 0.5",
-        "Baralho: P(carta vermelha) = 26/52 = 0.5",
-        "Classificação: P(spam | palavras) usando Bayes"
-      ]
-    }
+    1: { title: "Conceitos Básicos de Probabilidade", content: "Probabilidade é a medida da chance de um evento ocorrer.\n\n**Definições:**\n1. Experimento Aleatório: Resultado incerto\n2. Espaço Amostral: Todos os resultados possíveis\n3. Evento: Subconjunto do espaço amostral\n4. Probabilidade: Número entre 0 e 1", examples: ["Lançar um dado: P(par) = 3/6 = 0.5", "Baralho: P(vermelha) = 26/52 = 0.5", "Classificação: P(spam|palavras)"] },
+    2: { title: "Probabilidade Condicional", content: "Probabilidade de um evento dado que outro ocorreu.\n\n**Fórmula:**\nP(A|B) = P(A∩B) / P(B)\n\n**Leitura:**\nProbabilidade de A dado B\n\n**Aplicações:**\nFiltros de spam, diagnóstico médico", examples: ["P(chuva|nuvens)", "P(doença|teste positivo)", "P(spam|palavras específicas)"] },
+    3: { title: "Teorema de Bayes", content: "Atualizar probabilidades com nova informação.\n\n**Fórmula:**\nP(A|B) = P(B|A) * P(A) / P(B)\n\n**Conceitos:**\n1. Prior: Probabilidade inicial\n2. Likelihood: Probabilidade da evidência\n3. Posterior: Probabilidade atualizada", examples: ["Diagnóstico médico", "Filtro de spam", "Classificação Bayesiana"] },
+    4: { title: "Independência", content: "Eventos que não afetam um ao outro.\n\n**Definição:**\nP(A∩B) = P(A) * P(B)\n\n**Propriedade:**\nP(A|B) = P(A)\n\n**Exemplos:**\nDois dados, lançamentos sucessivos", examples: ["Dois dados: Independentes", "Lançamentos: Independentes", "Eventos aleatórios"] },
+    5: { title: "Variáveis Aleatórias", content: "Função que mapeia resultados para números.\n\n**Tipos:**\n1. Discreta: Valores específicos\n2. Contínua: Qualquer valor em intervalo\n\n**Propriedades:**\n1. Função de probabilidade\n2. Distribuição acumulada", examples: ["Número de caras em 10 lançamentos", "Altura de uma pessoa", "Tempo até um evento"] },
+    6: { title: "Distribuições Discretas", content: "Valores específicos com probabilidades.\n\n**Tipos:**\n1. Bernoulli: Sucesso ou fracasso\n2. Binomial: N sucessos em n tentativas\n3. Poisson: Eventos em intervalo\n4. Geométrica: Tentativas até sucesso", examples: ["Bernoulli: Sucesso/Falha", "Binomial: N sucessos", "Poisson: Eventos raros", "Geométrica: Tentativas"] },
+    7: { title: "Distribuições Contínuas", content: "Valores em intervalo com densidade.\n\n**Tipos:**\n1. Normal: Sino simétrico\n2. Uniforme: Igualmente distribuído\n3. Exponencial: Decaimento\n4. Beta: Intervalo [0,1]", examples: ["Normal: Altura", "Uniforme: Tempo", "Exponencial: Vida útil", "Beta: Proporções"] },
+    8: { title: "Esperança e Variância", content: "Valor esperado e dispersão.\n\n**Fórmulas:**\nE[X] = Σ x * P(x)\nVar(X) = E[X²] - E[X]²\n\n**Propriedades:**\n1. E[aX + b] = a*E[X] + b\n2. Var(aX + b) = a² * Var(X)", examples: ["Média: 5", "Variância: 2", "Desvio: 1.4", "E[X] = 3.5 para dado"] },
+    9: { title: "Lei dos Grandes Números", content: "Média converge para esperança.\n\n**Conceito:**\nCom muitas tentativas, média → E[X]\n\n**Implicação:**\nMaior amostra = melhor estimativa\n\n**Aplicação:**\nSimulações Monte Carlo", examples: ["Dado: 1000 lançamentos", "Moeda: 10000 lançamentos", "Convergência para 0.5"] },
+    10: { title: "Teorema Central do Limite", content: "Distribuição de médias é normal.\n\n**Implicação:**\nMédias de amostras → Normal\n\n**Consequência:**\nIntervalo de confiança\nTestes de hipótese\n\n**Aplicação:**\nMuitos fenômenos naturais", examples: ["Média de amostras", "Intervalo de confiança", "Testes estatísticos", "Distribuição normal"] },
+    11: { title: "Distribuições Conjuntas", content: "Probabilidade de múltiplas variáveis.\n\n**Conceito:**\nP(X=x, Y=y)\n\n**Tipos:**\n1. Conjunta: P(X,Y)\n2. Marginal: P(X)\n3. Condicional: P(X|Y)", examples: ["Altura e peso", "Idade e renda", "Temperatura e umidade"] },
+    12: { title: "Projeto: Simulações Probabilísticas", content: "Usar probabilidade para resolver problemas.\n\n**Técnicas:**\n1. Monte Carlo: Amostragem aleatória\n2. Simulação: Reproduzir fenômenos\n3. Amostragem: Gerar dados\n\n**Aplicações:**\nProblema de Monty Hall, Integração, Previsões", examples: ["Problema de Monty Hall", "Integração Monte Carlo", "Simulação de dados"] }
   },
   "python-basics": {
-    1: {
-      title: "Configuração do Ambiente Python",
-      content: `Antes de começar a programar em Python, você precisa configurar seu ambiente de desenvolvimento. Vamos aprender como instalar Python, gerenciadores de pacotes e IDEs.
-
-**O que você aprenderá:**
-1. Instalar Python 3.x
-2. Configurar pip e virtualenv
-3. Usar Jupyter Notebook
-4. Configurar uma IDE (VS Code ou PyCharm)
-
-**Por que é importante:**
-- Um ambiente bem configurado economiza tempo
-- Evita conflitos de dependências
-- Facilita colaboração em projetos`,
-      examples: [
-        "Instalar Python: python --version",
-        "Criar ambiente virtual: python -m venv env",
-        "Ativar ambiente: source env/bin/activate (Linux/Mac)",
-        "Instalar pacotes: pip install numpy pandas"
-      ]
-    }
+    1: { title: "Configuração do Ambiente Python", content: "Antes de programar, configure seu ambiente.\n\n**O que você aprenderá:**\n1. Instalar Python 3.x\n2. Configurar pip e virtualenv\n3. Usar Jupyter Notebook\n4. Configurar IDE (VS Code ou PyCharm)", examples: ["python --version", "python -m venv env", "source env/bin/activate", "pip install numpy pandas"] },
+    2: { title: "Variáveis e Tipos", content: "Armazenar e manipular dados.\n\n**Tipos:**\n1. int: Inteiros (5, -10)\n2. float: Decimais (3.14, -2.5)\n3. str: Texto ('Python', \"Olá\")\n4. bool: Verdadeiro/Falso (True, False)", examples: ["x = 10", "y = 3.14", "nome = 'Python'", "ativo = True"] },
+    3: { title: "Estruturas de Controle", content: "Executar código condicionalmente.\n\n**Estruturas:**\n1. if/else: Condicional\n2. for: Loop sobre sequência\n3. while: Loop com condição\n4. break/continue: Controle de loop", examples: ["if x > 5:", "for i in range(10):", "while x < 100:", "break, continue"] },
+    4: { title: "Funções", content: "Reutilizar código.\n\n**Definição:**\ndef funcao(param):\n    return resultado\n\n**Conceitos:**\n1. Parâmetros\n2. Retorno\n3. Escopo", examples: ["def somar(a, b):", "return a + b", "resultado = somar(3, 5)"] },
+    5: { title: "Listas e Tuplas", content: "Coleções de dados.\n\n**Diferenças:**\n1. Listas: Mutáveis [1, 2, 3]\n2. Tuplas: Imutáveis (1, 2, 3)\n\n**Operações:**\nAcesso, slicing, append", examples: ["lista = [1, 2, 3]", "tupla = (1, 2, 3)", "lista[0] = 10"] },
+    6: { title: "Dicionários", content: "Pares chave-valor.\n\n**Uso:**\ndict = {'chave': 'valor'}\n\n**Operações:**\nAcesso, adição, remoção", examples: ["pessoa = {'nome': 'João'}", "pessoa['idade'] = 30", "print(pessoa['nome'])"] },
+    7: { title: "Strings", content: "Manipular texto.\n\n**Operações:**\n1. Concatenação: +\n2. Slicing: [i:j]\n3. Métodos: upper(), lower(), split()", examples: ["s = 'Python'", "s.upper()", "s[0:3]", "s + ' é legal'"] },
+    8: { title: "Compreensões de Lista", content: "Criar listas de forma concisa.\n\n**Sintaxe:**\n[x for x in lista if condicao]\n\n**Vantagens:**\nMais legível e rápido", examples: ["[x*2 for x in range(5)]", "[x for x in lista if x > 5]", "[[x, y] for x in range(3) for y in range(3)]"] },
+    9: { title: "Tratamento de Erros", content: "Lidar com exceções.\n\n**Estrutura:**\ntry/except/finally\n\n**Tipos:**\nValueError, TypeError, IndexError", examples: ["try:", "except ValueError:", "finally:", "print('Fim')"] },
+    10: { title: "Módulos e Pacotes", content: "Organizar código.\n\n**Importação:**\nimport modulo\nfrom modulo import funcao\n\n**Exemplos:**\nNumPy, Pandas, Matplotlib", examples: ["import numpy", "from pandas import read_csv", "import matplotlib.pyplot as plt"] },
+    11: { title: "Orientação a Objetos", content: "Programação baseada em classes.\n\n**Conceitos:**\n1. Classes\n2. Objetos\n3. Herança\n4. Polimorfismo", examples: ["class Pessoa:", "def __init__(self):", "obj = Pessoa()"] },
+    12: { title: "Entrada e Saída", content: "Ler e escrever dados.\n\n**Operações:**\n1. input(): Ler do usuário\n2. print(): Exibir na tela\n3. open(): Trabalhar com arquivos", examples: ["nome = input('Nome:')", "print(nome)", "open('arquivo.txt')"] },
+    13: { title: "Expressões Regulares", content: "Buscar padrões em texto.\n\n**Módulo:**\nimport re\n\n**Funções:**\nsearch(), findall(), sub()", examples: ["re.search(r'\\\\d+', texto)", "re.findall(r'\\\\w+', texto)", "re.sub(r'\\\\s+', ' ', texto)"] },
+    14: { title: "Debugging", content: "Encontrar e corrigir erros.\n\n**Técnicas:**\n1. print()\n2. pdb (debugger)\n3. Logging", examples: ["print(variavel)", "import pdb; pdb.set_trace()", "logging.debug()"] },
+    15: { title: "Testes Unitários", content: "Verificar código.\n\n**Framework:**\nunittest\n\n**Conceito:**\nTestar funções isoladamente", examples: ["import unittest", "class TestCase(unittest.TestCase):", "self.assertEqual(resultado, esperado)"] },
+    16: { title: "Projeto: Aplicação Python", content: "Integrar conceitos em projeto.\n\n**Etapas:**\n1. Planejamento\n2. Desenvolvimento\n3. Testes\n4. Documentação", examples: ["Calculadora", "Gerenciador de tarefas", "Analisador de dados"] }
   }
 };
