@@ -7,11 +7,11 @@ import { coursesData, lessonsContentData } from "@/data/coursesData";
 export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
-  const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1); // Default to first lesson
+  const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1);
 
   if (!match) return null;
 
-  const module = params?.module || "linear-algebra";
+  const module = params?.module ? String(params.module).toLowerCase().trim() : "linear-algebra";
   const courseData = coursesData[module];
   const lessonsContent = lessonsContentData[module] || {};
 
