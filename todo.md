@@ -31,36 +31,32 @@
   - [ ] Página Python Intermediário
   - [ ] Página Python Avançado
 - [ ] Implementar Fase 3: SQL e Banco de Dados (Básico, Intermediário, Avançado)
-  - [ ] Página SQL Básico
-  - [ ] Página SQL Intermediário
-  - [ ] Página SQL Avançado
+  - [x] Página SQL Básico (módulo adicionado)
+  - [ ] Página SQL Intermediário (módulo adicionado)
+  - [ ] Página SQL Avançado (módulo adicionado)
 - [ ] Implementar Fase 4: Análise de Dados (NumPy, Pandas, Visualização)
-  - [ ] Página NumPy
-  - [ ] Página Pandas
-  - [ ] Página Visualização de Dados
+  - [x] Página NumPy (módulo adicionado)
+  - [x] Página Pandas (módulo adicionado)
+  - [ ] Página Visualização de Dados (módulo adicionado)
 
 ## FASE 4: Trilha de Aprendizado - Avançado (Fases 5-8)
 - [ ] Implementar Fase 5: Machine Learning (Supervisionado, Não-supervisionado, Métricas)
-  - [ ] Página ML Fundamentos
-  - [ ] Página Aprendizado Supervisionado
-  - [ ] Página Aprendizado Não-supervisionado
-  - [ ] Página Métricas de Avaliação
+  - [x] Página ML Fundamentos (módulo adicionado)
+  - [ ] Página Aprendizado Supervisionado (módulo adicionado)
+  - [ ] Página Aprendizado Não-supervisionado (módulo adicionado)
+  - [ ] Página Métricas de Avaliação (módulo adicionado)
 - [ ] Implementar Fase 6: Deep Learning (Redes Neurais, CNN, RNN, Transformers)
-  - [ ] Página Redes Neurais
-  - [ ] Página CNN
-  - [ ] Página RNN
-  - [ ] Página Transformers
+  - [x] Página Redes Neurais (módulo adicionado)
+  - [ ] Página CNN (módulo adicionado)
+  - [ ] Página RNN (módulo adicionado)
+  - [ ] Página Transformers (módulo adicionado)
 - [ ] Implementar Fase 7: IA Generativa (LLMs, Embeddings, RAG, Agentes)
-  - [ ] Página Grandes Modelos de Linguagem
-  - [ ] Página Embeddings
-  - [ ] Página RAG
-  - [ ] Página Agentes de IA
+  - [x] Página Grandes Modelos de Linguagem (módulo adicionado)
+  - [ ] Página Embeddings (módulo adicionado)
+  - [ ] Página RAG (módulo adicionado)
+  - [ ] Página Agentes de IA (módulo adicionado)
 - [ ] Implementar Fase 8: Engenharia de Software para IA (Git, Docker, APIs, Cloud, DevOps)
-  - [ ] Página Git
-  - [ ] Página Docker
-  - [ ] Página APIs
-  - [ ] Página Cloud
-  - [ ] Página DevOps
+  - [x] Página Engenharia de Software (módulo adicionado com Git, Docker, CI/CD, Cloud)
 
 ## FASE 5: Projetos Práticos
 - [ ] Criar layout base para seção de projetos

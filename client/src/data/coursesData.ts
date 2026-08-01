@@ -182,6 +182,115 @@ export const coursesData: Record<string, any> = {
         ]
       }
     ]
+  },
+  "sql-basics": {
+    title: "SQL Básico",
+    description: "Introdução a consultas SQL",
+    phase: 3,
+    difficulty: "Iniciante",
+    duration: "30 horas",
+    lessons: 10,
+    rating: 4.8,
+    reviews: 1200,
+    sections: [
+      { title: "Fundamentos", lessons: [{ id: 1, title: "Introdução", completed: false }, { id: 2, title: "SELECT", completed: false }, { id: 3, title: "WHERE", completed: false }] },
+      { title: "Operações", lessons: [{ id: 4, title: "INSERT", completed: false }, { id: 5, title: "UPDATE", completed: false }, { id: 6, title: "DELETE", completed: false }] },
+      { title: "Consultas", lessons: [{ id: 7, title: "JOINs", completed: false }, { id: 8, title: "GROUP BY", completed: false }, { id: 9, title: "ORDER BY", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 10, title: "Final", completed: false }] }
+    ]
+  },
+  "numpy": {
+    title: "NumPy",
+    description: "Computação numérica",
+    phase: 4,
+    difficulty: "Intermediário",
+    duration: "25 horas",
+    lessons: 8,
+    rating: 4.9,
+    reviews: 1500,
+    sections: [
+      { title: "Fundamentos", lessons: [{ id: 1, title: "Arrays", completed: false }, { id: 2, title: "Criação", completed: false }, { id: 3, title: "Indexação", completed: false }] },
+      { title: "Operações", lessons: [{ id: 4, title: "Matemática", completed: false }, { id: 5, title: "Broadcasting", completed: false }, { id: 6, title: "Álgebra", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 7, title: "Projeto", completed: false }, { id: 8, title: "Final", completed: false }] }
+    ]
+  },
+  "pandas": {
+    title: "Pandas",
+    description: "Manipulação de dados",
+    phase: 4,
+    difficulty: "Intermediário",
+    duration: "30 horas",
+    lessons: 10,
+    rating: 4.9,
+    reviews: 2000,
+    sections: [
+      { title: "Fundamentos", lessons: [{ id: 1, title: "Series", completed: false }, { id: 2, title: "Leitura", completed: false }, { id: 3, title: "Seleção", completed: false }] },
+      { title: "Manipulação", lessons: [{ id: 4, title: "Limpeza", completed: false }, { id: 5, title: "Transformação", completed: false }, { id: 6, title: "Agregação", completed: false }] },
+      { title: "Análise", lessons: [{ id: 7, title: "Exploratória", completed: false }, { id: 8, title: "Merge", completed: false }, { id: 9, title: "Pivot", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 10, title: "Final", completed: false }] }
+    ]
+  },
+  "ml-fundamentals": {
+    title: "Fundamentos ML",
+    description: "Conceitos de Machine Learning",
+    phase: 5,
+    difficulty: "Avançado",
+    duration: "30 horas",
+    lessons: 8,
+    rating: 4.9,
+    reviews: 1800,
+    sections: [
+      { title: "Conceitos", lessons: [{ id: 1, title: "O que é ML", completed: false }, { id: 2, title: "Tipos", completed: false }, { id: 3, title: "Workflow", completed: false }] },
+      { title: "Dados", lessons: [{ id: 4, title: "Preparação", completed: false }, { id: 5, title: "Feature", completed: false }, { id: 6, title: "Normalização", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 7, title: "Classificação", completed: false }, { id: 8, title: "Final", completed: false }] }
+    ]
+  },
+  "neural-networks": {
+    title: "Redes Neurais",
+    description: "Fundamentos de redes",
+    phase: 6,
+    difficulty: "Avançado",
+    duration: "35 horas",
+    lessons: 10,
+    rating: 4.9,
+    reviews: 1600,
+    sections: [
+      { title: "Fundamentos", lessons: [{ id: 1, title: "Neurônios", completed: false }, { id: 2, title: "Perceptron", completed: false }, { id: 3, title: "Backpropagation", completed: false }] },
+      { title: "Arquiteturas", lessons: [{ id: 4, title: "MLP", completed: false }, { id: 5, title: "Ativações", completed: false }, { id: 6, title: "Otimizadores", completed: false }] },
+      { title: "Frameworks", lessons: [{ id: 7, title: "TensorFlow", completed: false }, { id: 8, title: "PyTorch", completed: false }, { id: 9, title: "Keras", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 10, title: "Final", completed: false }] }
+    ]
+  },
+  "llms": {
+    title: "LLMs",
+    description: "Grandes modelos de linguagem",
+    phase: 7,
+    difficulty: "Avançado",
+    duration: "28 horas",
+    lessons: 8,
+    rating: 4.9,
+    reviews: 1900,
+    sections: [
+      { title: "Conceitos", lessons: [{ id: 1, title: "LLMs", completed: false }, { id: 2, title: "Treinamento", completed: false }, { id: 3, title: "Fine-tuning", completed: false }] },
+      { title: "Modelos", lessons: [{ id: 4, title: "GPT", completed: false }, { id: 5, title: "Claude", completed: false }, { id: 6, title: "Llama", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 7, title: "Chatbot", completed: false }, { id: 8, title: "Final", completed: false }] }
+    ]
+  },
+  "software-engineering": {
+    title: "Engenharia de Software",
+    description: "Boas práticas",
+    phase: 8,
+    difficulty: "Avançado",
+    duration: "35 horas",
+    lessons: 10,
+    rating: 4.8,
+    reviews: 1300,
+    sections: [
+      { title: "Padrões", lessons: [{ id: 1, title: "SOLID", completed: false }, { id: 2, title: "Design", completed: false }, { id: 3, title: "Arquitetura", completed: false }] },
+      { title: "DevOps", lessons: [{ id: 4, title: "Git", completed: false }, { id: 5, title: "Docker", completed: false }, { id: 6, title: "CI/CD", completed: false }] },
+      { title: "Cloud", lessons: [{ id: 7, title: "AWS", completed: false }, { id: 8, title: "GCP", completed: false }, { id: 9, title: "Azure", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 10, title: "Final", completed: false }] }
+    ]
   }
 };
 
