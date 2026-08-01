@@ -1,8 +1,10 @@
 import { Link } from "wouter";
 import { ArrowRight, Award, Clock, DollarSign, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function Certifications() {
+  const [, navigate] = useLocation();
   const certifications = [
     {
       id: 1,
@@ -381,11 +383,12 @@ export default function Certifications() {
             </p>
           </div>
 
-          <Link href="/learning-path">
-            <a className="btn-primary inline-flex items-center gap-2">
-              Explorar Trilha <ArrowRight className="w-5 h-5" />
-            </a>
-          </Link>
+          <button
+            onClick={() => navigate("/learning-path")}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            Explorar Trilha <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </section>
     </div>
