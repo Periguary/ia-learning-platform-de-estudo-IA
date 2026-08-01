@@ -7,7 +7,7 @@ import { coursesData, lessonsContentData } from "@/data/coursesData";
 export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
-  const [selectedLesson, setSelectedLesson] = useState<number | string | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1); // Default to first lesson
 
   if (!match) return null;
 
