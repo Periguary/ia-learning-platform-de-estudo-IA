@@ -111,3 +111,18 @@
 - [ ] Testar navegação em todos os caminhos
 - [ ] Otimizar performance e SEO
 - [ ] Revisar identidade visual em todas as páginas
+
+
+## 🔴 BUGS CRÍTICOS - RESOLVER URGENTE
+- [ ] BUG: Conteúdo das aulas não aparece na trilha de aprendizado
+- [ ] BUG: Erro "curso não encontrado" ao clicar em explorar trilha
+- [ ] Implementar visualização correta de conteúdo em CourseDetail.tsx
+
+## 🎨 REDESIGN - INSPIRADO EM ELEVIFY.COM
+- [ ] Redesenhar homepage com hero section moderna (azul + branco)
+- [ ] Adicionar grid de categorias de cursos com ícones
+- [ ] Implementar seção "Why choose us" com cards
+- [ ] Redesenhar navegação com search bar destacada
+- [ ] Implementar layout de trilha de aprendizado com cards visuais
+- [ ] Adicionar seção de depoimentos/testimonials
+- [ ] Implementar footer com links e redes sociais
