@@ -1,22 +1,53 @@
 import React, { useState } from "react";
-import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search } from "lucide-react";
+import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send } from "lucide-react";
 import { libraryCatalog, type LibraryCategory, type LibraryItem } from "@/data/libraryCatalog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { trpc } from "@/lib/trpc";
+import { AIAssistantBox } from "@/components/AIAssistantBox";
 
 const categories: LibraryCategory[] = ["Livros Clássicos", "Apostilas Técnicas", "Artigos Fundamentais", "Whitepapers e Guias"];
 
 export default function Library() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [activeTab, setActiveTab] = useState<"catalog" | "reading-list">("catalog");
+  const [selectedItem, setSelectedItem] = useState<LibraryItem | null>(null);
+  const [newComment, setNewComment] = useState("");
+  const [newRating, setNewRating] = useState(5);
   const [notification, setNotification] = useState<string | null>(null);
+
+  const utils = trpc.useUtils();
+  const favoritesQuery = trpc.ai.favorites.useQuery();
+  const toggleFavMutation = trpc.ai.toggleFavorite.useMutation({
+    onSuccess: () => {
+      void favoritesQuery.refetch();
+    },
+  });
+
+  const reviewsQuery = trpc.ai.reviews.useQuery(
+    { libraryItemId: selectedItem?.id ?? "" },
+    { enabled: !!selectedItem }
+  );
+
+  const addReviewMutation = trpc.ai.addReview.useMutation({
+    onSuccess: () => {
+      setNewComment("");
+      void reviewsQuery.refetch();
+      setNotification("Avaliação enviada com sucesso!");
+      setTimeout(() => setNotification(null), 3000);
+    },
+  });
+
+  const favorites = favoritesQuery.data ?? [];
 
   const filteredItems = libraryCatalog.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesTab = activeTab === "catalog" || favorites.includes(item.id);
+    return matchesSearch && matchesCategory && matchesTab;
   });
 
   const handleShareDrive = (item: LibraryItem) => {
@@ -47,8 +78,27 @@ export default function Library() {
               Documentos, livros, apostilas e artigos
             </h1>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Acesse leituras fundamentais e compartilhe materiais diretamente com Google Drive, GitHub e VS Code.
+              Acesse leituras fundamentais, favorite itens para sua lista pessoal, debata com o Tutor IA e compartilhe com Google Drive, GitHub e VS Code.
             </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <Button
+              variant={activeTab === "catalog" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveTab("catalog")}
+            >
+              Catálogo Completo
+            </Button>
+            <Button
+              variant={activeTab === "reading-list" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveTab("reading-list")}
+              className="gap-2"
+            >
+              <Bookmark className="size-4" />
+              Lista de Leitura ({favorites.length})
+            </Button>
           </div>
 
           <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-center">
@@ -84,78 +134,206 @@ export default function Library() {
         </div>
       </section>
 
-      <section className="container py-12">
+      <section className="container py-12 space-y-12">
         {notification && (
-          <div className="mb-8 rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm font-medium text-primary">
+          <div className="rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm font-medium text-primary">
             {notification}
           </div>
         )}
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredItems.map(item => (
-            <article key={item.id} className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-              <div className="flex items-center justify-between gap-4">
-                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                  {item.category}
-                </span>
-                <span className="text-xs font-medium text-muted-foreground">{item.format}</span>
-              </div>
-              <h3 className="mt-4 text-xl font-bold leading-tight">{item.title}</h3>
-              <p className="mt-1 text-xs font-medium text-muted-foreground">Por {item.author} ({item.year})</p>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-
-              <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground">
-                {item.localFileHint}
-              </div>
-
-              <div className="mt-6 flex flex-col gap-2 pt-2 border-t border-border">
-                <div className="flex items-center gap-2">
-                  <Button asChild variant="default" size="sm" className="flex-1 gap-1 text-xs">
-                    <a href={item.officialUrl} target="_blank" rel="noreferrer">
-                      Acessar Oficial
-                      <ExternalLink className="size-3.5" />
-                    </a>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="gap-1 text-xs"
-                    onClick={() => handleShareDrive(item)}
-                    title="Compartilhar com Google Drive"
-                  >
-                    <HardDrive className="size-3.5 text-blue-400" />
-                    Drive
-                  </Button>
+          {filteredItems.map(item => {
+            const isFav = favorites.includes(item.id);
+            const isSelected = selectedItem?.id === item.id;
+            return (
+              <article
+                key={item.id}
+                className={`group flex flex-col rounded-2xl border bg-card p-6 shadow-sm transition-all duration-200 ${
+                  isSelected ? "border-primary ring-2 ring-primary/25 shadow-lg" : "border-border hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    {item.category}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleFavMutation.mutate({ libraryItemId: item.id })}
+                      className={`rounded-lg p-1.5 transition-colors ${isFav ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}
+                      title={isFav ? "Remover da lista de leitura" : "Adicionar à lista de leitura"}
+                    >
+                      <Bookmark className="size-4" />
+                    </button>
+                    <span className="text-xs font-medium text-muted-foreground">{item.format}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 gap-1 text-xs"
-                    onClick={() => handleShareGithub(item)}
-                    title="Exportar referência para GitHub"
-                  >
-                    <FolderGit2 className="size-3.5 text-purple-400" />
-                    GitHub
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 gap-1 text-xs"
-                    onClick={() => handleOpenVsCode(item)}
-                    title="Abrir ou clonar para VS Code"
-                  >
-                    <Code className="size-3.5 text-cyan-400" />
-                    VS Code
-                  </Button>
+
+                <h3 className="mt-4 text-xl font-bold leading-tight">{item.title}</h3>
+                <p className="mt-1 text-xs font-medium text-muted-foreground">Por {item.author} ({item.year})</p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+
+                <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground">
+                  {item.localFileHint}
                 </div>
-              </div>
-            </article>
-          ))}
+
+                <div className="mt-6 flex flex-col gap-2 pt-2 border-t border-border">
+                  <div className="flex items-center gap-2">
+                    <Button asChild variant="default" size="sm" className="flex-1 gap-1 text-xs">
+                      <a href={item.officialUrl} target="_blank" rel="noreferrer">
+                        Acessar Oficial
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className={`text-xs gap-1 ${isSelected ? "border-primary text-primary bg-primary/5" : ""}`}
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      <MessageSquare className="size-3.5" />
+                      Debater / Avaliar
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1 text-xs"
+                      onClick={() => handleShareDrive(item)}
+                    >
+                      <HardDrive className="size-3.5 text-blue-400" />
+                      Drive
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1 text-xs"
+                      onClick={() => handleShareGithub(item)}
+                    >
+                      <FolderGit2 className="size-3.5 text-purple-400" />
+                      GitHub
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 gap-1 text-xs"
+                      onClick={() => handleOpenVsCode(item)}
+                    >
+                      <Code className="size-3.5 text-cyan-400" />
+                      VS Code
+                    </Button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
+
+        {selectedItem && (
+          <div className="mt-12 rounded-2xl border border-primary/20 bg-card p-6 md:p-8 space-y-8 shadow-xl">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+              <div>
+                <span className="text-xs font-semibold text-primary uppercase tracking-wider">{selectedItem.category}</span>
+                <h2 className="text-2xl font-bold mt-1">{selectedItem.title}</h2>
+                <p className="text-sm text-muted-foreground">Por {selectedItem.author} ({selectedItem.year})</p>
+              </div>
+              <Button type="button" variant="outline" size="sm" onClick={() => setSelectedItem(null)}>
+                Fechar Detalhes
+              </Button>
+            </div>
+
+            <div className="grid gap-8 lg:grid-cols-2">
+              <div>
+                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                  <MessageSquare className="size-5 text-primary" />
+                  Debater com o Tutor IA
+                </h3>
+                <AIAssistantBox
+                  moduleId={`library-${selectedItem.id}`}
+                  courseTitle={`Biblioteca: ${selectedItem.title}`}
+                  courseDescription={selectedItem.description}
+                  lessonTitle={selectedItem.category}
+                  lessonContent={`Documento: ${selectedItem.title}\nAutor: ${selectedItem.author} (${selectedItem.year})\nDescrição: ${selectedItem.description}\nNota: ${selectedItem.localFileHint}`}
+                />
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                    <Star className="size-5 text-amber-400 fill-amber-400" />
+                    Avaliações e Opiniões dos Alunos
+                  </h3>
+
+                  <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
+                    {reviewsQuery.data && reviewsQuery.data.length > 0 ? (
+                      reviewsQuery.data.map(review => (
+                        <div key={review.id} className="rounded-xl border border-border bg-muted/40 p-4 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-sm">{review.userName}</span>
+                            <div className="flex items-center gap-1">
+                              {Array.from({ length: review.rating }).map((_, i) => (
+                                <Star key={i} className="size-3.5 text-amber-400 fill-amber-400" />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+                          <span className="text-[10px] text-muted-foreground">{new Date(review.createdAt).toLocaleDateString("pt-BR")}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+                        Nenhuma avaliação registrada ainda. Seja o primeiro a avaliar este material!
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-border bg-card p-4 space-y-4">
+                  <h4 className="font-semibold text-sm">Deixe sua avaliação ou dica de estudo</h4>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">Nota (1 a 5):</span>
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setNewRating(star)}
+                        className="p-1 focus:outline-none"
+                      >
+                        <Star className={`size-5 ${star <= newRating ? "text-amber-400 fill-amber-400" : "text-muted"}`} />
+                      </button>
+                    ))}
+                  </div>
+                  <Input
+                    placeholder="Escreva sua opinião sobre a utilidade deste documento..."
+                    value={newComment}
+                    onChange={e => setNewComment(e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      if (!newComment.trim()) return;
+                      addReviewMutation.mutate({
+                        libraryItemId: selectedItem.id,
+                        rating: newRating,
+                        comment: newComment,
+                      });
+                    }}
+                    disabled={addReviewMutation.isPending || !newComment.trim()}
+                    className="w-full gap-2"
+                  >
+                    <Send className="size-4" />
+                    {addReviewMutation.isPending ? "Enviando..." : "Publicar Comentário"}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

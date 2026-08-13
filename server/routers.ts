@@ -4,7 +4,18 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
-import { saveAIConversation, getAIConversationsForUserAndModule, clearAIConversationsForUserAndModule, getApprovedAIUpdateCandidates, getPendingAIUpdateCandidates, updateAIUpdateCandidateStatus } from "./db";
+import {
+  saveAIConversation,
+  getAIConversationsForUserAndModule,
+  clearAIConversationsForUserAndModule,
+  getApprovedAIUpdateCandidates,
+  getPendingAIUpdateCandidates,
+  updateAIUpdateCandidateStatus,
+  getUserLibraryFavorites,
+  toggleUserLibraryFavorite,
+  getLibraryReviews,
+  addLibraryReview,
+} from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
 const assistantHistorySchema = z.array(
@@ -130,6 +141,39 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await updateAIUpdateCandidateStatus(input.id, input.status);
         return { success: true } as const;
+      }),
+    favorites: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getUserLibraryFavorites(ctx.user.id);
+    }),
+    toggleFavorite: publicProcedure
+      .input(z.object({ libraryItemId: z.string().trim().min(1).max(120) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para favoritar itens.");
+        const isFavorited = await toggleUserLibraryFavorite(ctx.user.id, input.libraryItemId);
+        return { isFavorited };
+      }),
+    reviews: publicProcedure
+      .input(z.object({ libraryItemId: z.string().trim().min(1).max(120) }))
+      .query(async ({ input }) => {
+        return await getLibraryReviews(input.libraryItemId);
+      }),
+    addReview: publicProcedure
+      .input(z.object({
+        libraryItemId: z.string().trim().min(1).max(120),
+        rating: z.number().int().min(1).max(5),
+        comment: z.string().trim().min(3, "O comentário deve ter pelo menos 3 caracteres.").max(1_000),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para enviar avaliações.");
+        await addLibraryReview({
+          libraryItemId: input.libraryItemId,
+          userId: ctx.user.id,
+          userName: ctx.user.name || "Estudante IA Academy",
+          rating: input.rating,
+          comment: input.comment,
+        });
+        return { success: true };
       }),
   }),
 });

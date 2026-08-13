@@ -60,3 +60,27 @@ export const aiUpdateCandidates = mysqlTable("ai_update_candidates", {
 
 export type AIUpdateCandidate = typeof aiUpdateCandidates.$inferSelect;
 export type InsertAIUpdateCandidate = typeof aiUpdateCandidates.$inferInsert;
+
+
+export const userLibraryFavorites = mysqlTable("user_library_favorites", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  libraryItemId: varchar("libraryItemId", { length: 120 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserLibraryFavorite = typeof userLibraryFavorites.$inferSelect;
+export type InsertUserLibraryFavorite = typeof userLibraryFavorites.$inferInsert;
+
+export const libraryReviews = mysqlTable("library_reviews", {
+  id: int("id").autoincrement().primaryKey(),
+  libraryItemId: varchar("libraryItemId", { length: 120 }).notNull(),
+  userId: int("userId").notNull(),
+  userName: varchar("userName", { length: 160 }).notNull(),
+  rating: int("rating").notNull(), // 1 a 5
+  comment: text("comment").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type LibraryReview = typeof libraryReviews.$inferSelect;
+export type InsertLibraryReview = typeof libraryReviews.$inferInsert;

@@ -200,3 +200,79 @@ export async function clearAIConversationsForUserAndModule(userId: number, modul
     console.warn("[Database] Failed to clear AI conversations:", error);
   }
 }
+
+
+import {
+  userLibraryFavorites,
+  UserLibraryFavorite,
+  InsertUserLibraryFavorite,
+  libraryReviews,
+  LibraryReview,
+  InsertLibraryReview,
+} from "../drizzle/schema";
+
+export async function getUserLibraryFavorites(userId: number): Promise<string[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    const rows = await db
+      .select()
+      .from(userLibraryFavorites)
+      .where(eq(userLibraryFavorites.userId, userId));
+    return rows.map(r => r.libraryItemId);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch library favorites:", error);
+    return [];
+  }
+}
+
+export async function toggleUserLibraryFavorite(userId: number, libraryItemId: string): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  try {
+    const existing = await db
+      .select()
+      .from(userLibraryFavorites)
+      .where(and(eq(userLibraryFavorites.userId, userId), eq(userLibraryFavorites.libraryItemId, libraryItemId)))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db
+        .delete(userLibraryFavorites)
+        .where(and(eq(userLibraryFavorites.userId, userId), eq(userLibraryFavorites.libraryItemId, libraryItemId)));
+      return false;
+    } else {
+      await db.insert(userLibraryFavorites).values({ userId, libraryItemId });
+      return true;
+    }
+  } catch (error) {
+    console.warn("[Database] Failed to toggle library favorite:", error);
+    return false;
+  }
+}
+
+export async function getLibraryReviews(libraryItemId: string): Promise<LibraryReview[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(libraryReviews)
+      .where(eq(libraryReviews.libraryItemId, libraryItemId))
+      .orderBy(desc(libraryReviews.createdAt))
+      .limit(50);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch library reviews:", error);
+    return [];
+  }
+}
+
+export async function addLibraryReview(data: InsertLibraryReview): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db.insert(libraryReviews).values(data);
+  } catch (error) {
+    console.warn("[Database] Failed to add library review:", error);
+  }
+}

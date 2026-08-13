@@ -262,3 +262,13 @@
 - [x] Incluir links de acesso rápido no menu de navegação e na homepage
 - [x] Adicionar testes automatizados para as novas rotas, catálogos e integrações
 - [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Favoritos, Tutor IA e Comentários na Biblioteca e Curiosidades
+- [x] Criar tabelas `user_library_favorites` e `library_reviews` em `drizzle/schema.ts` e aplicar migração
+- [x] Criar procedimentos tRPC para favoritar itens, carregar lista de leitura e enviar/listar avaliações e comentários reais
+- [x] Adicionar botões de favoritos e aba de "Lista de Leitura" na página `Library.tsx`
+- [x] Integrar o assistente virtual contextualizado nas páginas `Curiosities.tsx` e `Library.tsx` para tirar dúvidas e buscar documentos
+- [x] Implementar seção de avaliações e comentários dos alunos nos itens da Biblioteca (sem avaliações/depoimentos falsos pré-existentes)
+- [x] Adicionar testes de contrato e interação para favoritos, IA nas novas abas e comentários
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final
