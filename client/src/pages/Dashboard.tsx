@@ -3,6 +3,7 @@ import { BookOpen, TrendingUp, Award, Clock, CheckCircle2, Target } from "lucide
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { getPhaseEntryRoute } from "@/data/learningRoutes";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -204,7 +205,7 @@ export default function Dashboard() {
               {phases.map((phase) => (
                 <button
                   key={phase.id}
-                  onClick={() => navigate(`/course/${phase.id}/overview`)}
+                  onClick={() => navigate(getPhaseEntryRoute(phase.id))}
                   className="group w-full p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 flex items-center justify-between text-left smooth-scale color-transition"
                 >
                   <div className="flex items-center gap-4 flex-1">

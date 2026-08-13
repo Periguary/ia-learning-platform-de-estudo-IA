@@ -49,3 +49,13 @@ O CTA específico `Explorar Trilha` da homepage foi acionado pelo índice do bot
 `/course/1/probability` abriu com 12 aulas e conteúdo da primeira aula `Conceitos Básicos de Probabilidade` visível.
 
 Com isso, foram validados os 11 módulos exibidos em `/learning-path`.
+
+
+## Dashboard validado
+
+A seção `Progresso das Fases` do `/dashboard` agora usa a tabela de rotas reais. O clique na Fase 1 navegou para `/course/1/linear-algebra`, que abriu com a primeira aula `O que é Álgebra Linear?` e conteúdo visível. A rota inexistente `/course/1/overview` não é mais usada pelo Dashboard.
+
+
+## Learning Path sincronizada
+
+A `/learning-path` passou a usar `coursesData` como fonte dos módulos e contagens. O preview exibiu 8 fases e 11 módulos reais, incluindo 38 aulas na Fase 1, 16 em Python, 14 em Estatística e 12 em Probabilidade. O card de Álgebra Linear abriu `/course/1/linear-algebra` com a primeira aula e exemplos visíveis.

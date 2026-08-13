@@ -131,7 +131,7 @@
 ## Correção final de visual e navegação
 - [x] Corrigir a entrada do Tailwind 4 e os tokens de tema
 - [x] Validar visual, rotas e conteúdo inicial no preview
-- [x] Rodar testes e validar a melhora perceptível; checkpoint ainda pendente
+- [x] Rodar testes e validar a melhora perceptível
 - [ ] Se não houver melhora, interromper e informar com transparência
 
 ## Critérios de aceite
@@ -152,4 +152,17 @@
 - [x] Validar todos os módulos exibidos pela trilha abrindo suas rotas reais
 - [x] Confirmar objetivamente os tokens finais de tema e contraste
 - [x] Rodar os testes após as validações finais
-- [ ] Salvar checkpoint final após as validações finais
+- [x] Salvar checkpoint final após as validações finais
+
+
+## Correção funcional pós-checkpoint
+- [x] Corrigir o botão de continuar do Dashboard para usar um módulo existente em vez de `/course/:phase/overview`
+- [x] Adicionar regressão para impedir rotas de curso `overview` inexistentes
+- [x] Validar o fluxo Dashboard → Curso no preview
+
+## Catálogo sincronizado pós-checkpoint
+- [x] Usar `coursesData` como fonte única dos módulos exibidos na Learning Path
+- [x] Corrigir contagens de aulas exibidas para refletirem os dados reais
+- [x] Garantir que cada módulo exibido tenha rota `/course/:phase/:module` válida
+- [x] Adicionar regressões do catálogo e executar a suíte completa
+- [ ] Salvar checkpoint desta sincronização

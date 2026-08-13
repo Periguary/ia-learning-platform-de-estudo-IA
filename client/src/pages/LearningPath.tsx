@@ -3,11 +3,12 @@
 import { ArrowRight, CheckCircle2, BookOpen, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
+import { coursesData } from "@/data/coursesData";
 
 export default function LearningPath() {
   const [, navigate] = useLocation();
 
-  const phases = [
+  const phasePresentation = [
     {
       id: 1,
       title: "Fundamentos Matemáticos",
@@ -108,6 +109,17 @@ export default function LearningPath() {
       difficulty: "Avançado",
     },
   ];
+
+  const phases = phasePresentation.map((phase) => ({
+    ...phase,
+    modules: phase.modules
+      .filter((module) => Boolean(coursesData[module.id]))
+      .map((module) => ({
+        ...module,
+        title: coursesData[module.id].title,
+        lessons: coursesData[module.id].lessons,
+      })),
+  }));
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
