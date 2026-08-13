@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
+import { ShareActions } from "@/components/ShareActions";
 
 const categories: LibraryCategory[] = ["Livros Clássicos", "Apostilas Técnicas", "Artigos Fundamentais", "Whitepapers e Guias"];
 
@@ -49,6 +50,55 @@ export default function Library() {
     const matchesTab = activeTab === "catalog" || favorites.includes(item.id);
     return matchesSearch && matchesCategory && matchesTab;
   });
+
+  const readingListItems = libraryCatalog.filter(item => favorites.includes(item.id));
+
+  const makeReadingListMarkdown = () => [
+    "# Minha Lista de Leitura — IA Academy",
+    "",
+    "Materiais selecionados pelo aluno para estudo.",
+    "",
+    ...readingListItems.map(item => `## ${item.title}\n- Autor: ${item.author}\n- Categoria: ${item.category}\n- Fonte oficial: ${item.officialUrl}\n- Descrição: ${item.description}\n`),
+  ].join("\n");
+
+  const downloadFile = (name: string, content: string, type = "text/markdown") => {
+    const blob = new Blob([content], { type });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = name;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
+
+  const exportReadingList = (destination: "download" | "drive" | "github" | "colab") => {
+    if (readingListItems.length === 0) {
+      setNotification("Adicione pelo menos um item à Lista de Leitura antes de exportar.");
+      setTimeout(() => setNotification(null), 4000);
+      return;
+    }
+    const markdown = makeReadingListMarkdown();
+    downloadFile("ia-academy-lista-de-leitura.md", markdown);
+    if (destination === "drive") {
+      window.open("https://drive.google.com/drive/my-drive", "_blank", "noopener,noreferrer");
+      setNotification("Arquivo Markdown baixado. Abra o Google Drive para fazer o upload gratuito.");
+    } else if (destination === "github") {
+      window.open("https://github.com/new", "_blank", "noopener,noreferrer");
+      setNotification("Arquivo Markdown baixado. Crie um repositório gratuito no GitHub e adicione o arquivo.");
+    } else if (destination === "colab") {
+      const notebook = JSON.stringify({
+        cells: [{ cell_type: "markdown", metadata: {}, source: markdown.split("\\n").map(line => `${line}\\n`) }],
+        metadata: { kernelspec: { display_name: "Python 3", language: "python", name: "python3" } },
+        nbformat: 4,
+        nbformat_minor: 5,
+      }, null, 2);
+      downloadFile("ia-academy-lista-de-leitura.ipynb", notebook, "application/x-ipynb+json");
+      window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer");
+      setNotification("Notebook .ipynb baixado. Abra o Google Colab e faça upload do notebook gratuitamente.");
+    } else {
+      setNotification("Lista de leitura baixada em Markdown.");
+    }
+    setTimeout(() => setNotification(null), 5000);
+  };
 
   const handleShareDrive = (item: LibraryItem) => {
     setNotification(`[Google Drive] Link de '${item.title}' copiado para compartilhamento no Workspace.`);
@@ -99,6 +149,12 @@ export default function Library() {
               <Bookmark className="size-4" />
               Lista de Leitura ({favorites.length})
             </Button>
+            <div className="flex flex-wrap gap-2 rounded-lg border border-border bg-card/60 p-1">
+              <Button type="button" variant="ghost" size="sm" onClick={() => exportReadingList("download")} className="text-xs">Baixar Markdown</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => exportReadingList("drive")} className="text-xs">Google Drive</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => exportReadingList("github")} className="text-xs">GitHub</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => exportReadingList("colab")} className="text-xs">Google Colab</Button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-center">
@@ -197,6 +253,7 @@ export default function Library() {
                     </Button>
                   </div>
                   <div className="flex items-center gap-2">
+                    <ShareActions title={item.title} text={`Confira este material da Biblioteca IA Academy: ${item.title}`} />
                     <Button
                       type="button"
                       variant="outline"

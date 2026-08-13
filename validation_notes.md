@@ -123,3 +123,12 @@ O envio digitado da pergunta `Explique este conceito com uma analogia simples.` 
 ## Resposta real do Tutor IA validada — 2026-08-13
 
 Após aproximadamente 13 segundos, o procedimento `POST /api/trpc/ai.ask?batch=1` retornou status 200 no preview. A resposta exibida no balão do tutor começou com `Ótimo — uma analogia simples e direta para entender o que é Álgebra Linear`, confirmando que a pergunta digitada foi enviada, o contexto da aula foi aceito e a resposta do modelo apareceu na interface. A requisição levou 13.431 ms no modo de desenvolvimento; o estado de carregamento permaneceu visível durante esse intervalo.
+
+
+## Validação de compartilhamento, exportação e vídeos — 2026-08-13
+
+A rota `/curiosities` exibiu os filtros, quatro cards com botões de compartilhamento e o Tutor IA contextualizado, incluindo Novo Tópico, Limpar Histórico e perguntas sugeridas.
+
+A rota `/library` exibiu Catálogo Completo, Lista de Leitura (0 sem sessão), Baixar Markdown, Google Drive, GitHub e Google Colab, busca, filtros, favoritos, Debater/Avaliar, Compartilhar, Drive, GitHub e VS Code em cada card.
+
+A navegação global exibiu o novo destino `Vídeos`. Os testes automatizados do pacote passaram com 69 testes aprovados, incluindo catálogo de vídeos, compartilhamento e exportação da Lista de Leitura.

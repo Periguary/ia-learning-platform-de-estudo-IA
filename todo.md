@@ -272,3 +272,13 @@
 - [x] Implementar seção de avaliações e comentários dos alunos nos itens da Biblioteca (sem avaliações/depoimentos falsos pré-existentes)
 - [x] Adicionar testes de contrato e interação para favoritos, IA nas novas abas e comentários
 - [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Compartilhamento, Exportação para Drive/GitHub/Colab e Vídeos Gratuitos de IA
+- [x] Adicionar botões de compartilhamento com link copiável nas páginas `Curiosities.tsx` e `Library.tsx`
+- [x] Criar modal ou barra de exportação da Lista de Leitura para Google Drive, GitHub e Google Colab (notebooks de estudo gratuitos)
+- [x] Criar catálogo de vídeos educacionais gratuitos de IA em `client/src/data/videoCatalog.ts` com palestras, tutoriais de Hugging Face/PyTorch e introduções teóricas
+- [x] Criar página e rota `/videos` para a aba de vídeo-aulas gratuitas sobre IA, com player embutido e tutoriais do Google Colab
+- [x] Incluir o link de Vídeos na navegação global
+- [x] Adicionar testes automatizados para o catálogo de vídeos e exportações
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final

@@ -3,6 +3,7 @@ import { BookOpen, Compass, Lightbulb, Sparkles, Trophy } from "lucide-react";
 import { curiositiesCatalog, type CuriosityCategory, type CuriosityItem } from "@/data/curiositiesCatalog";
 import { Button } from "@/components/ui/button";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
+import { ShareActions } from "@/components/ShareActions";
 
 const categories: CuriosityCategory[] = ["História", "Algoritmos", "Ética e Sociedade", "Fronteira Tecnológica"];
 
@@ -68,7 +69,10 @@ export default function Curiosities() {
                   <span className="rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary">
                     {item.category}
                   </span>
-                  <span className="text-xs text-muted-foreground">{item.readTime}</span>
+                  <div className="flex items-center gap-2">
+                    <ShareActions title={item.title} text={`Confira esta curiosidade de IA na IA Academy: ${item.title}`} />
+                    <span className="text-xs text-muted-foreground">{item.readTime}</span>
+                  </div>
                 </div>
                 <h3 className="mt-4 text-2xl font-bold">{item.title}</h3>
                 <p className="mt-3 text-sm font-medium text-foreground">{item.teaser}</p>

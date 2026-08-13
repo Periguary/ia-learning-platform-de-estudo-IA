@@ -19,6 +19,7 @@ export default function Navigation() {
     { label: "Certificações", href: "/certifications" },
     { label: "Curiosidades", href: "/curiosities" },
     { label: "Biblioteca", href: "/library" },
+    { label: "Vídeos", href: "/videos" },
     { label: "Radar de IA", href: "/updates" },
   ];
 
