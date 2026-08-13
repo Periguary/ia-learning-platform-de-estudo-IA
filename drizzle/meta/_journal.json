@@ -15,6 +15,13 @@
       "when": 1786656741903,
       "tag": "0001_vengeful_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786657590355,
+      "tag": "0002_supreme_bloodscream",
+      "breakpoints": true
     }
   ]
 }

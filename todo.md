@@ -243,3 +243,12 @@
 - [x] Aprimorar `AIAssistantBox.tsx` com painel de histórico anterior, indicador visual avançado de digitação e renderização de recomendações
 - [x] Adicionar suíte de testes unitários/integração para o histórico e recomendações
 - [x] Validar a expansão no preview, salvar checkpoint e entregar o resultado
+
+
+## Ações Rápidas e Atualização Contínua de IA
+- [x] Adicionar botões de "Novo Tópico" e "Limpar Histórico" no componente `AIAssistantBox.tsx`
+- [x] Criar catálogo de atualizações globais de IA em `client/src/data/updatesCatalog.ts` com notas de versão, fontes oficiais e resumos técnicos verificados
+- [x] Criar página e rota `/updates` para que os alunos revisem as novidades globais de IA integradas à plataforma
+- [x] Adicionar procedimento tRPC de curadoria ou verificação de atualizações no servidor
+- [x] Cobrir com testes unitários e de contrato as novas rotas e ações rápidas
+- [x] Validar no preview, salvar checkpoint e entregar a entrega final

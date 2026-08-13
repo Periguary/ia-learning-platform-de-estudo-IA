@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -117,5 +117,86 @@ export async function getAIConversationsForUserAndModule(userId: number, moduleI
   } catch (error) {
     console.warn("[Database] Failed to fetch AI conversations:", error);
     return [];
+  }
+}
+
+
+export async function createAIUpdateCandidate(data: InsertAIUpdateCandidate): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db.insert(aiUpdateCandidates).values(data);
+  } catch (error) {
+    console.warn("[Database] Failed to save AI update candidate:", error);
+  }
+}
+
+export async function findAIUpdateCandidate(sourceUrl: string, title: string): Promise<AIUpdateCandidate | null> {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    const rows = await db
+      .select()
+      .from(aiUpdateCandidates)
+      .where(and(eq(aiUpdateCandidates.sourceUrl, sourceUrl), eq(aiUpdateCandidates.title, title)))
+      .limit(1);
+    return rows[0] ?? null;
+  } catch (error) {
+    console.warn("[Database] Failed to find AI update candidate:", error);
+    return null;
+  }
+}
+
+export async function getApprovedAIUpdateCandidates(): Promise<AIUpdateCandidate[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(aiUpdateCandidates)
+      .where(eq(aiUpdateCandidates.status, "approved"))
+      .orderBy(desc(aiUpdateCandidates.publishedAt), desc(aiUpdateCandidates.createdAt))
+      .limit(30);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch approved AI updates:", error);
+    return [];
+  }
+}
+
+export async function getPendingAIUpdateCandidates(): Promise<AIUpdateCandidate[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(aiUpdateCandidates)
+      .where(eq(aiUpdateCandidates.status, "pending"))
+      .orderBy(desc(aiUpdateCandidates.createdAt))
+      .limit(30);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch pending AI updates:", error);
+    return [];
+  }
+}
+
+export async function updateAIUpdateCandidateStatus(id: number, status: "approved" | "rejected"): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db.update(aiUpdateCandidates).set({ status }).where(eq(aiUpdateCandidates.id, id));
+  } catch (error) {
+    console.warn("[Database] Failed to update AI update candidate:", error);
+  }
+}
+
+export async function clearAIConversationsForUserAndModule(userId: number, moduleId: string): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db
+      .delete(aiConversations)
+      .where(and(eq(aiConversations.userId, userId), eq(aiConversations.moduleId, moduleId)));
+  } catch (error) {
+    console.warn("[Database] Failed to clear AI conversations:", error);
   }
 }

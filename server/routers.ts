@@ -3,8 +3,9 @@ import { COOKIE_NAME } from "../shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { invokeLLM } from "./_core/llm";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
-import { saveAIConversation, getAIConversationsForUserAndModule } from "./db";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc";
+import { saveAIConversation, getAIConversationsForUserAndModule, clearAIConversationsForUserAndModule, getApprovedAIUpdateCandidates, getPendingAIUpdateCandidates, updateAIUpdateCandidateStatus } from "./db";
+import { curateAIUpdates } from "./aiUpdates";
 
 const assistantHistorySchema = z.array(
   z.object({
@@ -102,6 +103,33 @@ export const appRouter = router({
       .query(async ({ input, ctx }) => {
         if (!ctx.user?.id) return [];
         return await getAIConversationsForUserAndModule(ctx.user.id, input.moduleId);
+      }),
+    clearHistory: publicProcedure
+      .input(z.object({
+        moduleId: z.string().trim().min(1).max(120),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) return { success: false } as const;
+        await clearAIConversationsForUserAndModule(ctx.user.id, input.moduleId);
+        return { success: true } as const;
+      }),
+    updates: publicProcedure.query(async () => {
+      return await getApprovedAIUpdateCandidates();
+    }),
+    pendingUpdates: adminProcedure.query(async () => {
+      return await getPendingAIUpdateCandidates();
+    }),
+    refreshUpdates: adminProcedure.mutation(async () => {
+      return await curateAIUpdates();
+    }),
+    reviewUpdate: adminProcedure
+      .input(z.object({
+        id: z.number().int().positive(),
+        status: z.enum(["approved", "rejected"]),
+      }))
+      .mutation(async ({ input }) => {
+        await updateAIUpdateCandidateStatus(input.id, input.status);
+        return { success: true } as const;
       }),
   }),
 });

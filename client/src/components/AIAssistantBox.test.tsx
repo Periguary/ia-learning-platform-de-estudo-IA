@@ -8,6 +8,10 @@ const mutationState = vi.hoisted(() => ({
   reset: vi.fn(),
 }));
 
+const clearHistoryState = vi.hoisted(() => ({
+  mutate: vi.fn(),
+}));
+
 vi.mock("@/components/AIChatBox", () => ({
   AIChatBox: ({
     messages,
@@ -43,7 +47,13 @@ vi.mock("@/lib/trpc", () => ({
   trpc: {
     ai: {
       history: {
-        useQuery: () => ({ isLoading: false, data: [] }),
+        useQuery: () => ({ isLoading: false, data: [], refetch: vi.fn() }),
+      },
+      clearHistory: {
+        useMutation: () => ({
+          isPending: false,
+          mutate: (input: unknown) => clearHistoryState.mutate(input),
+        }),
       },
       ask: {
         useMutation: (options: { onSuccess?: (result: { answer: string }) => void }) => ({
@@ -66,6 +76,7 @@ describe("AIAssistantBox", () => {
     cleanup();
     mutationState.mutate.mockClear();
     mutationState.reset.mockClear();
+    clearHistoryState.mutate.mockClear();
   });
 
   it("envia a dúvida com o contexto da aula e mostra a resposta", () => {
@@ -90,6 +101,39 @@ describe("AIAssistantBox", () => {
       question: "O que é magnitude?",
     }));
     expect(screen.getByText("A magnitude mede o comprimento do vetor.")).toBeTruthy();
+  });
+
+  it("limpa a conversa ao iniciar um novo tópico sem apagar o histórico salvo", () => {
+    render(
+      <AIAssistantBox
+        moduleId="linear-algebra"
+        courseTitle="Álgebra Linear"
+        courseDescription="Fundamentos de vetores e matrizes"
+        lessonTitle="Conceito de Vetor"
+        lessonContent="Um vetor representa direção e magnitude."
+      />,
+    );
+
+    const input = screen.getByPlaceholderText("Digite sua dúvida sobre esta aula...");
+    fireEvent.change(input, { target: { value: "Dúvida temporária" } });
+    fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
+    expect(screen.getByText("Dúvida temporária")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "Novo Tópico" }));
+    expect(screen.queryByText("Dúvida temporária")).toBeNull();
+  });
+
+  it("chama a mutação ao limpar o histórico salvo do módulo", () => {
+    render(
+      <AIAssistantBox
+        moduleId="linear-algebra"
+        courseTitle="Álgebra Linear"
+        courseDescription="Fundamentos de vetores e matrizes"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Limpar Histórico" }));
+    expect(clearHistoryState.mutate).toHaveBeenCalledWith({ moduleId: "linear-algebra" });
   });
 
   it("oferece perguntas sugeridas no estado inicial", () => {

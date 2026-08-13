@@ -13,6 +13,7 @@ import Careers from "./pages/Careers";
 import CareerDetail from "./pages/CareerDetail";
 import Certifications from "./pages/Certifications";
 import Dashboard from "./pages/Dashboard";
+import Updates from "./pages/Updates";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -28,6 +29,7 @@ function Router() {
       <Route path={"/career/:id"} component={CareerDetail} />
       <Route path={"/certifications"} component={Certifications} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/updates"} component={Updates} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

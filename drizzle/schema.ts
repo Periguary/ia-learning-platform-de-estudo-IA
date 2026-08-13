@@ -41,3 +41,22 @@ export const aiConversations = mysqlTable("ai_conversations", {
 
 export type AIConversation = typeof aiConversations.$inferSelect;
 export type InsertAIConversation = typeof aiConversations.$inferInsert;
+
+
+export const aiUpdateCandidates = mysqlTable("ai_update_candidates", {
+  id: int("id").autoincrement().primaryKey(),
+  sourceUrl: varchar("sourceUrl", { length: 500 }).notNull(),
+  sourceName: varchar("sourceName", { length: 160 }).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  summary: text("summary").notNull(),
+  category: varchar("category", { length: 80 }).notNull(),
+  relatedModules: text("relatedModules").notNull(),
+  learningAction: text("learningAction").notNull(),
+  publishedAt: timestamp("publishedAt"),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type AIUpdateCandidate = typeof aiUpdateCandidates.$inferSelect;
+export type InsertAIUpdateCandidate = typeof aiUpdateCandidates.$inferInsert;

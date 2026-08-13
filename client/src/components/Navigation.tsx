@@ -17,6 +17,7 @@ export default function Navigation() {
     { label: "Projetos", href: "/projects" },
     { label: "Carreira", href: "/careers" },
     { label: "Certificações", href: "/certifications" },
+    { label: "Radar de IA", href: "/updates" },
   ];
 
   return (

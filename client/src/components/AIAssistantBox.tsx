@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Sparkles, History, BookMarked, Loader2 } from "lucide-react";
+import { Sparkles, History, BookMarked, Loader2, RotateCcw, Trash2 } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,12 @@ export function AIAssistantBox({
     { moduleId },
     { enabled: showHistory }
   );
+
+  const clearHistoryMutation = trpc.ai.clearHistory.useMutation({
+    onSuccess: () => {
+      void historyQuery.refetch();
+    },
+  });
 
   const askMutation = trpc.ai.ask.useMutation({
     onSuccess: ({ answer }) => {
@@ -77,6 +83,19 @@ export function AIAssistantBox({
     });
   };
 
+  const startNewTopic = () => {
+    setMessages([]);
+    askMutation.reset();
+    setShowHistory(false);
+  };
+
+  const clearSavedHistory = () => {
+    setMessages([]);
+    askMutation.reset();
+    setShowHistory(false);
+    clearHistoryMutation.mutate({ moduleId });
+  };
+
   const loadPastConversation = (q: string, a: string, pastLesson?: string | null) => {
     setMessages([
       { role: "user", content: `[Histórico - ${pastLesson || "Visão Geral"}] ${q}` },
@@ -105,15 +124,38 @@ export function AIAssistantBox({
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2 text-xs"
-          onClick={() => setShowHistory(prev => !prev)}
-        >
-          <History className="size-4" />
-          {showHistory ? "Voltar ao Chat" : "Histórico Salvo"}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2 text-xs"
+            onClick={startNewTopic}
+            title="Começar um novo tópico sem apagar o histórico salvo"
+          >
+            <RotateCcw className="size-4" />
+            Novo Tópico
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2 text-xs text-destructive hover:text-destructive"
+            onClick={clearSavedHistory}
+            disabled={clearHistoryMutation.isPending}
+            title="Apagar o histórico salvo deste módulo"
+          >
+            {clearHistoryMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+            Limpar Histórico
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2 text-xs"
+            onClick={() => setShowHistory(prev => !prev)}
+          >
+            <History className="size-4" />
+            {showHistory ? "Voltar ao Chat" : "Histórico Salvo"}
+          </Button>
+        </div>
       </div>
 
       {showHistory ? (
