@@ -215,7 +215,7 @@
 - [x] Substituir a seção por evidências verificáveis ou uma seção neutra sobre metodologia
 - [x] Adicionar regressão para impedir nomes, citações e ratings inventados
 - [x] Validar a homepage e o CourseDetail no preview após remover ratings/reviews
-- [ ] Salvar checkpoint após a validação de conformidade
+- [x] Salvar checkpoint após a validação de conformidade
 
 
 ## Conformidade de métricas
