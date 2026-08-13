@@ -290,3 +290,12 @@
 - [x] Criar procedimento tRPC ou gerador inteligente de plano semanal combinando a Lista de Leitura e os vídeos recomendados
 - [x] Adicionar testes de interface e contrato para progresso de vídeos e plano semanal
 - [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Notebook de Estudos com Timestamp, Fontes e Emparelhamento com Obsidian
+- [x] Criar persistência e tabela/armazenamento para anotações de vídeo com timestamp em `drizzle/schema.ts` e `server/db.ts`
+- [x] Criar procedimentos tRPC para criar, listar e apagar anotações por vídeo e usuário
+- [x] Construir o painel "Notebook LM & Obsidian" na página `Videos.tsx`, permitindo registrar notas vinculadas a segundos do vídeo
+- [x] Implementar exportação direta para arquivo Markdown (`.md`) e URI do Obsidian (`obsidian://new?vault=...&file=...&content=...`)
+- [x] Adicionar testes automatizados para as anotações e exportação Obsidian
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final

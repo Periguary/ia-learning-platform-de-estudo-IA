@@ -15,6 +15,9 @@ import {
   toggleUserLibraryFavorite,
   getLibraryReviews,
   addLibraryReview,
+  getVideoNotes,
+  addVideoNote,
+  deleteVideoNote,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -174,6 +177,27 @@ export const appRouter = router({
           comment: input.comment,
         });
         return { success: true };
+      }),
+  }),
+
+  videoNotes: router({
+    list: publicProcedure
+      .input(z.object({ videoId: z.string().min(1).max(128) }))
+      .query(async ({ input, ctx }) => {
+        if (!ctx.user?.id) return [];
+        return getVideoNotes(ctx.user.id, input.videoId);
+      }),
+    add: publicProcedure
+      .input(z.object({ videoId: z.string().min(1).max(128), timestampSeconds: z.number().int().min(0), noteText: z.string().trim().min(1).max(2_000) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para salvar anotações.");
+        return addVideoNote(ctx.user.id, input.videoId, input.timestampSeconds, input.noteText);
+      }),
+    remove: publicProcedure
+      .input(z.object({ noteId: z.number().int(), videoId: z.string().min(1).max(128) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para remover anotações.");
+        return deleteVideoNote(ctx.user.id, input.noteId, input.videoId);
       }),
   }),
 });

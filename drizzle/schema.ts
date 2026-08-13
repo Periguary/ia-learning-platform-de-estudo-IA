@@ -84,3 +84,13 @@ export const libraryReviews = mysqlTable("library_reviews", {
 
 export type LibraryReview = typeof libraryReviews.$inferSelect;
 export type InsertLibraryReview = typeof libraryReviews.$inferInsert;
+
+
+export const videoNotes = mysqlTable("video_notes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  videoId: varchar("videoId", { length: 128 }).notNull(),
+  timestampSeconds: int("timestampSeconds").notNull().default(0),
+  noteText: text("noteText").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});

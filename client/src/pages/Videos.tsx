@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ExternalLink, Play, Video, Youtube, CheckCircle2, Circle, Sparkles, Calendar, BookOpen } from "lucide-react";
+import { ExternalLink, Play, Video, Youtube, CheckCircle2, Circle, Sparkles, Calendar, BookOpen, FileText, Clock, Trash2, Download, ExternalLink as LinkIcon } from "lucide-react";
 import { videoCatalog, type VideoCategory, type VideoItem } from "@/data/videoCatalog";
 import { Button } from "@/components/ui/button";
 import { ShareActions } from "@/components/ShareActions";
@@ -23,7 +23,22 @@ export default function Videos() {
   const [studyPlan, setStudyPlan] = useState<string | null>(null);
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
 
+  // Notebook LM & Obsidian Notes state
+  const [currentTimestampMin, setCurrentTimestampMin] = useState<number>(0);
+  const [currentTimestampSec, setCurrentTimestampSec] = useState<number>(0);
+  const [noteInput, setNoteInput] = useState<string>("");
+
   const favoritesQuery = trpc.ai.favorites.useQuery();
+  const notesQuery = trpc.videoNotes.list.useQuery({ videoId: selectedVideo.id });
+  const addNoteMutation = trpc.videoNotes.add.useMutation({
+    onSuccess: () => {
+      setNoteInput("");
+      notesQuery.refetch();
+    },
+  });
+  const removeNoteMutation = trpc.videoNotes.remove.useMutation({
+    onSuccess: () => notesQuery.refetch(),
+  });
 
   useEffect(() => {
     try {
@@ -64,6 +79,54 @@ export default function Videos() {
     }, 800);
   };
 
+  const handleAddNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!noteInput.trim()) return;
+    const totalSeconds = (currentTimestampMin * 60) + currentTimestampSec;
+    addNoteMutation.mutate({
+      videoId: selectedVideo.id,
+      timestampSeconds: totalSeconds,
+      noteText: noteInput.trim(),
+    });
+  };
+
+  const exportNotesMarkdown = () => {
+    const notes = notesQuery.data || [];
+    let md = `# Notebook de Estudo: ${selectedVideo.title}\n\n`;
+    md += `* **Provedor:** ${selectedVideo.provider}\n`;
+    md += `* **Link Original:** ${selectedVideo.sourceUrl}\n\n## Anotações com Timestamp\n\n`;
+    notes.forEach(n => {
+      const mins = Math.floor(n.timestampSeconds / 60);
+      const secs = n.timestampSeconds % 60;
+      const timeStr = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+      md += `* **[${timeStr}]** ${n.noteText}\n`;
+    });
+    md += `\n---\nGerado por IA Academy - Notebook LM & Obsidian Sync\n`;
+
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${selectedVideo.id}-obsidian-notes.md`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const openObsidianVault = () => {
+    const notes = notesQuery.data || [];
+    let md = `# ${selectedVideo.title}\n\n`;
+    notes.forEach(n => {
+      const mins = Math.floor(n.timestampSeconds / 60);
+      const secs = n.timestampSeconds % 60;
+      md += `- [${mins}:${secs < 10 ? "0" : ""}${secs}] ${n.noteText}\n`;
+    });
+    const encoded = encodeURIComponent(md);
+    const vaultName = prompt("Digite o nome do seu Vault no Obsidian (ex: MeuVault):", "IA-Academy");
+    if (!vaultName) return;
+    const uri = `obsidian://new?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent(selectedVideo.title)}&content=${encoded}`;
+    window.open(uri, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="w-full">
       <section className="border-b border-border bg-gradient-to-br from-red-500/10 via-background to-primary/10 py-16">
@@ -75,7 +138,7 @@ export default function Videos() {
           <div className="max-w-3xl space-y-4">
             <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Aprenda IA assistindo e praticando</h1>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Playlists e cursos oficiais gratuitos sobre fundamentos, Machine Learning, LLMs e IA responsável. Acompanhe seu progresso, tire dúvidas com o Tutor IA e crie seu plano semanal personalizado.
+              Playlists e cursos oficiais gratuitos sobre fundamentos, Machine Learning, LLMs e IA responsável. Acompanhe seu progresso, anote com timestamps sincronizados e emparelhe seus estudos com o Obsidian.
             </p>
           </div>
 
@@ -166,6 +229,76 @@ export default function Videos() {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Notebook LM & Obsidian Sync: Anotações vinculadas ao vídeo com timestamp */}
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-xl space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <FileText className="size-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold">Notebook LM da Aula & Obsidian Sync</h3>
+                <p className="text-xs text-muted-foreground">Faça anotações sincronizadas com o tempo do vídeo (timestamps), reuna fontes e exporte diretamente para seu Obsidian Vault.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" onClick={exportNotesMarkdown} className="gap-1.5">
+                <Download className="size-4" /> Baixar Markdown (.md)
+              </Button>
+              <Button variant="outline" size="sm" onClick={openObsidianVault} className="gap-1.5 text-purple-400 border-purple-500/30 hover:bg-purple-500/10">
+                <LinkIcon className="size-4" /> Emparelhar com Obsidian
+              </Button>
+            </div>
+          </div>
+
+          <form onSubmit={handleAddNote} className="grid gap-4 sm:grid-cols-[auto_1fr_auto]">
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
+              <Clock className="size-4 text-muted-foreground" />
+              <input type="number" min="0" max="999" value={currentTimestampMin} onChange={e => setCurrentTimestampMin(Number(e.target.value))} className="w-12 bg-transparent text-center font-mono text-sm outline-none" placeholder="min" />
+              <span>:</span>
+              <input type="number" min="0" max="59" value={currentTimestampSec} onChange={e => setCurrentTimestampSec(Number(e.target.value))} className="w-12 bg-transparent text-center font-mono text-sm outline-none" placeholder="seg" />
+            </div>
+            <input type="text" value={noteInput} onChange={e => setNoteInput(e.target.value)} placeholder="Digite sua anotação sincronizada com este momento da aula..." className="rounded-lg border border-border bg-background px-4 py-2 text-sm outline-none focus:border-primary" />
+            <Button type="submit" disabled={addNoteMutation.isPending} className="gap-2">
+              Salvar Nota
+            </Button>
+          </form>
+
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Suas Anotações e Fontes ({notesQuery.data?.length || 0})</h4>
+            {notesQuery.isLoading ? (
+              <p className="text-sm text-muted-foreground py-4">Carregando anotações...</p>
+            ) : notesQuery.data && notesQuery.data.length > 0 ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {notesQuery.data.map(note => {
+                  const mins = Math.floor(note.timestampSeconds / 60);
+                  const secs = note.timestampSeconds % 60;
+                  const timeLabel = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+                  return (
+                    <div key={note.id} className="flex items-start justify-between gap-3 rounded-xl border border-border bg-background/60 p-4">
+                      <div className="space-y-1">
+                        <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
+                          <Clock className="size-3" /> {timeLabel}
+                        </span>
+                        <p className="text-sm leading-relaxed text-foreground">{note.noteText}</p>
+                      </div>
+                      <button type="button" onClick={() => removeNoteMutation.mutate({ noteId: note.id, videoId: selectedVideo.id })} className="text-muted-foreground hover:text-destructive transition-colors">
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-border p-8 text-center text-muted-foreground">
+                <FileText className="mx-auto size-8 opacity-40 mb-2" />
+                <p className="text-sm">Nenhuma anotação registrada para esta aula ainda.</p>
+                <p className="text-xs text-muted-foreground mt-1">Informe o minuto/segundo acima e registre insights, fórmulas ou lembretes.</p>
+              </div>
+            )}
           </div>
         </div>
 

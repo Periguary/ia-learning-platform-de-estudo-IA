@@ -29,6 +29,13 @@
       "when": 1786658696825,
       "tag": "0003_colorful_black_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1786662160661,
+      "tag": "0004_quiet_frightful_four",
+      "breakpoints": true
     }
   ]
 }

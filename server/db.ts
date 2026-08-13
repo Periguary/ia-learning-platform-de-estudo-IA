@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -275,4 +275,31 @@ export async function addLibraryReview(data: InsertLibraryReview): Promise<void>
   } catch (error) {
     console.warn("[Database] Failed to add library review:", error);
   }
+}
+
+
+export async function getVideoNotes(userId: number, videoId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.videoId, videoId)));
+}
+
+export async function addVideoNote(userId: number, videoId: string, timestampSeconds: number, noteText: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(videoNotes).values({
+    userId,
+    videoId,
+    timestampSeconds,
+    noteText,
+    createdAt: new Date(),
+  });
+  return getVideoNotes(userId, videoId);
+}
+
+export async function deleteVideoNote(userId: number, noteId: number, videoId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.id, noteId)));
+  return getVideoNotes(userId, videoId);
 }
