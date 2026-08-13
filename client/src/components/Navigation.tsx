@@ -17,6 +17,8 @@ export default function Navigation() {
     { label: "Projetos", href: "/projects" },
     { label: "Carreira", href: "/careers" },
     { label: "Certificações", href: "/certifications" },
+    { label: "Curiosidades", href: "/curiosities" },
+    { label: "Biblioteca", href: "/library" },
     { label: "Radar de IA", href: "/updates" },
   ];
 

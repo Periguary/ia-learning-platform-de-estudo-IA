@@ -252,3 +252,13 @@
 - [x] Adicionar procedimento tRPC de curadoria ou verificação de atualizações no servidor
 - [x] Cobrir com testes unitários e de contrato as novas rotas e ações rápidas
 - [x] Validar no preview, salvar checkpoint e entregar a entrega final
+
+
+## Curiosidades, Biblioteca de Documentos e Integrações
+- [x] Criar catálogo de curiosidades de IA em `client/src/data/curiositiesCatalog.ts` com fatos históricos, dilemas éticos e inovações do estado da arte
+- [x] Criar catálogo de biblioteca de documentos, livros, apostilas e artigos em `client/src/data/libraryCatalog.ts` com categorias, resumos e links oficiais
+- [x] Criar página e rota `/curiosities` para a aba de curiosidades globais de IA
+- [x] Criar página e rota `/library` para a aba de documentos e livros, com ações de compartilhamento com Google Drive, GitHub e exportação para VS Code
+- [x] Incluir links de acesso rápido no menu de navegação e na homepage
+- [x] Adicionar testes automatizados para as novas rotas, catálogos e integrações
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final

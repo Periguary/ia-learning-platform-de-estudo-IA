@@ -14,6 +14,8 @@ import CareerDetail from "./pages/CareerDetail";
 import Certifications from "./pages/Certifications";
 import Dashboard from "./pages/Dashboard";
 import Updates from "./pages/Updates";
+import Curiosities from "./pages/Curiosities";
+import Library from "./pages/Library";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -30,6 +32,8 @@ function Router() {
       <Route path={"/certifications"} component={Certifications} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/updates"} component={Updates} />
+      <Route path={"/curiosities"} component={Curiosities} />
+      <Route path={"/library"} component={Library} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
