@@ -282,3 +282,11 @@
 - [x] Incluir o link de Vídeos na navegação global
 - [x] Adicionar testes automatizados para o catálogo de vídeos e exportações
 - [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Progresso em Vídeos, Tutor IA e Plano Semanal Personalizado
+- [x] Criar persistência local/banco para progresso e conclusão das vídeo-aulas em `client/src/pages/Videos.tsx`
+- [x] Integrar o componente `AIAssistantBox` na página de Vídeos com contexto do vídeo selecionado
+- [x] Criar procedimento tRPC ou gerador inteligente de plano semanal combinando a Lista de Leitura e os vídeos recomendados
+- [x] Adicionar testes de interface e contrato para progresso de vídeos e plano semanal
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final

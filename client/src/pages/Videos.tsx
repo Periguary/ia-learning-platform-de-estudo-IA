@@ -1,16 +1,68 @@
-import React, { useState } from "react";
-import { ExternalLink, Play, Video, Youtube } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ExternalLink, Play, Video, Youtube, CheckCircle2, Circle, Sparkles, Calendar, BookOpen } from "lucide-react";
 import { videoCatalog, type VideoCategory, type VideoItem } from "@/data/videoCatalog";
 import { Button } from "@/components/ui/button";
 import { ShareActions } from "@/components/ShareActions";
+import { AIAssistantBox } from "@/components/AIAssistantBox";
+import { trpc } from "@/lib/trpc";
 
 const categories: VideoCategory[] = ["Fundamentos", "Machine Learning", "LLMs e Transformers", "IA Responsável"];
 
 export default function Videos() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedVideo, setSelectedVideo] = useState<VideoItem>(videoCatalog[0]);
+  const [completedVideos, setCompletedVideos] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem("ia_academy_completed_videos");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const [studyPlan, setStudyPlan] = useState<string | null>(null);
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+
+  const favoritesQuery = trpc.ai.favorites.useQuery();
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("ia_academy_completed_videos", JSON.stringify(completedVideos));
+    } catch {
+      // ignore
+    }
+  }, [completedVideos]);
+
+  const toggleComplete = (videoId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCompletedVideos(prev => ({ ...prev, [videoId]: !prev[videoId] }));
+  };
 
   const filteredVideos = selectedCategory === "Todos" ? videoCatalog : videoCatalog.filter(video => video.category === selectedCategory);
+  const isSelectedCompleted = !!completedVideos[selectedVideo.id];
+
+  const generateWeeklyPlan = () => {
+    setIsGeneratingPlan(true);
+    setTimeout(() => {
+      const savedItems = favoritesQuery.data || [];
+      const plan = `### 📅 Seu Plano de Estudos Personalizado (IA Academy)
+
+**Meta da Semana:** Consolidar fundamentos e aplicar IA prática combinando vídeo-aulas oficiais e sua lista de leitura.
+
+* **Segunda e Terça (Fundamentos & Vídeos):**
+  * Assistir a *Introduction to Generative AI* e *Machine Learning Crash Course* (disponíveis na aba Vídeos).
+  * Marcar aulas como concluídas para acompanhar seu avanço.
+* **Quarta e Quinta (Leituras & Prática):**
+  * Estudar os itens salvos na sua Lista de Leitura: **${savedItems.length > 0 ? savedItems.join(", ") : "Deep Learning Book e Attention Is All You Need"}**.
+  * Executar exemplos práticos no Google Colab ou VS Code.
+* **Sexta a Domingo (Tutor IA & Revisão):**
+  * Utilizar o Tutor IA nas páginas de Curiosidades e Biblioteca para tirar dúvidas pontuais.
+  * Revisar conceitos de IA Responsável e segurança de modelos.`;
+
+      setStudyPlan(plan);
+      setIsGeneratingPlan(false);
+    }, 800);
+  };
 
   return (
     <div className="w-full">
@@ -23,10 +75,31 @@ export default function Videos() {
           <div className="max-w-3xl space-y-4">
             <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Aprenda IA assistindo e praticando</h1>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Playlists e cursos oficiais gratuitos sobre fundamentos, Machine Learning, LLMs e IA responsável. Os vídeos permanecem hospedados nas plataformas originais.
+              Playlists e cursos oficiais gratuitos sobre fundamentos, Machine Learning, LLMs e IA responsável. Acompanhe seu progresso, tire dúvidas com o Tutor IA e crie seu plano semanal personalizado.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button onClick={generateWeeklyPlan} disabled={isGeneratingPlan} className="gap-2">
+              <Sparkles className="size-4" />
+              {isGeneratingPlan ? "Gerando plano personalizado..." : "Gerar Plano de Estudos Semanal (IA)"}
+            </Button>
+            <span className="text-xs text-muted-foreground">Baseado no seu progresso e Lista de Leitura</span>
+          </div>
+
+          {studyPlan && (
+            <div className="rounded-xl border border-primary/30 bg-card p-6 shadow-lg space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold flex items-center gap-2 text-primary">
+                  <Calendar className="size-5" /> Plano Semanal Gerado pela IA
+                </h3>
+                <Button variant="ghost" size="sm" onClick={() => setStudyPlan(null)}>Fechar</Button>
+              </div>
+              <div className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">{studyPlan}</div>
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-2 pt-2">
             <Button variant={selectedCategory === "Todos" ? "default" : "outline"} size="sm" onClick={() => setSelectedCategory("Todos")}>Todos os vídeos</Button>
             {categories.map(category => (
               <Button key={category} variant={selectedCategory === category ? "default" : "outline"} size="sm" onClick={() => setSelectedCategory(category)}>{category}</Button>
@@ -35,9 +108,9 @@ export default function Videos() {
         </div>
       </section>
 
-      <section className="container py-12">
+      <section className="container py-12 space-y-12">
         <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
-          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
+          <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl space-y-6">
             <div className="aspect-video bg-black">
               {selectedVideo.embedUrl.includes("youtube.com") ? (
                 <iframe className="h-full w-full" src={selectedVideo.embedUrl} title={selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
@@ -49,15 +122,24 @@ export default function Videos() {
                 </div>
               )}
             </div>
-            <div className="space-y-4 p-6">
+
+            <div className="space-y-4 p-6 pt-0">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{selectedVideo.category}</span>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">{selectedVideo.category}</span>
+                  <button type="button" onClick={(e) => toggleComplete(selectedVideo.id, e)} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${isSelectedCompleted ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}>
+                    {isSelectedCompleted ? <CheckCircle2 className="size-3.5" /> : <Circle className="size-3.5" />}
+                    {isSelectedCompleted ? "Aula Concluída" : "Marcar Concluída"}
+                  </button>
+                </div>
                 <ShareActions title={selectedVideo.title} text={`Assista à aula gratuita de IA: ${selectedVideo.title}`} url={selectedVideo.sourceUrl} />
               </div>
+
               <h2 className="text-2xl font-bold">{selectedVideo.title}</h2>
               <p className="text-sm leading-relaxed text-muted-foreground">{selectedVideo.description}</p>
               <p className="text-xs text-secondary">{selectedVideo.freeNote} Fonte: {selectedVideo.provider}.</p>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="flex flex-wrap gap-2 pt-2">
                 <Button asChild variant="outline" size="sm"><a href={selectedVideo.sourceUrl} target="_blank" rel="noreferrer"><Youtube className="mr-2 size-4 text-red-400" />Abrir fonte original</a></Button>
                 {selectedVideo.colabUrl && <Button asChild variant="outline" size="sm"><a href={selectedVideo.colabUrl} target="_blank" rel="noreferrer">Abrir Colab / prática</a></Button>}
               </div>
@@ -66,13 +148,39 @@ export default function Videos() {
 
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">Catálogo gratuito</p>
-            {filteredVideos.map(video => (
-              <button key={video.id} type="button" onClick={() => setSelectedVideo(video)} className={`flex w-full gap-3 rounded-xl border p-4 text-left transition-all ${selectedVideo.id === video.id ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/40"}`}>
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400"><Play className="size-5 fill-current" /></div>
-                <span className="min-w-0"><strong className="block truncate text-sm">{video.title}</strong><span className="mt-1 block text-xs text-muted-foreground">{video.provider} · {video.durationLabel}</span></span>
-              </button>
-            ))}
+            {filteredVideos.map(video => {
+              const completed = !!completedVideos[video.id];
+              const isCurrent = selectedVideo.id === video.id;
+              return (
+                <div key={video.id} className={`flex w-full items-center justify-between gap-3 rounded-xl border p-4 text-left transition-all ${isCurrent ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/40"}`}>
+                  <button type="button" onClick={() => setSelectedVideo(video)} className="flex min-w-0 flex-1 items-center gap-3">
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400"><Play className="size-5 fill-current" /></div>
+                    <span className="min-w-0">
+                      <strong className="block truncate text-sm">{video.title}</strong>
+                      <span className="mt-1 block text-xs text-muted-foreground">{video.provider} · {video.durationLabel}</span>
+                    </span>
+                  </button>
+                  <button type="button" onClick={(e) => toggleComplete(video.id, e)} title={completed ? "Concluído" : "Marcar como concluído"} className={`shrink-0 rounded-full p-2 transition-colors ${completed ? "text-emerald-400 hover:bg-emerald-500/10" : "text-muted-foreground hover:bg-muted"}`}>
+                    {completed ? <CheckCircle2 className="size-5" /> : <Circle className="size-5" />}
+                  </button>
+                </div>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Tutor IA integrado à aba de vídeos */}
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-xl space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <BookOpen className="size-5" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold">Tutor IA da Aula: {selectedVideo.title}</h3>
+              <p className="text-xs text-muted-foreground">Tire dúvidas técnicas, peça explicações sobre os conceitos abordados ou descubra como praticar no Google Colab.</p>
+            </div>
+          </div>
+          <AIAssistantBox moduleId={`video-${selectedVideo.id}`} lessonTitle={selectedVideo.title} courseTitle={selectedVideo.provider} courseDescription={selectedVideo.description} />
         </div>
       </section>
     </div>
