@@ -8,6 +8,11 @@ import { trpc } from "@/lib/trpc";
 
 const categories: VideoCategory[] = ["Fundamentos", "Machine Learning", "LLMs e Transformers", "IA Responsável"];
 
+const withStartTime = (url: string, seconds: number) => {
+  if (!seconds) return url;
+  return `${url}${url.includes("?") ? "&" : "?"}start=${seconds}`;
+};
+
 export default function Videos() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedVideo, setSelectedVideo] = useState<VideoItem>(videoCatalog[0]);
@@ -27,6 +32,8 @@ export default function Videos() {
   const [currentTimestampMin, setCurrentTimestampMin] = useState<number>(0);
   const [currentTimestampSec, setCurrentTimestampSec] = useState<number>(0);
   const [noteInput, setNoteInput] = useState<string>("");
+  const [playerStartSeconds, setPlayerStartSeconds] = useState(0);
+  const [generatedMaterial, setGeneratedMaterial] = useState<string | null>(null);
 
   const favoritesQuery = trpc.ai.favorites.useQuery();
   const notesQuery = trpc.videoNotes.list.useQuery({ videoId: selectedVideo.id });
@@ -38,6 +45,9 @@ export default function Videos() {
   });
   const removeNoteMutation = trpc.videoNotes.remove.useMutation({
     onSuccess: () => notesQuery.refetch(),
+  });
+  const summarizeNotesMutation = trpc.ai.summarizeNotes.useMutation({
+    onSuccess: ({ answer }) => setGeneratedMaterial(answer),
   });
 
   useEffect(() => {
@@ -77,6 +87,11 @@ export default function Videos() {
       setStudyPlan(plan);
       setIsGeneratingPlan(false);
     }, 800);
+  };
+
+  const seekToTimestamp = (seconds: number) => {
+    setPlayerStartSeconds(seconds);
+    document.getElementById("video-player")?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   };
 
   const handleAddNote = (e: React.FormEvent) => {
@@ -174,9 +189,9 @@ export default function Videos() {
       <section className="container py-12 space-y-12">
         <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xl space-y-6">
-            <div className="aspect-video bg-black">
+            <div id="video-player" className="aspect-video bg-black">
               {selectedVideo.embedUrl.includes("youtube.com") ? (
-                <iframe className="h-full w-full" src={selectedVideo.embedUrl} title={selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
+                <iframe key={`${selectedVideo.id}-${playerStartSeconds}`} className="h-full w-full" src={withStartTime(selectedVideo.embedUrl, playerStartSeconds)} title={selectedVideo.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center text-white">
                   <Video className="size-12 text-primary" />
@@ -251,6 +266,12 @@ export default function Videos() {
               <Button variant="outline" size="sm" onClick={openObsidianVault} className="gap-1.5 text-purple-400 border-purple-500/30 hover:bg-purple-500/10">
                 <LinkIcon className="size-4" /> Emparelhar com Obsidian
               </Button>
+              <Button variant="outline" size="sm" disabled={!notesQuery.data?.length || summarizeNotesMutation.isPending} onClick={() => summarizeNotesMutation.mutate({ videoId: selectedVideo.id, videoTitle: selectedVideo.title, mode: "summary" })} className="gap-1.5">
+                <Sparkles className="size-4" /> Gerar Resumo IA
+              </Button>
+              <Button variant="outline" size="sm" disabled={!notesQuery.data?.length || summarizeNotesMutation.isPending} onClick={() => summarizeNotesMutation.mutate({ videoId: selectedVideo.id, videoTitle: selectedVideo.title, mode: "guide" })} className="gap-1.5">
+                <BookOpen className="size-4" /> Guia de Estudos
+              </Button>
             </div>
           </div>
 
@@ -267,6 +288,16 @@ export default function Videos() {
             </Button>
           </form>
 
+          {generatedMaterial && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-5">
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <h4 className="font-semibold text-primary flex items-center gap-2"><Sparkles className="size-4" /> Material gerado com suas anotações</h4>
+                <Button variant="ghost" size="sm" onClick={() => setGeneratedMaterial(null)}>Fechar</Button>
+              </div>
+              <div className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{generatedMaterial}</div>
+            </div>
+          )}
+
           <div className="space-y-3">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Suas Anotações e Fontes ({notesQuery.data?.length || 0})</h4>
             {notesQuery.isLoading ? (
@@ -280,9 +311,9 @@ export default function Videos() {
                   return (
                     <div key={note.id} className="flex items-start justify-between gap-3 rounded-xl border border-border bg-background/60 p-4">
                       <div className="space-y-1">
-                        <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary">
+                        <button type="button" onClick={() => seekToTimestamp(note.timestampSeconds)} className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 font-mono text-xs font-semibold text-primary transition-colors hover:bg-primary/20" title={`Ir para ${timeLabel}`}>
                           <Clock className="size-3" /> {timeLabel}
-                        </span>
+                        </button>
                         <p className="text-sm leading-relaxed text-foreground">{note.noteText}</p>
                       </div>
                       <button type="button" onClick={() => removeNoteMutation.mutate({ noteId: note.id, videoId: selectedVideo.id })} className="text-muted-foreground hover:text-destructive transition-colors">
@@ -313,7 +344,7 @@ export default function Videos() {
               <p className="text-xs text-muted-foreground">Tire dúvidas técnicas, peça explicações sobre os conceitos abordados ou descubra como praticar no Google Colab.</p>
             </div>
           </div>
-          <AIAssistantBox moduleId={`video-${selectedVideo.id}`} lessonTitle={selectedVideo.title} courseTitle={selectedVideo.provider} courseDescription={selectedVideo.description} />
+          <AIAssistantBox moduleId={`video-${selectedVideo.id}`} lessonTitle={selectedVideo.title} courseTitle={selectedVideo.provider} courseDescription={selectedVideo.description} studentNotes={(notesQuery.data || []).map(note => `[${Math.floor(note.timestampSeconds / 60)}:${String(note.timestampSeconds % 60).padStart(2, "0")}] ${note.noteText}`).join("\n")} />
         </div>
       </section>
     </div>

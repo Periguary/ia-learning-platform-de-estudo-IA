@@ -63,15 +63,23 @@ export const appRouter = router({
         courseDescription: z.string().trim().max(1_000),
         lessonTitle: z.string().trim().max(300).optional(),
         lessonContent: z.string().trim().max(10_000).optional(),
+        studentNotes: z.string().trim().max(12_000).optional(),
         question: z.string().trim().min(1, "Escreva uma dúvida antes de enviar.").max(2_000),
         history: assistantHistorySchema.default([]),
       }))
       .mutation(async ({ input, ctx }) => {
+        const storedNotes = ctx.user?.id && input.moduleId.startsWith("video-")
+          ? await getVideoNotes(ctx.user.id, input.moduleId.slice("video-".length))
+          : [];
+        const notesContext = storedNotes.length > 0
+          ? storedNotes.map(note => `[${Math.floor(note.timestampSeconds / 60)}:${String(note.timestampSeconds % 60).padStart(2, "0")}] ${note.noteText}`).join("\n")
+          : input.studentNotes || "Nenhuma anotação pessoal disponível para esta aula.";
         const context = [
           `Módulo: ${input.courseTitle} (${input.moduleId})`,
           `Descrição: ${input.courseDescription || "Não informada"}`,
           input.lessonTitle ? `Aula atual: ${input.lessonTitle}` : "Aula atual: visão geral do módulo",
           input.lessonContent ? `Conteúdo didático disponível:\n${input.lessonContent}` : "Conteúdo didático específico não selecionado.",
+          `Anotações pessoais do aluno (material privado, use apenas para personalizar a resposta):\n${notesContext}`,
         ].join("\n\n");
 
         try {
@@ -109,6 +117,35 @@ export const appRouter = router({
           console.error("AI assistant request failed", error);
           throw new Error("Não foi possível responder agora. Revise o conteúdo da aula e tente novamente em alguns instantes.");
         }
+      }),
+    summarizeNotes: publicProcedure
+      .input(z.object({
+        videoId: z.string().trim().min(1).max(128),
+        videoTitle: z.string().trim().min(1).max(300),
+        mode: z.enum(["summary", "guide"]),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para gerar um resumo personalizado.");
+        const notes = await getVideoNotes(ctx.user.id, input.videoId);
+        if (notes.length === 0) throw new Error("Salve pelo menos uma anotação antes de gerar o material.");
+        const notesText = notes
+          .map(note => `[${Math.floor(note.timestampSeconds / 60)}:${String(note.timestampSeconds % 60).padStart(2, "0")}] ${note.noteText}`)
+          .join("\n");
+        const task = input.mode === "summary"
+          ? "Crie um resumo didático e estruturado, destacando conceitos, relações entre ideias e dúvidas que o aluno deveria revisar."
+          : "Crie um guia de estudos prático com objetivos, sequência de revisão, perguntas de autoavaliação e um pequeno exercício. Não invente conteúdo fora das notas."
+        const response = await invokeLLM({
+          model: "gpt-5-mini",
+          maxTokens: 1200,
+          messages: [
+            { role: "system", content: "Você é um orientador pedagógico da IA Academy. Responda em português do Brasil, usando somente as anotações do aluno. Preserve os timestamps quando forem úteis e deixe claro quando algo não estiver nas notas." },
+            { role: "user", content: `Vídeo: ${input.videoTitle}\n\nAnotações do aluno:\n${notesText}\n\nTarefa: ${task}` },
+          ],
+        });
+        const content = response.choices[0]?.message?.content;
+        const answer = content ? extractText(content) : "";
+        if (!answer) throw new Error("Não foi possível gerar o material a partir das anotações.");
+        return { answer };
       }),
     history: publicProcedure
       .input(z.object({

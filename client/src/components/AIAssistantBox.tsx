@@ -10,6 +10,7 @@ type AIAssistantBoxProps = {
   courseDescription: string;
   lessonTitle?: string;
   lessonContent?: string;
+  studentNotes?: string;
 };
 
 const defaultPrompts = [
@@ -25,6 +26,7 @@ export function AIAssistantBox({
   courseDescription,
   lessonTitle,
   lessonContent,
+  studentNotes,
 }: AIAssistantBoxProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showHistory, setShowHistory] = useState(false);
@@ -78,6 +80,7 @@ export function AIAssistantBox({
       courseDescription,
       lessonTitle,
       lessonContent,
+      studentNotes,
       question: content,
       history: previousConversation,
     });

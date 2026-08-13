@@ -25,6 +25,7 @@ const baseInput = {
   courseDescription: "Fundamentos de vetores e matrizes",
   lessonTitle: "Conceito de Vetor",
   lessonContent: "Um vetor representa direção e magnitude. Sua magnitude é calculada pela norma.",
+  studentNotes: "Lembrar de comparar norma L2 com distância euclidiana.",
   question: "Por que a magnitude é importante?",
   history: [],
 };
@@ -48,6 +49,7 @@ describe("ai.ask", () => {
       messages: expect.arrayContaining([
         expect.objectContaining({ content: expect.stringContaining("Conceito de Vetor") }),
         expect.objectContaining({ content: expect.stringContaining("direção e magnitude") }),
+        expect.objectContaining({ content: expect.stringContaining("norma L2") }),
         expect.objectContaining({ content: baseInput.question }),
       ]),
     }));
@@ -60,6 +62,17 @@ describe("ai.ask", () => {
       ...baseInput,
       question: "d".repeat(2_001),
     })).rejects.toThrow();
+    expect(llmMock.invokeLLM).not.toHaveBeenCalled();
+  });
+
+  it("exige autenticação para gerar resumo personalizado das anotações", async () => {
+    const caller = appRouter.createCaller(createContext());
+
+    await expect(caller.ai.summarizeNotes({
+      videoId: "google-generative-ai-intro",
+      videoTitle: "Introduction to Generative AI",
+      mode: "summary",
+    })).rejects.toThrow("Faça login para gerar um resumo personalizado.");
     expect(llmMock.invokeLLM).not.toHaveBeenCalled();
   });
 

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send } from "lucide-react";
 import { libraryCatalog, type LibraryCategory, type LibraryItem } from "@/data/libraryCatalog";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
@@ -10,6 +11,7 @@ import { ShareActions } from "@/components/ShareActions";
 const categories: LibraryCategory[] = ["Livros Clássicos", "Apostilas Técnicas", "Artigos Fundamentais", "Whitepapers e Guias"];
 
 export default function Library() {
+  const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [activeTab, setActiveTab] = useState<"catalog" | "reading-list">("catalog");
@@ -17,6 +19,11 @@ export default function Library() {
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(5);
   const [notification, setNotification] = useState<string | null>(null);
+
+  useEffect(() => {
+    const query = new URLSearchParams(location.split("?")[1] ?? "").get("query") ?? "";
+    setSearchQuery(query);
+  }, [location]);
 
   const utils = trpc.useUtils();
   const favoritesQuery = trpc.ai.favorites.useQuery();

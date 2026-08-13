@@ -11,6 +11,7 @@ vi.mock("@/lib/trpc", () => ({
   trpc: {
     ai: {
       favorites: { useQuery: () => ({ data: ["deep-learning-book-goodfellow"] }) },
+      summarizeNotes: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
     },
     videoNotes: {
       list: { useQuery: () => ({ data: [] }) },

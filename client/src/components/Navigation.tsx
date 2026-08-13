@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -8,6 +8,8 @@ import { getLoginUrl } from "@/const";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [, navigate] = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
@@ -52,9 +54,33 @@ export default function Navigation() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-4">
-          {/* Search Button */}
-          <button className="p-2 hover:bg-muted rounded-lg transition-colors">
-            <Search className="w-5 h-5 text-muted-foreground" />
+          {/* Search Bar */}
+          {searchOpen && (
+            <form
+              className="hidden sm:flex items-center gap-2 rounded-full border border-primary/40 bg-card/90 px-3 py-1.5 shadow-sm"
+              onSubmit={(event) => {
+                event.preventDefault();
+                navigate(`/library${searchQuery.trim() ? `?query=${encodeURIComponent(searchQuery.trim())}` : ""}`);
+              }}
+            >
+              <Search className="size-4 text-primary" aria-hidden="true" />
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Buscar conteúdos de IA"
+                aria-label="Buscar conteúdos de IA"
+                className="w-40 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              />
+            </form>
+          )}
+          <button
+            type="button"
+            onClick={() => setSearchOpen((open) => !open)}
+            className={`rounded-lg p-2 transition-colors hover:bg-muted ${searchOpen ? "bg-primary/10 text-primary" : ""}`}
+            aria-label="Abrir busca de conteúdos"
+          >
+            <Search className="size-5 text-muted-foreground" />
           </button>
 
           {/* Theme Toggle */}

@@ -11,6 +11,7 @@ vi.mock("@/lib/trpc", () => ({
   trpc: {
     ai: {
       favorites: { useQuery: () => ({ data: [] }) },
+      summarizeNotes: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
     },
     videoNotes: {
       list: { useQuery: () => ({ data: [{ id: 1, videoId: "google-generative-ai-intro", timestampSeconds: 65, noteText: "Conceito de Transformer", createdAt: new Date() }] }) },
@@ -30,5 +31,10 @@ describe("Videos notes and Obsidian sync", () => {
     expect(screen.getByText(/1:05/i)).toBeTruthy();
     expect(screen.getByRole("button", { name: /Baixar Markdown/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Emparelhar com Obsidian/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Gerar Resumo IA/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Guia de Estudos/i })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /1:05/i }));
+    expect(screen.getByTitle("Introduction to Generative AI").getAttribute("src")).toContain("start=65");
   });
 });

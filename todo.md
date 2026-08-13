@@ -122,9 +122,9 @@
 - [x] Redesenhar homepage com hero section moderna (azul + branco)
 - [x] Adicionar grid de categorias de cursos com ícones
 - [x] Implementar seção "Why choose us" com cards
-- [ ] Redesenhar navegação com search bar destacada
+- [x] Redesenhar navegação com search bar destacada e busca para a Biblioteca
 - [x] Implementar layout de trilha de aprendizado com cards visuais
-- [ ] Adicionar seção de depoimentos/testimonials
+- [x] Substituir seção de depoimentos/testimonials por seção neutra de metodologia, sem prova social inventada
 - [x] Implementar footer com links e redes sociais
 
 
@@ -299,3 +299,18 @@
 - [x] Implementar exportação direta para arquivo Markdown (`.md`) e URI do Obsidian (`obsidian://new?vault=...&file=...&content=...`)
 - [x] Adicionar testes automatizados para as anotações e exportação Obsidian
 - [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Timestamps Navegáveis, Resumo por IA e Tutor IA Personalizado com Notas
+- [x] Tornar timestamps das anotações clicáveis em `Videos.tsx` para avançar o player de vídeo no segundo exato
+- [x] Criar gerador de resumo e guia de estudos automático baseado nas anotações do aluno no vídeo
+- [x] Atualizar o procedimento tRPC `ai.ask` para opcionalmente injetar as notas salvas do aluno no prompt, permitindo respostas personalizadas
+- [x] Atualizar `AIAssistantBox` e `Videos.tsx` para passar as notas locais do aluno para o assistente
+- [x] Adicionar testes de contrato e interface para timestamps navegáveis e contexto personalizado
+- [x] Validar no preview, salvar checkpoint e entregar a versão final
+
+
+## Fechamento da Busca Global e Checkpoint Final
+- [x] Conectar a search bar da navegação à `Library.tsx`, lendo `?query=`, preenchendo o campo e aplicando o filtro inicial
+- [x] Adicionar teste ponta a ponta da busca Navegação → Biblioteca
+- [x] Salvar checkpoint após a validação final do pacote de timestamps, resumo, tutor personalizado e busca integrada

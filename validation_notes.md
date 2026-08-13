@@ -132,3 +132,8 @@ A rota `/curiosities` exibiu os filtros, quatro cards com botões de compartilha
 A rota `/library` exibiu Catálogo Completo, Lista de Leitura (0 sem sessão), Baixar Markdown, Google Drive, GitHub e Google Colab, busca, filtros, favoritos, Debater/Avaliar, Compartilhar, Drive, GitHub e VS Code em cada card.
 
 A navegação global exibiu o novo destino `Vídeos`. Os testes automatizados do pacote passaram com 69 testes aprovados, incluindo catálogo de vídeos, compartilhamento e exportação da Lista de Leitura.
+
+
+## Validação do Notebook com timestamps, resumo e Tutor IA personalizado — 2026-08-13
+
+A rota `/videos` foi validada no preview após os ajustes finais. A página renderiza o player oficial, o painel `Notebook LM da Aula & Obsidian Sync`, os controles `Baixar Markdown (.md)`, `Emparelhar com Obsidian`, `Gerar Resumo IA` e `Guia de Estudos`, além dos campos de timestamp, a área de anotações e o Tutor IA contextual da aula. O teste automatizado cobre o clique em uma nota `1:05`, que atualiza o iframe para iniciar em `start=65`. O preview sem autenticação apresenta corretamente zero anotações e mantém o material gerado desabilitado até que o aluno esteja autenticado e possua notas salvas.
