@@ -5,10 +5,12 @@ import {
 } from "./db";
 
 export const AI_UPDATE_SOURCES = [
-  { name: "OpenAI News", url: "https://openai.com/news/" },
-  { name: "Google DeepMind", url: "https://deepmind.google/blog/" },
-  { name: "Hugging Face Blog", url: "https://huggingface.co/blog" },
-  { name: "NIST AI RMF", url: "https://www.nist.gov/itl/ai-risk-management-framework" },
+  { name: "OpenAI News", url: "https://openai.com/news/", category: "Modelos" },
+  { name: "Google DeepMind", url: "https://deepmind.google/blog/", category: "Pesquisa" },
+  { name: "Hugging Face Blog", url: "https://huggingface.co/blog", category: "Open Source" },
+  { name: "NIST AI RMF", url: "https://www.nist.gov/itl/ai-risk-management-framework", category: "Segurança" },
+  { name: "Anthropic News", url: "https://www.anthropic.com/news", category: "Modelos" },
+  { name: "arXiv CS.AI Feed", url: "https://arxiv.org/list/cs.AI/recent", category: "Pesquisa" },
 ] as const;
 
 const stripMarkup = (html: string) => html

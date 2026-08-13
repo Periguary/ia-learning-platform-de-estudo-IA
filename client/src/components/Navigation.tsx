@@ -22,6 +22,7 @@ export default function Navigation() {
     { label: "Curiosidades", href: "/curiosities" },
     { label: "Biblioteca", href: "/library" },
     { label: "Vídeos", href: "/videos" },
+    { label: "Especializações", href: "/specializations" },
     { label: "Radar de IA", href: "/updates" },
   ];
 

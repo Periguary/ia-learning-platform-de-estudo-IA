@@ -68,20 +68,26 @@ export default function Updates() {
             </p>
           </div>
           {isAdmin && (
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <Button
-                type="button"
-                onClick={() => refreshMutation.mutate()}
-                disabled={refreshMutation.isPending}
-                className="gap-2 bg-gradient-to-r from-primary to-secondary"
-              >
-                <RefreshCw className={`size-4 ${refreshMutation.isPending ? "animate-spin" : ""}`} />
-                {refreshMutation.isPending ? "Analisando fontes..." : "Buscar novas atualizações"}
-              </Button>
+            <div className="rounded-2xl border border-border bg-card/80 p-6 shadow-sm space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold">Painel Editorial Avançado</h2>
+                  <p className="text-sm text-muted-foreground">Monitore as fontes oficiais de IA e aprove ou rejeite itens antes de irem para o Radar.</p>
+                </div>
+                <Button
+                  type="button"
+                  onClick={() => refreshMutation.mutate()}
+                  disabled={refreshMutation.isPending}
+                  className="gap-2 bg-gradient-to-r from-primary to-secondary"
+                >
+                  <RefreshCw className={`size-4 ${refreshMutation.isPending ? "animate-spin" : ""}`} />
+                  {refreshMutation.isPending ? "Varrendo fontes..." : "Executar varredura automática"}
+                </Button>
+              </div>
               {refreshMutation.data && (
-                <span className="text-sm text-muted-foreground">
-                  {refreshMutation.data.created} candidato(s) criado(s), {refreshMutation.data.skipped} já conhecido(s).
-                </span>
+                <div className="rounded-xl border border-primary/30 bg-primary/10 p-3 text-sm text-primary">
+                  Varredura concluída: {refreshMutation.data.scanned} fontes escaneadas, {refreshMutation.data.created} novos candidatos criados, {refreshMutation.data.skipped} já indexados, {refreshMutation.data.failed} falhas tratadas.
+                </div>
               )}
             </div>
           )}

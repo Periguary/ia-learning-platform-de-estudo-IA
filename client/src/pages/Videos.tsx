@@ -142,6 +142,47 @@ export default function Videos() {
     window.open(uri, "_blank", "noopener,noreferrer");
   };
 
+  const exportNotesPdf = () => {
+    const notes = notesQuery.data || [];
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      alert("Permita pop-ups para gerar o PDF.");
+      return;
+    }
+    const html = `
+      <!DOCTYPE html>
+      <html lang="pt-BR">
+      <head>
+        <meta charset="utf-8">
+        <title>Notas - ${selectedVideo.title}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #111; line-height: 1.6; }
+          h1 { color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; }
+          .meta { color: #6b7280; margin-bottom: 24px; font-size: 14px; }
+          .note-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+          .time { font-family: monospace; font-weight: bold; color: #2563eb; }
+          .material { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin-top: 24px; white-space: pre-line; }
+        </style>
+      </head>
+      <body>
+        <h1>${selectedVideo.title}</h1>
+        <div class="meta">Plataforma IA Academy — Notebook LM & Obsidian Sync</div>
+        <h2>Anotações com Timestamps (${notes.length})</h2>
+        ${notes.length === 0 ? "<p>Nenhuma anotação registrada.</p>" : notes.map(n => {
+          const mins = Math.floor(n.timestampSeconds / 60);
+          const secs = n.timestampSeconds % 60;
+          const timeLabel = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+          return `<div class="note-card"><span class="time">[${timeLabel}]</span> ${n.noteText}</div>`;
+        }).join("")}
+        ${generatedMaterial ? `<h2>Material Gerado por IA / Guia de Estudos</h2><div class="material">${generatedMaterial}</div>` : ""}
+        <script>window.print();</script>
+      </body>
+      </html>
+    `;
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   return (
     <div className="w-full">
       <section className="border-b border-border bg-gradient-to-br from-red-500/10 via-background to-primary/10 py-16">
@@ -265,6 +306,9 @@ export default function Videos() {
               </Button>
               <Button variant="outline" size="sm" onClick={openObsidianVault} className="gap-1.5 text-purple-400 border-purple-500/30 hover:bg-purple-500/10">
                 <LinkIcon className="size-4" /> Emparelhar com Obsidian
+              </Button>
+              <Button variant="outline" size="sm" onClick={exportNotesPdf} className="gap-1.5 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10">
+                <Download className="size-4" /> Baixar PDF
               </Button>
               <Button variant="outline" size="sm" disabled={!notesQuery.data?.length || summarizeNotesMutation.isPending} onClick={() => summarizeNotesMutation.mutate({ videoId: selectedVideo.id, videoTitle: selectedVideo.title, mode: "summary" })} className="gap-1.5">
                 <Sparkles className="size-4" /> Gerar Resumo IA

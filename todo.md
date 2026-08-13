@@ -314,3 +314,11 @@
 - [x] Conectar a search bar da navegação à `Library.tsx`, lendo `?query=`, preenchendo o campo e aplicando o filtro inicial
 - [x] Adicionar teste ponta a ponta da busca Navegação → Biblioteca
 - [x] Salvar checkpoint após a validação final do pacote de timestamps, resumo, tutor personalizado e busca integrada
+
+
+## Evolução Recente: Radar Automatizado, Exportação em PDF e Áreas Detalhadas de IA
+- [ ] Atualizar o Radar de IA com fontes oficiais automatizadas (OpenAI, DeepMind, Hugging Face, arXiv) e painel editorial detalhado para aprovadores
+- [ ] Implementar exportação direta do guia de estudos e notas para PDF usando jsPDF ou print-friendly formatting com layout profissional
+- [ ] Criar a página de Especializações e Áreas de IA (`/specializations`) detalhando IA em Frontend, Backend, DevOps, Data Engineering, Research e Produto
+- [ ] Adicionar testes automatizados para ingestão, PDF e áreas de IA
+- [ ] Validar no preview, salvar checkpoint e entregar o resultado final
