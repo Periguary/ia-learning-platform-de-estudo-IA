@@ -8,6 +8,7 @@ export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
   const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1);
+  const [completedLessonIds, setCompletedLessonIds] = useState<number[]>([]);
 
   if (!match) return null;
 
@@ -33,7 +34,8 @@ export default function CourseDetail() {
 
   const totalLessons = courseData.sections.reduce((acc: number, s: any) => acc + s.lessons.length, 0);
   const completedLessons = courseData.sections.reduce(
-    (acc: number, s: any) => acc + s.lessons.filter((l: any) => l.completed).length,
+    (acc: number, s: any) =>
+      acc + s.lessons.filter((l: any) => l.completed || completedLessonIds.includes(l.id)).length,
     0
   );
   const progressPercentage = Math.round((completedLessons / totalLessons) * 100);
@@ -65,6 +67,46 @@ export default function CourseDetail() {
       icon: BookOpen,
     },
   ];
+
+  const resourceContents: Record<string, { title: string; content: string; examples: string[] }> = {
+    notebooks: {
+      title: "Notebooks Python com Exemplos",
+      content: "Use notebooks para transformar cada conceito em uma experiência executável. Comece com uma célula de texto, importe as bibliotecas necessárias e registre o resultado de cada experimento.",
+      examples: ["Organize um notebook por objetivo", "Explique cada etapa antes do código", "Registre hipóteses, resultados e conclusões"],
+    },
+    exercises: {
+      title: "Exercícios Interativos",
+      content: "Consolide o aprendizado resolvendo pequenos desafios. Tente explicar o raciocínio antes de escrever a solução e compare diferentes abordagens depois de concluir o exercício.",
+      examples: ["Resolva um desafio por vez", "Teste casos normais e casos-limite", "Revise a solução e identifique melhorias"],
+    },
+    projects: {
+      title: "Projetos Práticos",
+      content: "Aplique o módulo em um projeto pequeno e demonstrável. Defina o problema, escolha os dados, implemente uma primeira versão e documente as decisões técnicas.",
+      examples: ["Defina uma entrega pequena", "Crie uma estrutura de pastas clara", "Inclua README, testes e próximos passos"],
+    },
+    references: {
+      title: "Referências e Leitura Adicional",
+      content: "Aprofunde o conteúdo consultando a documentação oficial, livros introdutórios e artigos técnicos. Prefira fontes que expliquem conceitos, limitações e exemplos reproduzíveis.",
+      examples: ["Documentação oficial da tecnologia", "Artigos acadêmicos introdutórios", "Exemplos reproduzíveis e atualizados"],
+    },
+  };
+
+  const selectedContent = selectedLesson != null
+    ? lessonsContent[selectedLesson] ?? resourceContents[String(selectedLesson)]
+    : null;
+
+  const lessonSequence = courseData.sections.flatMap((section: any) => section.lessons);
+  const handleCompleteLesson = () => {
+    if (typeof selectedLesson !== "number") return;
+    setCompletedLessonIds((current) => (current.includes(selectedLesson) ? current : [...current, selectedLesson]));
+  };
+  const handleNextLesson = () => {
+    const currentIndex = typeof selectedLesson === "number"
+      ? lessonSequence.findIndex((lesson: any) => lesson.id === selectedLesson)
+      : -1;
+    const nextLesson = lessonSequence[currentIndex + 1] ?? lessonSequence[0];
+    if (nextLesson) setSelectedLesson(nextLesson.id);
+  };
 
   return (
     <div className="w-full">
@@ -127,11 +169,11 @@ export default function CourseDetail() {
         <div className="container grid lg:grid-cols-3 gap-8">
           {/* Left: Lessons Content */}
           <div className="lg:col-span-2">
-            {selectedLesson != null && lessonsContent[selectedLesson] != null ? (
+            {selectedContent ? (
               // Show lesson content
               <div className="p-6 border border-border rounded-xl bg-card space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">{lessonsContent[selectedLesson].title}</h2>
+                  <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
                   <button
                     onClick={() => setSelectedLesson(null)}
                     className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl"
@@ -142,15 +184,15 @@ export default function CourseDetail() {
 
                 <div className="max-w-none">
                   <div className="text-foreground space-y-4 whitespace-pre-wrap text-sm leading-relaxed">
-                    {lessonsContent[selectedLesson].content}
+                    {selectedContent.content}
                   </div>
                 </div>
 
-                {lessonsContent[selectedLesson]?.examples && lessonsContent[selectedLesson].examples!.length > 0 && (
+                {selectedContent.examples && selectedContent.examples.length > 0 && (
                   <div className="bg-muted/30 p-4 rounded-lg space-y-2">
                     <h4 className="font-semibold text-sm">Exemplos Práticos:</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      {lessonsContent[selectedLesson].examples!.map((example: string, idx: number) => (
+                      {selectedContent.examples.map((example: string, idx: number) => (
                         <li key={`example-${idx}`} className="flex gap-2">
                           <span className="text-primary">•</span>
                           <span>{example}</span>
@@ -161,10 +203,12 @@ export default function CourseDetail() {
                 )}
 
                 <div className="flex gap-3">
-                  <Button className="flex-1" variant="default">
-                    Marcar como Concluída
+                  <Button className="flex-1" variant="default" onClick={handleCompleteLesson}>
+                    {typeof selectedLesson === "number" && completedLessonIds.includes(selectedLesson)
+                      ? "Aula Concluída"
+                      : "Marcar como Concluída"}
                   </Button>
-                  <Button className="flex-1" variant="outline">
+                  <Button className="flex-1" variant="outline" onClick={handleNextLesson}>
                     Próxima Aula
                   </Button>
                 </div>

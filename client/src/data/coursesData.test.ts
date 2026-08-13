@@ -104,3 +104,34 @@ describe("coursesData", () => {
     });
   });
 });
+
+
+describe("learning path lesson availability", () => {
+  it("exposes a valid first lesson with content for every module", async () => {
+    const { lessonsContentData } = await import("./coursesData");
+    const moduleIds = [
+      "linear-algebra",
+      "statistics",
+      "probability",
+      "python-basics",
+      "sql-basics",
+      "numpy",
+      "pandas",
+      "ml-fundamentals",
+      "neural-networks",
+      "llms",
+      "software-engineering",
+    ];
+
+    moduleIds.forEach((moduleId) => {
+      const course = coursesData[moduleId];
+      const firstLesson = course.sections?.[0]?.lessons?.[0];
+      const content = lessonsContentData[moduleId]?.[firstLesson?.id];
+
+      expect(firstLesson, `missing first lesson: ${moduleId}`).toBeDefined();
+      expect(content, `missing lesson content: ${moduleId}`).toBeDefined();
+      expect(content.title).toBeTruthy();
+      expect(content.content).toBeTruthy();
+    });
+  });
+});

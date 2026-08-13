@@ -126,3 +126,30 @@
 - [ ] Implementar layout de trilha de aprendizado com cards visuais
 - [ ] Adicionar seção de depoimentos/testimonials
 - [ ] Implementar footer com links e redes sociais
+
+
+## Correção final de visual e navegação
+- [x] Corrigir a entrada do Tailwind 4 e os tokens de tema
+- [x] Validar visual, rotas e conteúdo inicial no preview
+- [x] Rodar testes e validar a melhora perceptível; checkpoint ainda pendente
+- [ ] Se não houver melhora, interromper e informar com transparência
+
+## Critérios de aceite
+- [x] Interface com cores, contraste e tipografia legível
+- [x] Explorar Trilha abre /learning-path
+- [x] Módulo válido abre /course/:phase/:module
+- [x] Primeira aula mostra título e explicação
+- [x] Sem erro "Curso não encontrado" nos módulos exibidos
+
+## Status
+- [x] Diagnóstico concluído
+- [x] Correção concluída
+- [x] Validação concluída
+- [ ] Entrega condicional pendente
+
+## Validações adicionais antes do checkpoint
+- [x] Clicar no CTA específico `Explorar Trilha` e confirmar `/learning-path`
+- [x] Validar todos os módulos exibidos pela trilha abrindo suas rotas reais
+- [x] Confirmar objetivamente os tokens finais de tema e contraste
+- [x] Rodar os testes após as validações finais
+- [ ] Salvar checkpoint final após as validações finais
