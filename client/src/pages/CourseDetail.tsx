@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
 import { markLessonComplete, readProgress, writeProgress } from "@/data/progress";
+import { AIAssistantBox } from "@/components/AIAssistantBox";
 
 export default function CourseDetail() {
   const [, navigate] = useLocation();
@@ -276,6 +277,17 @@ export default function CourseDetail() {
                 </div>
               </>
             )}
+
+            <AIAssistantBox
+              key={`${module}-${selectedLesson ?? "overview"}`}
+              moduleId={module}
+              courseTitle={courseData.title}
+              courseDescription={courseData.description}
+              lessonTitle={selectedContent?.title}
+              lessonContent={selectedContent
+                ? `${selectedContent.content}${selectedContent.examples?.length ? `\n\nExemplos:\n${selectedContent.examples.join("\n")}` : ""}`
+                : undefined}
+            />
           </div>
 
           {/* Right: Lessons Sidebar */}

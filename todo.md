@@ -224,3 +224,12 @@
 - [x] Atualizar testes para validar metadados reais sem ratings inventados
 - [x] Derivar a métrica "Módulos disponíveis" diretamente de `coursesData`
 - [x] Executar a suíte completa (51/51) e validar o preview
+
+
+## Assistente Virtual com IA
+- [x] Criar procedimento tRPC para o assistente virtual em `server/routers.ts` com injeção de contexto do módulo
+- [x] Implementar chamada ao `invokeLLM` usando `gpt-5-mini` com prompt pedagógico especializado
+- [x] Criar componente `AIAssistantBox.tsx` com histórico de chat, input e digitação fluida na página de curso
+- [x] Integrar o assistente na página `CourseDetail.tsx` (ao lado ou abaixo das aulas)
+- [x] Adicionar suíte de testes unitários/integração para o assistente de IA
+- [x] Validar o assistente virtual no preview e registrar checkpoint

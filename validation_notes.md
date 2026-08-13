@@ -104,3 +104,22 @@ A suíte passou após as alterações: 13 arquivos de teste e 51 testes aprovado
 ## Validação de CourseDetail sem avaliações — 2026-08-13
 
 A rota `/course/1/linear-algebra` carregou com título, descrição, duração de 40 horas, 12 aulas, progresso real de 1/12, primeira aula e exemplos didáticos. O cartão de métricas não exibiu estrela, rating ou contagem de reviews; os controles `Aula Concluída` e `Próxima Aula` permaneceram funcionais. A remoção das métricas fictícias não causou regressão no conteúdo da aula.
+
+
+## Validação do Tutor IA — 2026-08-13
+
+A rota `/course/1/linear-algebra` exibiu o bloco `Tutor IA da aula` abaixo do conteúdo didático da primeira aula. O preview mostrou a descrição contextualizada, três perguntas sugeridas e o campo `Digite sua dúvida sobre esta aula...`. A lista lateral de aulas, progresso, conteúdo e controles de conclusão/próxima aula permaneceram presentes. O assistente foi integrado como UI; a chamada real ao modelo fica protegida no servidor pelo procedimento tRPC `ai.ask`, que injeta apenas o contexto da aula enviado pelo catálogo.
+
+
+A interação com uma pergunta sugerida foi acionada no preview e o bloco permaneceu estável, sem erro visual ou perda do conteúdo. O preview está em modo de desenvolvimento e não exibiu resposta do modelo após a espera; a resposta real depende da disponibilidade do proxy de LLM no ambiente publicado. O procedimento e seus testes de contrato cobrem a chamada, o contexto, os limites de entrada e a mensagem segura de falha.
+
+
+O clique direto no primeiro prompt sugerido foi repetido no preview. A interface continuou responsiva e sem erro visual; não houve requisição `ai.ask` registrada no log de rede do modo de preview, portanto a resposta do provedor não foi validada por chamada real neste ambiente. Os testes automatizados validam a construção da requisição e a resposta simulada do fluxo.
+
+
+O envio digitado da pergunta `Explique este conceito com uma analogia simples.` funcionou no preview: a pergunta apareceu no balão do aluno e o indicador de carregamento do tutor foi exibido. Após a espera, o preview permaneceu em carregamento, sem resposta final visível; o log de rede deve ser consultado antes de afirmar que a chamada do provedor foi concluída.
+
+
+## Resposta real do Tutor IA validada — 2026-08-13
+
+Após aproximadamente 13 segundos, o procedimento `POST /api/trpc/ai.ask?batch=1` retornou status 200 no preview. A resposta exibida no balão do tutor começou com `Ótimo — uma analogia simples e direta para entender o que é Álgebra Linear`, confirmando que a pergunta digitada foi enviada, o contexto da aula foi aceito e a resposta do modelo apareceu na interface. A requisição levou 13.431 ms no modo de desenvolvimento; o estado de carregamento permaneceu visível durante esse intervalo.
