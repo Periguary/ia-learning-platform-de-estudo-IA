@@ -1,13 +1,15 @@
 'use client';
 
-import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, Star, ShieldCheck, Zap, Compass, GraduationCap } from "lucide-react";
+import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, ShieldCheck, Zap, Compass, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { useLocation } from "wouter";
+import { coursesData } from "@/data/coursesData";
 
 export default function Home() {
   const { user } = useAuth();
+  const availableModuleCount = Object.keys(coursesData).length;
   const [, navigate] = useLocation();
 
   const categories = [
@@ -34,21 +36,6 @@ export default function Home() {
       title: "Certificado Reconhecido",
       description: "Conquiste certificados válidos que destacam suas novas competências no mercado de trabalho.",
       icon: Award,
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Mariana Costa",
-      role: "Cientista de Dados",
-      content: "A didática é impecável! Consegui transicionar para IA em poucos meses graças à estrutura prática dos módulos.",
-      avatar: "👩‍💻",
-    },
-    {
-      name: "Lucas Almeida",
-      role: "Engenheiro de Software",
-      content: "O melhor investimento que fiz na minha carreira. Conteúdo profundo e direto ao ponto.",
-      avatar: "👨‍💻",
     },
   ];
 
@@ -119,8 +106,8 @@ export default function Home() {
                 <p className="text-xs text-slate-400">Trilha Completa</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-emerald-400">4.9/5</p>
-                <p className="text-xs text-slate-400">Avaliação Média</p>
+                <p className="text-2xl font-bold text-emerald-400">{availableModuleCount}</p>
+                <p className="text-xs text-slate-400">Módulos disponíveis</p>
               </div>
             </div>
           </div>
@@ -230,32 +217,37 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Methodology and evidence */}
       <section className="py-20 px-6 md:px-12 bg-slate-950">
-        <div className="max-w-4xl mx-auto space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold">O que dizem nossos alunos</h2>
-            <p className="text-slate-400">Histórias reais de quem transformou a carreira.</p>
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-stretch">
+          <div className="rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900 to-indigo-500/10 p-8 md:p-10">
+            <div className="flex items-center gap-3 text-blue-300 mb-5">
+              <ShieldCheck className="w-6 h-6" />
+              <span className="text-sm font-semibold uppercase tracking-[0.18em]">Como a plataforma funciona</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white leading-tight">Aprendizado organizado para você praticar, acompanhar e evoluir.</h2>
+            <p className="mt-5 text-slate-300 leading-relaxed">A trilha combina aulas didáticas, projetos guiados, referências externas e acompanhamento local do progresso. Cada módulo mostra seu conteúdo real, duração e próxima ação.</p>
+            <div className="mt-8 grid sm:grid-cols-3 gap-4">
+              {["Aulas estruturadas", "Projetos aplicados", "Progresso por módulo"].map((item) => (
+                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm font-medium text-slate-100">{item}</div>
+              ))}
+            </div>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="text-4xl">{t.avatar}</div>
-                  <div>
-                    <p className="font-bold text-slate-200">{t.name}</p>
-                    <p className="text-xs text-blue-400">{t.role}</p>
-                  </div>
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 md:p-10">
+            <h3 className="text-xl font-bold text-white">Explore antes de decidir</h3>
+            <p className="mt-3 text-slate-400 leading-relaxed">Veja a trilha, abra uma aula e conheça os projetos disponíveis. Não usamos avaliações ou depoimentos inventados para representar a experiência dos alunos.</p>
+            <div className="mt-8 space-y-4">
+              {[
+                ["01", "Escolha uma fase", "Comece pelos fundamentos ou avance para IA generativa."],
+                ["02", "Leia uma aula", "O conteúdo didático fica disponível dentro do módulo."],
+                ["03", "Acompanhe seu ritmo", "Marque aulas concluídas e veja o progresso no Dashboard."],
+              ].map(([number, title, description]) => (
+                <div key={number} className="flex gap-4 items-start">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/15 text-sm font-bold text-blue-300">{number}</span>
+                  <div><p className="font-semibold text-slate-100">{title}</p><p className="mt-1 text-sm text-slate-400">{description}</p></div>
                 </div>
-                <p className="text-slate-300 text-sm italic">"{t.content}"</p>
-                <div className="flex text-yellow-400 gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                  ))}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

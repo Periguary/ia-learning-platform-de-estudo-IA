@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 
 /**
  * Regression Tests for Home Component Fixes
@@ -29,18 +30,15 @@ describe('Home Component - Regression Tests (Static Analysis)', () => {
       expect(uniqueNumbers.size).toBe(8);
     });
 
-    it('should have unique testimonial IDs', () => {
-      const testimonials = [
-        { id: "testimonial-1", name: "Carlos Silva" },
-        { id: "testimonial-2", name: "Ana Santos" },
-        { id: "testimonial-3", name: "João Oliveira" },
-      ];
+    it('should not hardcode unverified testimonials or ratings', () => {
+      const source = readFileSync(new URL('./Home.tsx', import.meta.url), 'utf8');
 
-      const ids = testimonials.map(t => t.id);
-      const uniqueIds = new Set(ids);
-
-      expect(uniqueIds.size).toBe(testimonials.length);
-      expect(uniqueIds.size).toBe(3);
+      expect(source).not.toMatch(/const testimonials\s*=|O que dizem nossos alunos/);
+      expect(source).not.toMatch(/fill-yellow-400|Avaliação Média|4\.9\/5|Mariana Costa|Lucas Almeida/);
+      expect(source).toContain('Como a plataforma funciona');
+      expect(source).toContain('import { coursesData } from "@/data/coursesData";');
+      expect(source).toContain('Object.keys(coursesData).length');
+      expect(source).toContain('{availableModuleCount}');
     });
 
     it('should have unique FAQ IDs', () => {
@@ -244,7 +242,7 @@ describe('Home Component - Regression Tests (Static Analysis)', () => {
       const sections = [
         { id: 'hero', name: 'Hero Section' },
         { id: 'trilha', name: 'Trilha Overview' },
-        { id: 'testimonials', name: 'Testimonials' },
+        { id: 'methodology', name: 'Methodology and Evidence' },
         { id: 'faq', name: 'FAQ' },
         { id: 'cta', name: 'CTA' },
       ];
@@ -256,13 +254,13 @@ describe('Home Component - Regression Tests (Static Analysis)', () => {
     it('should have correct number of items in each list', () => {
       const itemCounts = {
         phases: 8,
-        testimonials: 3,
+        methodology: 3,
         faqs: 4,
         stats: 4,
       };
 
       expect(itemCounts.phases).toBe(8);
-      expect(itemCounts.testimonials).toBe(3);
+      expect(itemCounts.methodology).toBe(3);
       expect(itemCounts.faqs).toBe(4);
       expect(itemCounts.stats).toBe(4);
     });

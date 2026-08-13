@@ -16,7 +16,7 @@
 - [x] Criar hero section impactante com CTA
 - [x] Implementar visão geral da trilha (8 fases)
 - [x] Adicionar estatísticas do mercado
-- [x] Criar seção de depoimentos fictícios
+- [x] Substituir depoimentos fictícios por uma seção neutra de metodologia
 - [x] Implementar FAQ section
 - [x] Adicionar rodapé com links e informações
 
@@ -167,6 +167,11 @@
 - [x] Adicionar regressões do catálogo e executar a suíte completa
 - [x] Salvar checkpoint desta sincronização
 
+## Auditoria do backlog de módulos
+- [x] Confirmar que 11 módulos reais estão no catálogo atual
+- [x] Manter módulos ainda ausentes como pendentes, sem rotas fictícias
+- [ ] Implementar módulos avançados ausentes com conteúdo didático específico
+
 
 ## Progresso funcional pós-checkpoint
 - [x] Persistir aulas concluídas por módulo no navegador sem perder o estado ao trocar de rota
@@ -195,10 +200,27 @@
 
 ## Próximo pacote funcional pós-checkpoint
 - [x] Inspecionar Carreira e Certificações em busca de placeholders ou ações sem rota
-- [ ] Criar catálogo único de carreiras com detalhes e roadmap por perfil
-- [ ] Criar catálogo único de certificações com links oficiais e requisitos
+- [x] Criar catálogo único de carreiras com detalhes e roadmap por perfil
+- [x] Criar catálogo único de certificações com links oficiais e requisitos
 - [x] Corrigir CareerDetail para os seis perfis e remover o fallback de Cientista de Dados
 - [x] Substituir ações sem destino nos cards de certificações por links oficiais HTTPS
 - [x] Adicionar testes reais de interação dos cards de carreira e links oficiais de certificação
+- [x] Adicionar testes de contrato dos catálogos de carreira e certificação
 - [x] Validar Carreira e Certificações no preview
-- [ ] Salvar checkpoint somente após testes passarem
+- [ ] Salvar checkpoint desta consolidação somente após testes passarem
+
+
+## Conformidade de conteúdo
+- [x] Remover depoimentos e avaliações fictícios da homepage
+- [x] Substituir a seção por evidências verificáveis ou uma seção neutra sobre metodologia
+- [x] Adicionar regressão para impedir nomes, citações e ratings inventados
+- [x] Validar a homepage e o CourseDetail no preview após remover ratings/reviews
+- [ ] Salvar checkpoint após a validação de conformidade
+
+
+## Conformidade de métricas
+- [x] Remover campos rating e reviews fictícios do catálogo de cursos
+- [x] Remover a exibição de avaliações do CourseDetail
+- [x] Atualizar testes para validar metadados reais sem ratings inventados
+- [x] Derivar a métrica "Módulos disponíveis" diretamente de `coursesData`
+- [x] Executar a suíte completa (51/51) e validar o preview

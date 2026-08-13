@@ -83,8 +83,8 @@ describe("coursesData", () => {
       expect(module).toHaveProperty("difficulty");
       expect(module).toHaveProperty("duration");
       expect(module).toHaveProperty("lessons");
-      expect(module).toHaveProperty("rating");
-      expect(module).toHaveProperty("reviews");
+      expect(module).not.toHaveProperty("rating");
+      expect(module).not.toHaveProperty("reviews");
       expect(module).toHaveProperty("sections");
       expect(Array.isArray(module.sections)).toBe(true);
     });
@@ -97,10 +97,10 @@ describe("coursesData", () => {
     });
   });
 
-  it("should have valid rating values", () => {
-    Object.entries(coursesData).forEach(([key, module]) => {
-      expect(module.rating).toBeGreaterThanOrEqual(0);
-      expect(module.rating).toBeLessThanOrEqual(5);
+  it("should not expose fabricated ratings or review counts", () => {
+    Object.values(coursesData).forEach((module) => {
+      expect(module.rating).toBeUndefined();
+      expect(module.reviews).toBeUndefined();
     });
   });
 });

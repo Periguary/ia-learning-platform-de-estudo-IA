@@ -81,3 +81,26 @@ O detalhe `/project/2` agora apresenta etapas de Análise de Churn, incluindo al
 A página `/careers` apresentou os seis perfis profissionais. O segundo card navegou para `/career/2`, que exibiu o título correto “Engenheiro de Machine Learning”, responsabilidades, habilidades, empresas, mercado e roadmap específico, sem cair no fallback de Cientista de Dados. O retorno para Carreiras e o botão Começar Roadmap foram renderizados como botões de navegação, sem nested anchors.
 
 A suíte automatizada de interação de Carreiras e Certificações passou junto com os demais testes: 47 testes aprovados. Os seis cards de certificação agora expõem links oficiais externos com `target="_blank"` e protocolo HTTPS.
+
+
+## Validação pós-catálogo — 13 de agosto de 2026
+
+A rota `/careers` exibiu os seis perfis vindos do catálogo único: Cientista de Dados, Engenheiro de Machine Learning, Engenheiro de IA, Analista de IA, Engenheiro de Software com IA e Especialista em IA Generativa. Os cartões mantiveram salários, experiência, número de habilidades e ação de exploração; o layout continuou colorido e legível no preview.
+
+A rota `/certifications` exibiu seis registros vindos do catálogo único, cada um com provedor, nível, duração, tópicos, informações de exame, benefícios e CTA `Saiba Mais`. Os seis CTAs foram renderizados como links oficiais HTTPS: Google Cloud, Kaggle, DeepLearning.AI, Hugging Face, Microsoft Azure e AWS. Nenhum botão vazio ou rota interna de certificação foi observado.
+
+## Limitação registrada
+
+A consolidação em catálogos únicos foi implementada e testada. Ainda não há uma página interna de detalhe de certificação; os CTAs levam diretamente às fontes oficiais externas, que é o comportamento intencional desta versão.
+
+
+## Validação de conformidade da homepage — 2026-08-13
+
+A homepage carregou no preview com cores, contraste e tipografia aplicados. O bloco de métricas exibiu "11 Módulos disponíveis", agora derivado diretamente de `Object.keys(coursesData).length`, sem "Avaliação Média" ou valor 4.9/5. A seção de avaliações foi substituída por "Como a plataforma funciona" e "Explore antes de decidir", sem nomes, citações, estrelas ou ratings de clientes. O CTA `Explorar Trilha` permaneceu visível.
+
+A suíte passou após as alterações: 13 arquivos de teste e 51 testes aprovados. Ainda falta validar um `CourseDetail` no preview após a remoção das métricas e salvar o checkpoint desta conformidade.
+
+
+## Validação de CourseDetail sem avaliações — 2026-08-13
+
+A rota `/course/1/linear-algebra` carregou com título, descrição, duração de 40 horas, 12 aulas, progresso real de 1/12, primeira aula e exemplos didáticos. O cartão de métricas não exibiu estrela, rating ou contagem de reviews; os controles `Aula Concluída` e `Próxima Aula` permaneceram funcionais. A remoção das métricas fictícias não causou regressão no conteúdo da aula.

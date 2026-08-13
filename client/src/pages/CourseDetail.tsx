@@ -1,5 +1,5 @@
 import { useLocation, useRoute } from "wouter";
-import { ArrowLeft, BookOpen, Clock, CheckCircle2, Star, ExternalLink, FileText, Code, Lightbulb } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, CheckCircle2, ExternalLink, FileText, Code, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
@@ -145,10 +145,6 @@ export default function CourseDetail() {
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-muted-foreground" />
                 <span>{courseData.lessons} aulas</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                <span>{courseData.rating} ({courseData.reviews} avaliações)</span>
               </div>
             </div>
 

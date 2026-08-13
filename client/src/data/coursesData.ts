@@ -8,8 +8,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Iniciante",
     duration: "40 horas",
     lessons: 12,
-    rating: 4.9,
-    reviews: 2340,
     sections: [
       {
         title: "Introdução",
@@ -52,8 +50,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Intermediário",
     duration: "45 horas",
     lessons: 14,
-    rating: 4.8,
-    reviews: 1890,
     sections: [
       {
         title: "Fundamentos",
@@ -98,8 +94,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Intermediário",
     duration: "38 horas",
     lessons: 12,
-    rating: 4.7,
-    reviews: 1650,
     sections: [
       {
         title: "Conceitos Básicos",
@@ -142,8 +136,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Iniciante",
     duration: "50 horas",
     lessons: 16,
-    rating: 4.9,
-    reviews: 5420,
     sections: [
       {
         title: "Fundamentos",
@@ -190,8 +182,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Iniciante",
     duration: "30 horas",
     lessons: 10,
-    rating: 4.8,
-    reviews: 1200,
     sections: [
       { title: "Fundamentos", lessons: [{ id: 1, title: "Introdução", completed: false }, { id: 2, title: "SELECT", completed: false }, { id: 3, title: "WHERE", completed: false }] },
       { title: "Operações", lessons: [{ id: 4, title: "INSERT", completed: false }, { id: 5, title: "UPDATE", completed: false }, { id: 6, title: "DELETE", completed: false }] },
@@ -206,8 +196,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Intermediário",
     duration: "25 horas",
     lessons: 8,
-    rating: 4.9,
-    reviews: 1500,
     sections: [
       { title: "Fundamentos", lessons: [{ id: 1, title: "Arrays", completed: false }, { id: 2, title: "Criação", completed: false }, { id: 3, title: "Indexação", completed: false }] },
       { title: "Operações", lessons: [{ id: 4, title: "Matemática", completed: false }, { id: 5, title: "Broadcasting", completed: false }, { id: 6, title: "Álgebra", completed: false }] },
@@ -221,8 +209,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Intermediário",
     duration: "30 horas",
     lessons: 10,
-    rating: 4.9,
-    reviews: 2000,
     sections: [
       { title: "Fundamentos", lessons: [{ id: 1, title: "Series", completed: false }, { id: 2, title: "Leitura", completed: false }, { id: 3, title: "Seleção", completed: false }] },
       { title: "Manipulação", lessons: [{ id: 4, title: "Limpeza", completed: false }, { id: 5, title: "Transformação", completed: false }, { id: 6, title: "Agregação", completed: false }] },
@@ -237,8 +223,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Avançado",
     duration: "30 horas",
     lessons: 8,
-    rating: 4.9,
-    reviews: 1800,
     sections: [
       { title: "Conceitos", lessons: [{ id: 1, title: "O que é ML", completed: false }, { id: 2, title: "Tipos", completed: false }, { id: 3, title: "Workflow", completed: false }] },
       { title: "Dados", lessons: [{ id: 4, title: "Preparação", completed: false }, { id: 5, title: "Feature", completed: false }, { id: 6, title: "Normalização", completed: false }] },
@@ -252,8 +236,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Avançado",
     duration: "35 horas",
     lessons: 10,
-    rating: 4.9,
-    reviews: 1600,
     sections: [
       { title: "Fundamentos", lessons: [{ id: 1, title: "Neurônios", completed: false }, { id: 2, title: "Perceptron", completed: false }, { id: 3, title: "Backpropagation", completed: false }] },
       { title: "Arquiteturas", lessons: [{ id: 4, title: "MLP", completed: false }, { id: 5, title: "Ativações", completed: false }, { id: 6, title: "Otimizadores", completed: false }] },
@@ -268,8 +250,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Avançado",
     duration: "28 horas",
     lessons: 8,
-    rating: 4.9,
-    reviews: 1900,
     sections: [
       { title: "Conceitos", lessons: [{ id: 1, title: "LLMs", completed: false }, { id: 2, title: "Treinamento", completed: false }, { id: 3, title: "Fine-tuning", completed: false }] },
       { title: "Modelos", lessons: [{ id: 4, title: "GPT", completed: false }, { id: 5, title: "Claude", completed: false }, { id: 6, title: "Llama", completed: false }] },
@@ -283,8 +263,6 @@ export const coursesData: Record<string, any> = {
     difficulty: "Avançado",
     duration: "35 horas",
     lessons: 10,
-    rating: 4.8,
-    reviews: 1300,
     sections: [
       { title: "Padrões", lessons: [{ id: 1, title: "SOLID", completed: false }, { id: 2, title: "Design", completed: false }, { id: 3, title: "Arquitetura", completed: false }] },
       { title: "DevOps", lessons: [{ id: 4, title: "Git", completed: false }, { id: 5, title: "Docker", completed: false }, { id: 6, title: "CI/CD", completed: false }] },
