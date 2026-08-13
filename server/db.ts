@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { eq, desc, and } from "drizzle-orm";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -90,3 +90,32 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // TODO: add feature queries here as your schema grows.
+
+
+
+
+export async function saveAIConversation(data: InsertAIConversation): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db.insert(aiConversations).values(data);
+  } catch (error) {
+    console.warn("[Database] Failed to save AI conversation:", error);
+  }
+}
+
+export async function getAIConversationsForUserAndModule(userId: number, moduleId: string): Promise<AIConversation[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(aiConversations)
+      .where(and(eq(aiConversations.userId, userId), eq(aiConversations.moduleId, moduleId)))
+      .orderBy(desc(aiConversations.createdAt))
+      .limit(10);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch AI conversations:", error);
+    return [];
+  }
+}

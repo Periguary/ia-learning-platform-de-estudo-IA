@@ -8,6 +8,13 @@
       "when": 1781019587199,
       "tag": "0000_material_silverclaw",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1786656741903,
+      "tag": "0001_vengeful_black_widow",
+      "breakpoints": true
     }
   ]
 }

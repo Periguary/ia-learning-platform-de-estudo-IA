@@ -42,6 +42,9 @@ vi.mock("@/components/AIChatBox", () => ({
 vi.mock("@/lib/trpc", () => ({
   trpc: {
     ai: {
+      history: {
+        useQuery: () => ({ isLoading: false, data: [] }),
+      },
       ask: {
         useMutation: (options: { onSuccess?: (result: { answer: string }) => void }) => ({
           isPending: false,

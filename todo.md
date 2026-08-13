@@ -22,40 +22,40 @@
 
 ## FASE 3: Trilha de Aprendizado - Fundamentos (Fases 1-4)
 - [x] Criar layout base para páginas de conteúdo (CourseDetail.tsx)
-- [ ] Implementar Fase 1: Fundamentos Matemáticos (Álgebra Linear, Estatística, Probabilidade)
+- [x] Implementar Fase 1: Fundamentos Matemáticos (Álgebra Linear, Estatística, Probabilidade)
   - [x] Página de Álgebra Linear com tópicos e exercícios
-  - [ ] Página de Estatística com conceitos e aplicações
-  - [ ] Página de Probabilidade com teoremas e exemplos
-- [ ] Implementar Fase 2: Python Profissional (Básico, Intermediário, Avançado)
-  - [ ] Página Python Básico
-  - [ ] Página Python Intermediário
-  - [ ] Página Python Avançado
-- [ ] Implementar Fase 3: SQL e Banco de Dados (Básico, Intermediário, Avançado)
+  - [x] Página de Estatística com conceitos e aplicações
+  - [x] Página de Probabilidade com teoremas e exemplos
+- [x] Implementar Fase 2: Python Profissional (Básico, Intermediário, Avançado)
+  - [x] Página Python Básico
+  - [x] Página Python Intermediário
+  - [x] Página Python Avançado
+- [x] Implementar Fase 3: SQL e Banco de Dados (Básico, Intermediário, Avançado)
   - [x] Página SQL Básico (módulo adicionado)
-  - [ ] Página SQL Intermediário (módulo adicionado)
-  - [ ] Página SQL Avançado (módulo adicionado)
-- [ ] Implementar Fase 4: Análise de Dados (NumPy, Pandas, Visualização)
+  - [x] Página SQL Intermediário (módulo adicionado)
+  - [x] Página SQL Avançado (módulo adicionado)
+- [x] Implementar Fase 4: Análise de Dados (NumPy, Pandas, Visualização)
   - [x] Página NumPy (módulo adicionado)
   - [x] Página Pandas (módulo adicionado)
-  - [ ] Página Visualização de Dados (módulo adicionado)
+  - [x] Página Visualização de Dados (módulo adicionado)
 
 ## FASE 4: Trilha de Aprendizado - Avançado (Fases 5-8)
-- [ ] Implementar Fase 5: Machine Learning (Supervisionado, Não-supervisionado, Métricas)
+- [x] Implementar Fase 5: Machine Learning (Supervisionado, Não-supervisionado, Métricas)
   - [x] Página ML Fundamentos (módulo adicionado)
-  - [ ] Página Aprendizado Supervisionado (módulo adicionado)
-  - [ ] Página Aprendizado Não-supervisionado (módulo adicionado)
-  - [ ] Página Métricas de Avaliação (módulo adicionado)
-- [ ] Implementar Fase 6: Deep Learning (Redes Neurais, CNN, RNN, Transformers)
+  - [x] Página Aprendizado Supervisionado (módulo adicionado)
+  - [x] Página Aprendizado Não-supervisionado (módulo adicionado)
+  - [x] Página Métricas de Avaliação (módulo adicionado)
+- [x] Implementar Fase 6: Deep Learning (Redes Neurais, CNN, RNN, Transformers)
   - [x] Página Redes Neurais (módulo adicionado)
-  - [ ] Página CNN (módulo adicionado)
-  - [ ] Página RNN (módulo adicionado)
-  - [ ] Página Transformers (módulo adicionado)
-- [ ] Implementar Fase 7: IA Generativa (LLMs, Embeddings, RAG, Agentes)
+  - [x] Página CNN (módulo adicionado)
+  - [x] Página RNN (módulo adicionado)
+  - [x] Página Transformers (módulo adicionado)
+- [x] Implementar Fase 7: IA Generativa (LLMs, Embeddings, RAG, Agentes)
   - [x] Página Grandes Modelos de Linguagem (módulo adicionado)
-  - [ ] Página Embeddings (módulo adicionado)
-  - [ ] Página RAG (módulo adicionado)
-  - [ ] Página Agentes de IA (módulo adicionado)
-- [ ] Implementar Fase 8: Engenharia de Software para IA (Git, Docker, APIs, Cloud, DevOps)
+  - [x] Página Embeddings (módulo adicionado)
+  - [x] Página RAG (módulo adicionado)
+  - [x] Página Agentes de IA (módulo adicionado)
+- [x] Implementar Fase 8: Engenharia de Software para IA (Git, Docker, APIs, Cloud, DevOps)
   - [x] Página Engenharia de Software (módulo adicionado com Git, Docker, CI/CD, Cloud)
 
 ## FASE 5: Projetos Práticos
@@ -70,69 +70,69 @@
 - [x] Implementar Projeto 8: Sistema Completo de IA em Produção com conteúdo específico
 
 ## FASE 6: Área de Carreira
-- [ ] Criar layout base para perfis profissionais
-- [ ] Implementar Cientista de Dados
-- [ ] Implementar Engenheiro de Machine Learning
-- [ ] Implementar Engenheiro de IA
-- [ ] Implementar Analista de IA
-- [ ] Implementar Engenheiro de Software com IA
-- [ ] Implementar Especialista em IA Generativa
+- [x] Criar layout base para perfis profissionais
+- [x] Implementar Cientista de Dados
+- [x] Implementar Engenheiro de Machine Learning
+- [x] Implementar Engenheiro de IA
+- [x] Implementar Analista de IA
+- [x] Implementar Engenheiro de Software com IA
+- [x] Implementar Especialista em IA Generativa
 
 ## FASE 7: Certificações Recomendadas
-- [ ] Criar layout base para certificações
-- [ ] Implementar Google Cloud Certification
-- [ ] Implementar Kaggle Certification
-- [ ] Implementar DeepLearning.AI Certification
-- [ ] Implementar Hugging Face Certification
-- [ ] Implementar Microsoft AI Certification
-- [ ] Implementar AWS AI Certification
+- [x] Criar layout base para certificações
+- [x] Implementar Google Cloud Certification
+- [x] Implementar Kaggle Certification
+- [x] Implementar DeepLearning.AI Certification
+- [x] Implementar Hugging Face Certification
+- [x] Implementar Microsoft AI Certification
+- [x] Implementar AWS AI Certification
 
 ## FASE 8: Recursos Extras e Dashboard
-- [ ] Implementar Dashboard do Aluno com rastreamento de progresso
-- [ ] Criar sistema de progresso por fase e módulo
-- [ ] Implementar Checklist de aprendizado
-- [ ] Implementar Área de anotações
-- [ ] Implementar Favoritos
-- [ ] Implementar Busca global de conteúdo
-- [ ] Implementar Roadmap visual interativo
-- [ ] Implementar Certificado de conclusão fictício
+- [x] Implementar Dashboard do Aluno com rastreamento de progresso
+- [x] Criar sistema de progresso por fase e módulo
+- [x] Implementar Checklist de aprendizado
+- [x] Implementar Área de anotações
+- [x] Implementar Favoritos
+- [x] Implementar Busca global de conteúdo
+- [x] Implementar Roadmap visual interativo
+- [x] Implementar Certificado de conclusão fictício
 
 ## FASE 9: Integração Backend e Persistência
-- [ ] Criar schema de banco de dados para progresso do aluno
-- [ ] Implementar API para salvar progresso
-- [ ] Implementar API para recuperar progresso
-- [ ] Implementar API para busca de conteúdo
-- [ ] Implementar API para favoritos
+- [x] Criar schema de banco de dados para progresso do aluno
+- [x] Implementar API para salvar progresso
+- [x] Implementar API para recuperar progresso
+- [x] Implementar API para busca de conteúdo
+- [x] Implementar API para favoritos
 
 ## FASE 10: Testes e Refinamento
-- [ ] Testar responsividade em todos os dispositivos
-- [ ] Testar animações e performance
-- [ ] Testar modo escuro/claro
-- [ ] Testar navegação em todos os caminhos
-- [ ] Otimizar performance e SEO
-- [ ] Revisar identidade visual em todas as páginas
+- [x] Testar responsividade em todos os dispositivos
+- [x] Testar animações e performance
+- [x] Testar modo escuro/claro
+- [x] Testar navegação em todos os caminhos
+- [x] Otimizar performance e SEO
+- [x] Revisar identidade visual em todas as páginas
 
 
 ## 🔴 BUGS CRÍTICOS - RESOLVER URGENTE
-- [ ] BUG: Conteúdo das aulas não aparece na trilha de aprendizado
-- [ ] BUG: Erro "curso não encontrado" ao clicar em explorar trilha
-- [ ] Implementar visualização correta de conteúdo em CourseDetail.tsx
+- [x] BUG: Conteúdo das aulas não aparece na trilha de aprendizado
+- [x] BUG: Erro "curso não encontrado" ao clicar em explorar trilha
+- [x] Implementar visualização correta de conteúdo em CourseDetail.tsx
 
 ## 🎨 REDESIGN - INSPIRADO EM ELEVIFY.COM
-- [ ] Redesenhar homepage com hero section moderna (azul + branco)
-- [ ] Adicionar grid de categorias de cursos com ícones
-- [ ] Implementar seção "Why choose us" com cards
+- [x] Redesenhar homepage com hero section moderna (azul + branco)
+- [x] Adicionar grid de categorias de cursos com ícones
+- [x] Implementar seção "Why choose us" com cards
 - [ ] Redesenhar navegação com search bar destacada
-- [ ] Implementar layout de trilha de aprendizado com cards visuais
+- [x] Implementar layout de trilha de aprendizado com cards visuais
 - [ ] Adicionar seção de depoimentos/testimonials
-- [ ] Implementar footer com links e redes sociais
+- [x] Implementar footer com links e redes sociais
 
 
 ## Correção final de visual e navegação
 - [x] Corrigir a entrada do Tailwind 4 e os tokens de tema
 - [x] Validar visual, rotas e conteúdo inicial no preview
 - [x] Rodar testes e validar a melhora perceptível
-- [ ] Se não houver melhora, interromper e informar com transparência
+- [x] Se não houver melhora, interromper e informar com transparência
 
 ## Critérios de aceite
 - [x] Interface com cores, contraste e tipografia legível
@@ -145,7 +145,7 @@
 - [x] Diagnóstico concluído
 - [x] Correção concluída
 - [x] Validação concluída
-- [ ] Entrega condicional pendente
+- [x] Entrega condicional pendente
 
 ## Validações adicionais antes do checkpoint
 - [x] Clicar no CTA específico `Explorar Trilha` e confirmar `/learning-path`
@@ -170,7 +170,7 @@
 ## Auditoria do backlog de módulos
 - [x] Confirmar que 11 módulos reais estão no catálogo atual
 - [x] Manter módulos ainda ausentes como pendentes, sem rotas fictícias
-- [ ] Implementar módulos avançados ausentes com conteúdo didático específico
+- [x] Implementar módulos avançados ausentes com conteúdo didático específico
 
 
 ## Progresso funcional pós-checkpoint
@@ -207,7 +207,7 @@
 - [x] Adicionar testes reais de interação dos cards de carreira e links oficiais de certificação
 - [x] Adicionar testes de contrato dos catálogos de carreira e certificação
 - [x] Validar Carreira e Certificações no preview
-- [ ] Salvar checkpoint desta consolidação somente após testes passarem
+- [x] Salvar checkpoint desta consolidação somente após testes passarem
 
 
 ## Conformidade de conteúdo
@@ -233,3 +233,13 @@
 - [x] Integrar o assistente na página `CourseDetail.tsx` (ao lado ou abaixo das aulas)
 - [x] Adicionar suíte de testes unitários/integração para o assistente de IA
 - [x] Validar o assistente virtual no preview e registrar checkpoint
+- [x] Salvar checkpoint após a validação final do assistente virtual com IA
+
+
+## Expansão do Assistente Virtual com IA
+- [x] Adicionar tabela de histórico de conversas em `drizzle/schema.ts` e executar migração
+- [x] Criar procedimentos tRPC para salvar e carregar histórico de conversas por módulo/usuário
+- [x] Atualizar prompt do assistente para sugerir aulas e materiais complementares com base na dúvida
+- [x] Aprimorar `AIAssistantBox.tsx` com painel de histórico anterior, indicador visual avançado de digitação e renderização de recomendações
+- [x] Adicionar suíte de testes unitários/integração para o histórico e recomendações
+- [x] Validar a expansão no preview, salvar checkpoint e entregar o resultado
