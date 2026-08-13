@@ -1,25 +1,25 @@
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { BookOpen, TrendingUp, Award, Clock, CheckCircle2, Target } from "lucide-react";
 import { useLocation } from "wouter";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { coursesData } from "@/data/coursesData";
+import { learningPhases } from "@/data/learningCatalog";
+import { getCompletedCount, readProgress } from "@/data/progress";
 import { getPhaseEntryRoute } from "@/data/learningRoutes";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
 
-  // Mock data
-  const progressData = [
-    { phase: "Fase 1", completed: 0, total: 3 },
-    { phase: "Fase 2", completed: 0, total: 3 },
-    { phase: "Fase 3", completed: 0, total: 3 },
-    { phase: "Fase 4", completed: 0, total: 3 },
-    { phase: "Fase 5", completed: 0, total: 4 },
-    { phase: "Fase 6", completed: 0, total: 4 },
-    { phase: "Fase 7", completed: 0, total: 4 },
-    { phase: "Fase 8", completed: 0, total: 5 },
-  ];
+  const [progressState, setProgressState] = useState(() => readProgress());
+
+  useEffect(() => {
+    const syncProgress = () => setProgressState(readProgress());
+    window.addEventListener("storage", syncProgress);
+    return () => window.removeEventListener("storage", syncProgress);
+  }, []);
 
   const studyTimeData = [
     { day: "Seg", hours: 0 },
@@ -31,39 +31,60 @@ export default function Dashboard() {
     { day: "Dom", hours: 0 },
   ];
 
-  const skillsData = [
-    { name: "Python", value: 0 },
-    { name: "SQL", value: 0 },
-    { name: "ML", value: 0 },
-    { name: "Estatística", value: 0 },
+  const skillModules = [
+    { name: "Python", moduleId: "python-basics" },
+    { name: "SQL", moduleId: "sql-basics" },
+    { name: "ML", moduleId: "ml-fundamentals" },
+    { name: "Estatística", moduleId: "statistics" },
   ];
+
+  const skillsData = skillModules.map(({ name, moduleId }) => ({
+    name,
+    value: Math.round((getCompletedCount(progressState, moduleId) / coursesData[moduleId].lessons) * 100),
+  }));
 
   const COLORS = ["#00d4ff", "#a855f7", "#fbbf24", "#f97316"];
 
-  const phases = [
-    { id: 1, title: "Fundamentos Matemáticos", completed: false, modules: 3 },
-    { id: 2, title: "Python Profissional", completed: false, modules: 3 },
-    { id: 3, title: "SQL e Banco de Dados", completed: false, modules: 3 },
-    { id: 4, title: "Análise de Dados", completed: false, modules: 3 },
-    { id: 5, title: "Machine Learning", completed: false, modules: 4 },
-    { id: 6, title: "Deep Learning", completed: false, modules: 4 },
-    { id: 7, title: "IA Generativa", completed: false, modules: 4 },
-    { id: 8, title: "Engenharia de Software", completed: false, modules: 5 },
-  ];
+  const phases = learningPhases.map((phase) => ({
+    id: phase.id,
+    title: phase.title,
+    completed: false,
+    modules: phase.modules.length,
+    moduleIds: phase.modules.map((module) => module.id),
+  }));
+
+  const progressData = phases.map((phase) => {
+    const total = phase.moduleIds.reduce((sum, moduleId) => sum + coursesData[moduleId].lessons, 0);
+    const completed = phase.moduleIds.reduce((sum, moduleId) => sum + getCompletedCount(progressState, moduleId), 0);
+    return { phase: `Fase ${phase.id}`, completed, total };
+  });
+
+  const totalLessons = progressData.reduce((sum, phase) => sum + phase.total, 0);
+  const completedLessons = progressData.reduce((sum, phase) => sum + phase.completed, 0);
+  const overallProgress = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+  const isPhaseComplete = (phaseId: number) => {
+    const phaseProgress = progressData[phaseId - 1];
+    return Boolean(phaseProgress && phaseProgress.completed >= phaseProgress.total && phaseProgress.total > 0);
+  };
 
   const achievements = [
-    { id: 1, title: "Primeiro Passo", description: "Complete o primeiro módulo", icon: "🎯", unlocked: false },
-    { id: 2, title: "Matemático", description: "Complete Fase 1", icon: "📐", unlocked: false },
-    { id: 3, title: "Pythonista", description: "Complete Fase 2", icon: "🐍", unlocked: false },
-    { id: 4, title: "Analista", description: "Complete Fase 4", icon: "📊", unlocked: false },
-    { id: 5, title: "Especialista em ML", description: "Complete Fase 5", icon: "🤖", unlocked: false },
-    { id: 6, title: "Mestre em IA", description: "Complete toda a trilha", icon: "👑", unlocked: false },
+    { id: 1, title: "Primeiro Passo", description: "Complete a primeira aula", icon: "🎯", unlocked: completedLessons > 0 },
+    { id: 2, title: "Matemático", description: "Complete Fase 1", icon: "📐", unlocked: isPhaseComplete(1) },
+    { id: 3, title: "Pythonista", description: "Complete Fase 2", icon: "🐍", unlocked: isPhaseComplete(2) },
+    { id: 4, title: "Analista", description: "Complete Fase 4", icon: "📊", unlocked: isPhaseComplete(4) },
+    { id: 5, title: "Especialista em ML", description: "Complete Fase 5", icon: "🤖", unlocked: isPhaseComplete(5) },
+    { id: 6, title: "Mestre em IA", description: "Complete toda a trilha", icon: "👑", unlocked: overallProgress === 100 },
   ];
 
+  const completedModules = Object.entries(coursesData).filter(([moduleId, course]) =>
+    getCompletedCount(progressState, moduleId) >= course.lessons,
+  ).length;
+
   const stats = [
-    { label: "Progresso Geral", value: "0%", icon: TrendingUp, color: "text-primary" },
-    { label: "Horas Estudadas", value: "0h", icon: Clock, color: "text-secondary" },
-    { label: "Módulos Completos", value: "0", icon: CheckCircle2, color: "text-accent" },
+    { label: "Progresso Geral", value: `${overallProgress}%`, icon: TrendingUp, color: "text-primary" },
+    { label: "Aulas Concluídas", value: `${completedLessons}/${totalLessons}`, icon: Clock, color: "text-secondary" },
+    { label: "Módulos Completos", value: String(completedModules), icon: CheckCircle2, color: "text-accent" },
     { label: "Certificações", value: "0", icon: Award, color: "text-green-500" },
   ];
 
@@ -202,7 +223,13 @@ export default function Dashboard() {
           <div className="p-6 border border-border rounded-xl bg-card space-y-6">
             <h2 className="text-xl font-bold">Progresso das Fases</h2>
             <div className="space-y-4">
-              {phases.map((phase) => (
+              {phases.map((phase) => {
+                const phaseProgress = progressData[phase.id - 1];
+                const phasePercentage = phaseProgress?.total
+                  ? Math.round((phaseProgress.completed / phaseProgress.total) * 100)
+                  : 0;
+
+                return (
                 <button
                   key={phase.id}
                   onClick={() => navigate(getPhaseEntryRoute(phase.id))}
@@ -221,12 +248,16 @@ export default function Dashboard() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                      <div className="h-full w-0 bg-gradient-to-r from-primary to-secondary"></div>
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
+                        style={{ width: `${phasePercentage}%` }}
+                      ></div>
                     </div>
-                    <span className="text-sm font-semibold text-muted-foreground">0%</span>
+                    <span className="text-sm font-semibold text-muted-foreground">{phasePercentage}%</span>
                   </div>
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
 

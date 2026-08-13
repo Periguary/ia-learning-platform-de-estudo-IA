@@ -3,18 +3,20 @@ import { ArrowLeft, BookOpen, Clock, CheckCircle2, Star, ExternalLink, FileText,
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
+import { markLessonComplete, readProgress, writeProgress } from "@/data/progress";
 
 export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
   const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1);
-  const [completedLessonIds, setCompletedLessonIds] = useState<number[]>([]);
+  const [progressState, setProgressState] = useState(() => readProgress());
 
   if (!match) return null;
 
   const module = params?.module ? String(params.module).toLowerCase().trim() : "linear-algebra";
   const courseData = coursesData[module];
   const lessonsContent = lessonsContentData[module] || {};
+  const completedLessonIds = progressState[module] ?? [];
 
   if (!courseData) {
     return (
@@ -98,7 +100,9 @@ export default function CourseDetail() {
   const lessonSequence = courseData.sections.flatMap((section: any) => section.lessons);
   const handleCompleteLesson = () => {
     if (typeof selectedLesson !== "number") return;
-    setCompletedLessonIds((current) => (current.includes(selectedLesson) ? current : [...current, selectedLesson]));
+    const nextProgress = markLessonComplete(progressState, module, selectedLesson);
+    setProgressState(nextProgress);
+    writeProgress(nextProgress);
   };
   const handleNextLesson = () => {
     const currentIndex = typeof selectedLesson === "number"

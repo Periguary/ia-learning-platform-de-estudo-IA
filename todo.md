@@ -166,3 +166,11 @@
 - [x] Garantir que cada módulo exibido tenha rota `/course/:phase/:module` válida
 - [x] Adicionar regressões do catálogo e executar a suíte completa
 - [ ] Salvar checkpoint desta sincronização
+
+
+## Progresso funcional pós-checkpoint
+- [x] Persistir aulas concluídas por módulo no navegador sem perder o estado ao trocar de rota
+- [x] Refletir progresso real no CourseDetail e no Dashboard
+- [x] Adicionar regressões para leitura e gravação do progresso
+- [x] Validar concluir aula → voltar ao Dashboard → conferir progresso
+- [ ] Salvar checkpoint apenas após testes e validação no preview

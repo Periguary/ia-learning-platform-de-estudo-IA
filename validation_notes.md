@@ -59,3 +59,8 @@ A seção `Progresso das Fases` do `/dashboard` agora usa a tabela de rotas reai
 ## Learning Path sincronizada
 
 A `/learning-path` passou a usar `coursesData` como fonte dos módulos e contagens. O preview exibiu 8 fases e 11 módulos reais, incluindo 38 aulas na Fase 1, 16 em Python, 14 em Estatística e 12 em Probabilidade. O card de Álgebra Linear abriu `/course/1/linear-algebra` com a primeira aula e exemplos visíveis.
+
+
+## Progresso persistente validado
+
+No preview, a primeira aula de Álgebra Linear foi marcada como concluída e o CourseDetail mudou para “Aula Concluída”, exibindo 1 de 12 aulas completas. Ao abrir o Dashboard, o indicador passou a mostrar 1/118 aulas, progresso geral de 1%, e a Fase 1 passou a exibir 3%, além de desbloquear a conquista “Primeiro Passo”.
