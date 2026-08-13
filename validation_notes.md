@@ -74,3 +74,10 @@ A página `/projects` exibiu os oito projetos com dados do catálogo único. O c
 ## Conteúdo específico dos projetos validado
 
 O detalhe `/project/2` agora apresenta etapas de Análise de Churn, incluindo alvo binário, sinais de risco, regressão logística, limiar de contato e fila de retenção. O detalhe `/project/7` apresenta etapas de Assistente de IA Corporativo, incluindo ferramentas permitidas, estado, orquestração, aprovação humana e rastreabilidade. Os snippets não contêm os placeholders genéricos removidos.
+
+
+## Validação de Carreiras e Certificações — 13/08/2026
+
+A página `/careers` apresentou os seis perfis profissionais. O segundo card navegou para `/career/2`, que exibiu o título correto “Engenheiro de Machine Learning”, responsabilidades, habilidades, empresas, mercado e roadmap específico, sem cair no fallback de Cientista de Dados. O retorno para Carreiras e o botão Começar Roadmap foram renderizados como botões de navegação, sem nested anchors.
+
+A suíte automatizada de interação de Carreiras e Certificações passou junto com os demais testes: 47 testes aprovados. Os seis cards de certificação agora expõem links oficiais externos com `target="_blank"` e protocolo HTTPS.

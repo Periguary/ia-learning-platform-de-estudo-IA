@@ -181,7 +181,7 @@
 - [x] Criar uma rota de detalhe para projetos práticos reais
 - [x] Adicionar teste real de navegação/UI para abertura de um projeto pelo card
 - [x] Validar Projetos → Detalhe no preview
-- [ ] Salvar checkpoint após testes e validação do catálogo e dos projetos
+- [x] Salvar checkpoint após testes e validação do catálogo e dos projetos
 
 ## Lacunas identificadas na revisão
 - [x] Substituir o template genérico por etapas e snippets específicos dos oito projetos
@@ -191,3 +191,14 @@
 - [x] Configurar ambiente DOM com jsdom para o teste interativo de Projects
 - [x] Rodar o teste real de clique e navegação no cliente
 
+
+
+## Próximo pacote funcional pós-checkpoint
+- [x] Inspecionar Carreira e Certificações em busca de placeholders ou ações sem rota
+- [ ] Criar catálogo único de carreiras com detalhes e roadmap por perfil
+- [ ] Criar catálogo único de certificações com links oficiais e requisitos
+- [x] Corrigir CareerDetail para os seis perfis e remover o fallback de Cientista de Dados
+- [x] Substituir ações sem destino nos cards de certificações por links oficiais HTTPS
+- [x] Adicionar testes reais de interação dos cards de carreira e links oficiais de certificação
+- [x] Validar Carreira e Certificações no preview
+- [ ] Salvar checkpoint somente após testes passarem

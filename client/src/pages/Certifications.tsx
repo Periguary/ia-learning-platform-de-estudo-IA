@@ -1,6 +1,5 @@
-import { Link } from "wouter";
+import React from "react";
 import { ArrowRight, Award, Clock, DollarSign, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
 export default function Certifications() {
@@ -17,6 +16,7 @@ export default function Certifications() {
       difficulty: "Avançado",
       color: "from-blue-500 to-cyan-500",
       description: "Certificação oficial do Google Cloud para engenheiros de dados.",
+      url: "https://cloud.google.com/learn/certification/data-engineer",
       benefits: [
         "Reconhecimento global",
         "Aumento salarial",
@@ -45,7 +45,8 @@ export default function Certifications() {
       price: "Gratuito",
       difficulty: "Intermediário",
       color: "from-green-500 to-emerald-500",
-      description: "Certificação por competição na plataforma Kaggle.",
+      description: "Trilhas práticas e competições na plataforma Kaggle.",
+      url: "https://www.kaggle.com/learn",
       benefits: [
         "Totalmente gratuito",
         "Comunidade ativa",
@@ -74,7 +75,8 @@ export default function Certifications() {
       price: "Pago (~R$ 300/mês)",
       difficulty: "Avançado",
       color: "from-purple-500 to-pink-500",
-      description: "Especialização completa em Deep Learning e IA.",
+      description: "Cursos e especializações em Deep Learning e IA.",
+      url: "https://www.deeplearning.ai/courses/",
       benefits: [
         "Conteúdo de qualidade",
         "Projetos práticos",
@@ -104,6 +106,7 @@ export default function Certifications() {
       difficulty: "Intermediário",
       color: "from-orange-500 to-red-500",
       description: "Curso completo de NLP com Hugging Face Transformers.",
+      url: "https://huggingface.co/learn/nlp-course/chapter1/1",
       benefits: [
         "Totalmente gratuito",
         "Conteúdo atualizado",
@@ -133,6 +136,7 @@ export default function Certifications() {
       difficulty: "Avançado",
       color: "from-indigo-500 to-purple-500",
       description: "Certificação oficial do Microsoft Azure para engenheiros de IA.",
+      url: "https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-engineer/",
       benefits: [
         "Reconhecimento global",
         "Acesso Azure",
@@ -162,6 +166,7 @@ export default function Certifications() {
       difficulty: "Avançado",
       color: "from-yellow-500 to-orange-500",
       description: "Certificação oficial AWS para especialistas em Machine Learning.",
+      url: "https://aws.amazon.com/certification/certified-machine-learning-specialty/",
       benefits: [
         "Reconhecimento global",
         "Acesso AWS",
@@ -273,12 +278,14 @@ export default function Certifications() {
                   </div>
 
                   {/* CTA */}
-                  <Button
-                    size="sm"
-                    className="w-full bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50"
+                  <a
+                    href={cert.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:shadow-lg hover:shadow-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    Saiba Mais
-                  </Button>
+                    Saiba Mais <ArrowRight className="w-4 h-4" />
+                  </a>
                 </div>
               </div>
             ))}
