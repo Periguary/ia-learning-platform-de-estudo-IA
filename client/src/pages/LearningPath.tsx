@@ -1,15 +1,19 @@
-import { ArrowRight, Lock, CheckCircle2 } from "lucide-react";
+'use client';
+
+import { ArrowRight, CheckCircle2, BookOpen, Clock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
 export default function LearningPath() {
   const [, navigate] = useLocation();
+
   const phases = [
     {
       id: 1,
       title: "Fundamentos Matemáticos",
-      description: "Domine os conceitos matemáticos essenciais para IA",
+      description: "Domine os conceitos matemáticos essenciais para IA: Álgebra Linear, Estatística e Probabilidade.",
       icon: "📐",
+      color: "from-blue-500 to-cyan-500",
       modules: [
         { id: "linear-algebra", title: "Álgebra Linear", lessons: 12 },
         { id: "statistics", title: "Estatística", lessons: 10 },
@@ -17,230 +21,189 @@ export default function LearningPath() {
       ],
       duration: "4 semanas",
       difficulty: "Iniciante",
-      color: "from-blue-500 to-cyan-500",
     },
     {
       id: 2,
       title: "Python Profissional",
-      description: "Aprenda Python do básico ao avançado",
+      description: "Aprenda programação em Python do básico ao avançado com foco em dados e IA.",
       icon: "🐍",
+      color: "from-green-500 to-emerald-500",
       modules: [
-        { id: "python-basics", title: "Python Básico", lessons: 15 },
-        { id: "python-intermediate", title: "Python Intermediário", lessons: 12 },
-        { id: "python-advanced", title: "Python Avançado", lessons: 10 },
+        { id: "python-basics", title: "Python Básico", lessons: 16 },
       ],
       duration: "6 semanas",
       difficulty: "Iniciante",
-      color: "from-green-500 to-emerald-500",
     },
     {
       id: 3,
-      title: "SQL e Banco de Dados",
-      description: "Domine consultas e design de banco de dados",
+      title: "SQL e Bancos de Dados",
+      description: "Aprenda consultas eficientes, modelagem e manipulação de dados relacionais.",
       icon: "🗄️",
+      color: "from-orange-500 to-red-500",
       modules: [
         { id: "sql-basics", title: "SQL Básico", lessons: 10 },
-        { id: "sql-intermediate", title: "SQL Intermediário", lessons: 12 },
-        { id: "sql-advanced", title: "SQL Avançado", lessons: 8 },
       ],
       duration: "4 semanas",
       difficulty: "Intermediário",
-      color: "from-orange-500 to-red-500",
     },
     {
       id: 4,
       title: "Análise de Dados",
-      description: "Trabalhe com dados usando NumPy, Pandas e Visualização",
+      description: "Processe e analise grandes volumes de dados utilizando NumPy e Pandas.",
       icon: "📊",
+      color: "from-purple-500 to-pink-500",
       modules: [
         { id: "numpy", title: "NumPy", lessons: 8 },
         { id: "pandas", title: "Pandas", lessons: 10 },
-        { id: "visualization", title: "Visualização de Dados", lessons: 9 },
       ],
       duration: "5 semanas",
       difficulty: "Intermediário",
-      color: "from-purple-500 to-pink-500",
     },
     {
       id: 5,
       title: "Machine Learning",
-      description: "Crie modelos preditivos com algoritmos clássicos",
+      description: "Construa modelos preditivos inteligentes usando algoritmos clássicos de ML.",
       icon: "🤖",
+      color: "from-indigo-500 to-purple-500",
       modules: [
-        { id: "ml-fundamentals", title: "Fundamentos", lessons: 8 },
-        { id: "supervised", title: "Aprendizado Supervisionado", lessons: 12 },
-        { id: "unsupervised", title: "Aprendizado Não-supervisionado", lessons: 10 },
-        { id: "metrics", title: "Métricas de Avaliação", lessons: 6 },
+        { id: "ml-fundamentals", title: "Fundamentos de ML", lessons: 8 },
       ],
       duration: "8 semanas",
       difficulty: "Avançado",
-      color: "from-indigo-500 to-purple-500",
     },
     {
       id: 6,
       title: "Deep Learning",
-      description: "Trabalhe com redes neurais e arquiteturas modernas",
+      description: "Compreenda redes neurais profundas e arquiteturas avançadas de aprendizado.",
       icon: "🧠",
+      color: "from-red-500 to-pink-500",
       modules: [
         { id: "neural-networks", title: "Redes Neurais", lessons: 10 },
-        { id: "cnn", title: "CNN - Visão Computacional", lessons: 9 },
-        { id: "rnn", title: "RNN - Séries Temporais", lessons: 8 },
-        { id: "transformers", title: "Transformers", lessons: 10 },
       ],
       duration: "8 semanas",
       difficulty: "Avançado",
-      color: "from-red-500 to-pink-500",
     },
     {
       id: 7,
       title: "IA Generativa",
-      description: "Explore LLMs, RAG e agentes de IA",
+      description: "Explore Grandes Modelos de Linguagem (LLMs), arquitetura Transformer e geração de texto.",
       icon: "✨",
+      color: "from-yellow-500 to-orange-500",
       modules: [
-        { id: "llms", title: "Grandes Modelos de Linguagem", lessons: 8 },
-        { id: "embeddings", title: "Embeddings", lessons: 6 },
-        { id: "rag", title: "RAG - Retrieval Augmented Generation", lessons: 7 },
-        { id: "agents", title: "Agentes de IA", lessons: 8 },
+        { id: "llms", title: "Grandes Modelos de Linguagem (LLMs)", lessons: 8 },
       ],
       duration: "7 semanas",
       difficulty: "Avançado",
-      color: "from-yellow-500 to-orange-500",
     },
     {
       id: 8,
       title: "Engenharia de Software para IA",
-      description: "Deploy, DevOps e produção de modelos",
+      description: "Aprenda engenharia de software robusta, Git, Docker, DevOps e boas práticas.",
       icon: "⚙️",
+      color: "from-teal-500 to-cyan-500",
       modules: [
-        { id: "git", title: "Git e Versionamento", lessons: 5 },
-        { id: "docker", title: "Docker e Containers", lessons: 7 },
-        { id: "apis", title: "APIs e FastAPI", lessons: 8 },
-        { id: "cloud", title: "Cloud Computing", lessons: 8 },
-        { id: "devops", title: "DevOps e CI/CD", lessons: 7 },
+        { id: "software-engineering", title: "Engenharia de Software", lessons: 10 },
       ],
       duration: "7 semanas",
       difficulty: "Avançado",
-      color: "from-teal-500 to-cyan-500",
     },
   ];
 
   return (
-    <div className="w-full">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       {/* Header */}
-      <section className="py-16 border-b border-border">
-        <div className="container space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold">Trilha de Aprendizado</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl">
-            Siga uma trilha estruturada de 8 fases que leva você do iniciante ao especialista em Inteligência Artificial.
+      <section className="py-16 px-6 md:px-12 bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800">
+        <div className="max-w-6xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/25 text-sm font-semibold">
+            <Sparkles className="w-4 h-4" />
+            <span>Trilha Estruturada do Zero ao Profissional</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Trilha de Aprendizado</h1>
+          <p className="text-lg text-slate-300 max-w-2xl leading-relaxed">
+            Siga nossa jornada dividida em 8 fases sequenciais. Clique em qualquer módulo para acessar o conteúdo didático completo, exemplos práticos e recursos.
           </p>
         </div>
       </section>
 
-      {/* Phases Grid */}
-      <section className="py-20">
-        <div className="container">
-          <div className="space-y-12">
-            {phases.map((phase) => (
-              <div key={`phase-${phase.id}`} className="space-y-6">
-                {/* Phase Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 p-6 border border-border rounded-xl bg-card hover:border-primary/50 transition-colors">
-                  <div className="flex items-start gap-4">
-                    <div className="text-5xl">{phase.icon}</div>
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-3">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${phase.color} text-white`}>
-                          Fase {phase.id}
-                        </span>
-                        <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
-                          {phase.difficulty}
-                        </span>
-                      </div>
-                      <h2 className="text-2xl font-bold">{phase.title}</h2>
-                      <p className="text-muted-foreground">{phase.description}</p>
-                      <div className="flex gap-6 pt-2 text-sm text-muted-foreground">
-                        <span>⏱️ {phase.duration}</span>
-                        <span>📚 {phase.modules.reduce((acc, m) => acc + m.lessons, 0)} aulas</span>
-                      </div>
-                    </div>
+      {/* Path Content */}
+      <section className="py-16 px-6 md:px-12 max-w-6xl mx-auto w-full space-y-16">
+        {phases.map((phase) => (
+          <div key={`phase-${phase.id}`} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-xl space-y-6">
+            {/* Phase Info */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-800 pb-6">
+              <div className="flex items-start gap-4">
+                <div className="text-5xl p-3 bg-slate-800/80 rounded-2xl">{phase.icon}</div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r ${phase.color} text-white`}>
+                      Fase {phase.id}
+                    </span>
+                    <span className="text-xs font-medium text-slate-400 bg-slate-800 px-3 py-1 rounded-full">
+                      {phase.difficulty}
+                    </span>
                   </div>
-                  <button
-                    onClick={() => navigate(`/course/${phase.id}/overview`)}
-                    className="btn-primary inline-flex items-center gap-2 whitespace-nowrap"
-                  >
-                    Explorar <ArrowRight className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Modules Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 ml-0 md:ml-12">
-                  {phase.modules.map((module) => (
-                    <button
-                      key={`module-${module.id}`}
-                      onClick={() => navigate(`/course/${phase.id}/${module.id}`)}
-                      className="group p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 transition-all text-left w-full"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {module.title}
-                        </h3>
-                        <CheckCircle2 className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                      </div>
-                      <p className="text-sm text-muted-foreground">{module.lessons} aulas</p>
-                    </button>
-                  ))}
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-100">{phase.title}</h2>
+                  <p className="text-slate-400 text-sm max-w-xl">{phase.description}</p>
                 </div>
               </div>
-            ))}
+
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+                <div className="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1.5 rounded-xl">
+                  <Clock className="w-4 h-4 text-blue-400" />
+                  <span>{phase.duration}</span>
+                </div>
+                <div className="flex items-center gap-1.5 bg-slate-800/60 px-3 py-1.5 rounded-xl">
+                  <BookOpen className="w-4 h-4 text-purple-400" />
+                  <span>{phase.modules.reduce((acc, m) => acc + m.lessons, 0)} aulas</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modules Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {phase.modules.map((module) => (
+                <div
+                  key={`module-${module.id}`}
+                  onClick={() => navigate(`/course/${phase.id}/${module.id}`)}
+                  className="bg-slate-800/50 border border-slate-700/60 hover:border-blue-500/50 p-5 rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:bg-slate-800 group flex flex-col justify-between"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Módulo</span>
+                      <CheckCircle2 className="w-5 h-5 text-slate-600 group-hover:text-emerald-400 transition-colors" />
+                    </div>
+                    <h3 className="font-bold text-slate-200 group-hover:text-blue-400 transition-colors text-lg">
+                      {module.title}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-700/40 text-xs text-slate-400">
+                    <span>{module.lessons} aulas didáticas</span>
+                    <span className="text-blue-400 font-semibold group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                      Acessar &rarr;
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ))}
       </section>
 
-      {/* Progress Summary */}
-      <section className="py-20 border-t border-border bg-card/50">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold">Seu Progresso</h2>
-              <p className="text-muted-foreground">Acompanhe seu desenvolvimento ao longo da trilha</p>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="space-y-4">
-              <div className="flex justify-between text-sm text-muted-foreground mb-2">
-                <span>Progresso Geral</span>
-                <span>0%</span>
-              </div>
-              <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
-                <div className="h-full w-0 bg-gradient-to-r from-primary to-secondary transition-all duration-500"></div>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              <div className="p-4 border border-border rounded-lg bg-background">
-                <p className="text-2xl font-bold text-primary">0</p>
-                <p className="text-sm text-muted-foreground">Fases Completas</p>
-              </div>
-              <div className="p-4 border border-border rounded-lg bg-background">
-                <p className="text-2xl font-bold text-secondary">0</p>
-                <p className="text-sm text-muted-foreground">Módulos Completos</p>
-              </div>
-              <div className="p-4 border border-border rounded-lg bg-background">
-                <p className="text-2xl font-bold text-accent">0</p>
-                <p className="text-sm text-muted-foreground">Aulas Assistidas</p>
-              </div>
-            </div>
-
-            <Button
-              asChild
-              size="lg"
-              className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50 h-12"
-            >
-              <a href="/dashboard">Ver Dashboard Completo</a>
-            </Button>
+      {/* Footer */}
+      <footer className="bg-slate-900 border-t border-slate-800 py-12 px-6 md:px-12 text-center text-slate-400 text-sm mt-auto">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2 font-bold text-white text-lg">
+            ⚡ IA Academy
+          </div>
+          <p>&copy; {new Date().getFullYear()} IA Academy. Todos os direitos reservados.</p>
+          <div className="flex gap-6">
+            <a href="/" className="hover:text-white transition-colors">Início</a>
+            <a href="/careers" className="hover:text-white transition-colors">Carreiras</a>
+            <a href="/certifications" className="hover:text-white transition-colors">Certificações</a>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
