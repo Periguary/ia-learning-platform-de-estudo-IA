@@ -186,7 +186,7 @@ describe('Home Component - Regression Tests (Static Analysis)', () => {
       const correctPattern1 = '<a href="/">Link</a>';
       const correctPattern2 = '<button onClick={() => navigate("/path")}>Link</button>';
 
-      expect(wrongPattern).toContain('<a><a>');
+      expect(wrongPattern).toMatch(/<a[^>]*>\s*<a[^>]*>/);
       expect(correctPattern1).not.toContain('<a><a>');
       expect(correctPattern2).not.toContain('<a>');
     });

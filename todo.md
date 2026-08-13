@@ -59,15 +59,15 @@
   - [x] Página Engenharia de Software (módulo adicionado com Git, Docker, CI/CD, Cloud)
 
 ## FASE 5: Projetos Práticos
-- [ ] Criar layout base para seção de projetos
-- [ ] Implementar Projeto 1: Previsão de Vendas
-- [ ] Implementar Projeto 2: Análise de Churn
-- [ ] Implementar Projeto 3: Sistema de Recomendação
-- [ ] Implementar Projeto 4: Classificador de Imagens
-- [ ] Implementar Projeto 5: Chatbot com RAG
-- [ ] Implementar Projeto 6: API de Machine Learning
-- [ ] Implementar Projeto 7: Assistente de IA Corporativo
-- [ ] Implementar Projeto 8: Sistema Completo de IA em Produção
+- [x] Criar layout base para seção de projetos
+- [x] Implementar Projeto 1: Previsão de Vendas com conteúdo específico
+- [x] Implementar Projeto 2: Análise de Churn com conteúdo específico
+- [x] Implementar Projeto 3: Sistema de Recomendação com conteúdo específico
+- [x] Implementar Projeto 4: Classificador de Imagens com conteúdo específico
+- [x] Implementar Projeto 5: Chatbot com RAG com conteúdo específico
+- [x] Implementar Projeto 6: API de Machine Learning com conteúdo específico
+- [x] Implementar Projeto 7: Assistente de IA Corporativo com conteúdo específico
+- [x] Implementar Projeto 8: Sistema Completo de IA em Produção com conteúdo específico
 
 ## FASE 6: Área de Carreira
 - [ ] Criar layout base para perfis profissionais
@@ -165,7 +165,7 @@
 - [x] Corrigir contagens de aulas exibidas para refletirem os dados reais
 - [x] Garantir que cada módulo exibido tenha rota `/course/:phase/:module` válida
 - [x] Adicionar regressões do catálogo e executar a suíte completa
-- [ ] Salvar checkpoint desta sincronização
+- [x] Salvar checkpoint desta sincronização
 
 
 ## Progresso funcional pós-checkpoint
@@ -173,4 +173,21 @@
 - [x] Refletir progresso real no CourseDetail e no Dashboard
 - [x] Adicionar regressões para leitura e gravação do progresso
 - [x] Validar concluir aula → voltar ao Dashboard → conferir progresso
-- [ ] Salvar checkpoint apenas após testes e validação no preview
+- [x] Salvar checkpoint do progresso após testes e validação no preview
+
+
+## Próximo fluxo funcional
+- [x] Inspecionar a página Projetos e remover ações que não levam a conteúdo real
+- [x] Criar uma rota de detalhe para projetos práticos reais
+- [x] Adicionar teste real de navegação/UI para abertura de um projeto pelo card
+- [x] Validar Projetos → Detalhe no preview
+- [ ] Salvar checkpoint após testes e validação do catálogo e dos projetos
+
+## Lacunas identificadas na revisão
+- [x] Substituir o template genérico por etapas e snippets específicos dos oito projetos
+- [x] Remover placeholders como `defina aqui` e `baseline_score = None`
+- [x] Adicionar teste real de interação Projects → `/project/:id`
+- [x] Validar os oito projetos como implementados com conteúdo específico, sem placeholders
+- [x] Configurar ambiente DOM com jsdom para o teste interativo de Projects
+- [x] Rodar o teste real de clique e navegação no cliente
+

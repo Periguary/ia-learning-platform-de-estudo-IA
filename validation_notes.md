@@ -64,3 +64,13 @@ A `/learning-path` passou a usar `coursesData` como fonte dos módulos e contage
 ## Progresso persistente validado
 
 No preview, a primeira aula de Álgebra Linear foi marcada como concluída e o CourseDetail mudou para “Aula Concluída”, exibindo 1 de 12 aulas completas. Ao abrir o Dashboard, o indicador passou a mostrar 1/118 aulas, progresso geral de 1%, e a Fase 1 passou a exibir 3%, além de desbloquear a conquista “Primeiro Passo”.
+
+
+## Projetos validados
+
+A página `/projects` exibiu os oito projetos com dados do catálogo único. O card “Previsão de Vendas” abriu `/project/1` sem fallback ou erro. O detalhe mostrou objetivos, requisitos, cinco etapas de código, melhorias, tecnologias e links oficiais do Pandas e scikit-learn. A ação “Começar Projeto” está preparada para rolar até a primeira etapa; não há mais recursos com `href="#"`.
+
+
+## Conteúdo específico dos projetos validado
+
+O detalhe `/project/2` agora apresenta etapas de Análise de Churn, incluindo alvo binário, sinais de risco, regressão logística, limiar de contato e fila de retenção. O detalhe `/project/7` apresenta etapas de Assistente de IA Corporativo, incluindo ferramentas permitidas, estado, orquestração, aprovação humana e rastreabilidade. Os snippets não contêm os placeholders genéricos removidos.
