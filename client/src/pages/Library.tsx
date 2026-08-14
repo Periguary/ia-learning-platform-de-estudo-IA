@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send } from "lucide-react";
+import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send, NotebookPen, Copy } from "lucide-react";
 import { libraryCatalog, type LibraryCategory, type LibraryItem } from "@/data/libraryCatalog";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -120,6 +120,19 @@ export default function Library() {
   const handleOpenVsCode = (item: LibraryItem) => {
     setNotification(`[VS Code] Comando gerado: 'code --install-extension' ou clone para workspace local (${item.title}).`);
     setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handlePrepareNotebookLm = async (item: LibraryItem) => {
+    const markdown = `# ${item.title}\n\n- **Autor:** ${item.author} (${item.year})\n- **Categoria:** ${item.category}\n- **Fonte oficial:** ${item.officialUrl}\n\n## Sobre este material\n\n${item.description}\n\n## Como usar no Gemini Notebook\n\nAdicione a URL original acima como fonte do notebook e use este arquivo Markdown como contexto de estudo.\n`;
+    downloadFile(`ia-academy-${item.id}-gemini-notebook.md`, markdown);
+    try {
+      await navigator.clipboard.writeText(item.officialUrl);
+      setNotification("Arquivo Markdown baixado e URL oficial copiada. Abra o Gemini Notebook e adicione ambos como fontes.");
+    } catch {
+      setNotification("Arquivo Markdown baixado. Copie a URL oficial do material e adicione-a como fonte no Gemini Notebook.");
+    }
+    window.open("https://notebooklm.google/", "_blank", "noopener,noreferrer");
+    setTimeout(() => setNotification(null), 6000);
   };
 
   return (
@@ -292,6 +305,10 @@ export default function Library() {
                       VS Code
                     </Button>
                   </div>
+                  <Button type="button" variant="outline" size="sm" onClick={() => void handlePrepareNotebookLm(item)} className="w-full gap-2 text-xs text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
+                    <NotebookPen className="size-3.5" /> Preparar para Gemini Notebook
+                    <Copy className="ml-auto size-3.5" />
+                  </Button>
                 </div>
               </article>
             );

@@ -61,6 +61,24 @@ export const aiUpdateCandidates = mysqlTable("ai_update_candidates", {
 export type AIUpdateCandidate = typeof aiUpdateCandidates.$inferSelect;
 export type InsertAIUpdateCandidate = typeof aiUpdateCandidates.$inferInsert;
 
+export const userRadarFavorites = mysqlTable("user_radar_favorites", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  radarItemId: varchar("radarItemId", { length: 180 }).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  summary: text("summary").notNull(),
+  category: varchar("category", { length: 80 }).notNull(),
+  sourceName: varchar("sourceName", { length: 160 }).notNull(),
+  sourceUrl: varchar("sourceUrl", { length: 500 }).notNull(),
+  relatedModules: text("relatedModules").notNull(),
+  learningAction: text("learningAction").notNull(),
+  publishedAt: varchar("publishedAt", { length: 40 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserRadarFavorite = typeof userRadarFavorites.$inferSelect;
+export type InsertUserRadarFavorite = typeof userRadarFavorites.$inferInsert;
+
 
 export const userLibraryFavorites = mysqlTable("user_library_favorites", {
   id: int("id").autoincrement().primaryKey(),

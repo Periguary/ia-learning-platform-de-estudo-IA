@@ -15,9 +15,17 @@ vi.mock("@/_core/hooks/useAuth", () => ({
 
 vi.mock("@/lib/trpc", () => ({
   trpc: {
+    useUtils: () => ({ ai: { radarFavorites: { invalidate: vi.fn() } } }),
     ai: {
       updates: {
-        useQuery: () => ({ data: [], isLoading: false }),
+        useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
+      },
+      radarFavorites: {
+        useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
+        invalidate: vi.fn(),
+      },
+      toggleRadarFavorite: {
+        useMutation: () => ({ isPending: false, mutate: vi.fn() }),
       },
       pendingUpdates: {
         useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
@@ -54,5 +62,12 @@ describe("Updates interaction", () => {
 
     expect(screen.queryByRole("button", { name: /Buscar novas atualizações/i })).toBeNull();
     expect(screen.queryByText(/Candidatos aguardando revisão/i)).toBeNull();
+  });
+
+  it("exibe o controle de leitura posterior do Radar", () => {
+    render(<Updates />);
+
+    expect(screen.getAllByRole("button", { name: /Salvas \(0\)/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: /Salvar /i }).length).toBeGreaterThan(0);
   });
 });

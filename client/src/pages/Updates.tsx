@@ -1,5 +1,6 @@
 import React from "react";
-import { ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, RefreshCw, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowUpRight, BookOpen, Bookmark, CalendarDays, CheckCircle2, RefreshCw, ShieldCheck, Sparkles } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { updatesCatalog, updatesLastReviewedAt, type AIUpdate } from "@/data/updatesCatalog";
 import { trpc } from "@/lib/trpc";
@@ -24,7 +25,9 @@ export default function Updates() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const approvedQuery = trpc.ai.updates.useQuery();
+  const radarFavoritesQuery = trpc.ai.radarFavorites.useQuery();
   const pendingQuery = trpc.ai.pendingUpdates.useQuery(undefined, { enabled: isAdmin });
   const refreshMutation = trpc.ai.refreshUpdates.useMutation({
     onSuccess: () => {
@@ -35,6 +38,12 @@ export default function Updates() {
     onSuccess: () => {
       void pendingQuery.refetch();
       void approvedQuery.refetch();
+    },
+  });
+  const utils = trpc.useUtils();
+  const radarFavoriteMutation = trpc.ai.toggleRadarFavorite.useMutation({
+    onSuccess: () => {
+      void utils.ai.radarFavorites.invalidate();
     },
   });
 
@@ -50,6 +59,19 @@ export default function Updates() {
     learningAction: item.learningAction,
   }));
   const visibleUpdates = [...updatesCatalog, ...approvedUpdates];
+  const favoriteIds = useMemo(() => new Set((radarFavoritesQuery.data ?? []).map(item => item.radarItemId)), [radarFavoritesQuery.data]);
+  const savedUpdates: AIUpdate[] = (radarFavoritesQuery.data ?? []).map(item => ({
+    id: item.radarItemId,
+    title: item.title,
+    summary: item.summary,
+    category: item.category as AIUpdate["category"],
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    publishedAt: item.publishedAt ?? new Date(item.createdAt).toISOString().slice(0, 10),
+    relatedModules: JSON.parse(item.relatedModules) as string[],
+    learningAction: item.learningAction,
+  }));
+  const displayUpdates = showFavoritesOnly ? savedUpdates : visibleUpdates;
 
   return (
     <div className="w-full">
@@ -120,17 +142,51 @@ export default function Updates() {
           <p className="text-sm text-muted-foreground">Última revisão: {new Date(`${updatesLastReviewedAt}T12:00:00`).toLocaleDateString("pt-BR")}</p>
         </div>
 
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2" role="tablist" aria-label="Filtro do Radar">
+            <Button type="button" size="sm" variant={!showFavoritesOnly ? "default" : "outline"} onClick={() => setShowFavoritesOnly(false)}>Todas as atualizações</Button>
+            <Button type="button" size="sm" variant={showFavoritesOnly ? "default" : "outline"} onClick={() => setShowFavoritesOnly(true)} className="gap-2">
+              <Bookmark className="size-4" /> Salvas ({radarFavoritesQuery.data?.length ?? 0})
+            </Button>
+          </div>
+          {!user && <p className="text-xs text-muted-foreground">Entre na plataforma para salvar itens.</p>}
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
-          {visibleUpdates.map(update => (
+          {displayUpdates.map(update => (
             <article key={update.id} className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
               <div className="flex items-start justify-between gap-4">
                 <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${categoryStyles[update.category] ?? "bg-muted text-muted-foreground"}`}>
                   {update.category}
                 </span>
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={favoriteIds.has(update.id) ? `Remover ${update.title} dos salvos` : `Salvar ${update.title}`}
+                    title={favoriteIds.has(update.id) ? "Remover dos salvos" : "Salvar para ler depois"}
+                    disabled={!user || radarFavoriteMutation.isPending}
+                    onClick={() => radarFavoriteMutation.mutate({
+                      radarItemId: update.id,
+                      title: update.title,
+                      summary: update.summary,
+                      category: update.category,
+                      sourceName: update.sourceName,
+                      sourceUrl: update.sourceUrl,
+                      relatedModules: update.relatedModules,
+                      learningAction: update.learningAction,
+                      publishedAt: update.publishedAt,
+                    })}
+                    className={favoriteIds.has(update.id) ? "text-primary" : "text-muted-foreground"}
+                  >
+                    <Bookmark className={`size-4 ${favoriteIds.has(update.id) ? "fill-current" : ""}`} />
+                  </Button>
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
                   <CalendarDays className="size-3.5" />
                   {new Date(`${update.publishedAt}T12:00:00`).toLocaleDateString("pt-BR")}
-                </span>
+                  </span>
+                </div>
               </div>
               <h3 className="mt-5 text-xl font-bold leading-tight">{update.title}</h3>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{update.summary}</p>
@@ -169,6 +225,12 @@ export default function Updates() {
             </article>
           ))}
         </div>
+
+        {showFavoritesOnly && savedUpdates.length === 0 && (
+          <div className="mt-6 rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            Você ainda não salvou nenhuma atualização. Use o marcador nos cards para criar sua lista de leitura.
+          </div>
+        )}
 
         {isAdmin && pendingQuery.data && pendingQuery.data.length > 0 && (
           <section className="mt-12 rounded-2xl border border-primary/20 bg-primary/5 p-6">

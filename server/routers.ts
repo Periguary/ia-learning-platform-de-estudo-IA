@@ -10,6 +10,8 @@ import {
   clearAIConversationsForUserAndModule,
   getApprovedAIUpdateCandidates,
   getPendingAIUpdateCandidates,
+  getUserRadarFavorites,
+  toggleUserRadarFavorite,
   updateAIUpdateCandidateStatus,
   getUserLibraryFavorites,
   toggleUserLibraryFavorite,
@@ -181,6 +183,38 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         await updateAIUpdateCandidateStatus(input.id, input.status);
         return { success: true } as const;
+      }),
+    radarFavorites: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getUserRadarFavorites(ctx.user.id);
+    }),
+    toggleRadarFavorite: publicProcedure
+      .input(z.object({
+        radarItemId: z.string().trim().min(1).max(180),
+        title: z.string().trim().min(1).max(300),
+        summary: z.string().trim().min(1).max(5_000),
+        category: z.string().trim().min(1).max(80),
+        sourceName: z.string().trim().min(1).max(160),
+        sourceUrl: z.string().url().max(500),
+        relatedModules: z.array(z.string().trim().min(1).max(120)).min(1).max(10),
+        learningAction: z.string().trim().min(1).max(2_000),
+        publishedAt: z.string().trim().max(40).nullable().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para salvar atualizações do Radar.");
+        const isFavorited = await toggleUserRadarFavorite(ctx.user.id, {
+          userId: ctx.user.id,
+          radarItemId: input.radarItemId,
+          title: input.title,
+          summary: input.summary,
+          category: input.category,
+          sourceName: input.sourceName,
+          sourceUrl: input.sourceUrl,
+          relatedModules: JSON.stringify(input.relatedModules),
+          learningAction: input.learningAction,
+          publishedAt: input.publishedAt ?? null,
+        });
+        return { isFavorited };
       }),
     favorites: publicProcedure.query(async ({ ctx }) => {
       if (!ctx.user?.id) return [];

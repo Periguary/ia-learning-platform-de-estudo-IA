@@ -204,12 +204,55 @@ export async function clearAIConversationsForUserAndModule(userId: number, modul
 
 import {
   userLibraryFavorites,
+  UserRadarFavorite,
+  InsertUserRadarFavorite,
+  userRadarFavorites,
   UserLibraryFavorite,
   InsertUserLibraryFavorite,
   libraryReviews,
   LibraryReview,
   InsertLibraryReview,
 } from "../drizzle/schema";
+
+export async function getUserRadarFavorites(userId: number): Promise<UserRadarFavorite[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(userRadarFavorites)
+      .where(eq(userRadarFavorites.userId, userId))
+      .orderBy(desc(userRadarFavorites.createdAt));
+  } catch (error) {
+    console.warn("[Database] Failed to fetch Radar favorites:", error);
+    return [];
+  }
+}
+
+export async function toggleUserRadarFavorite(userId: number, data: InsertUserRadarFavorite): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  try {
+    const existing = await db
+      .select()
+      .from(userRadarFavorites)
+      .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, data.radarItemId)))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db
+        .delete(userRadarFavorites)
+        .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, data.radarItemId)));
+      return false;
+    }
+
+    await db.insert(userRadarFavorites).values({ ...data, userId });
+    return true;
+  } catch (error) {
+    console.warn("[Database] Failed to toggle Radar favorite:", error);
+    return false;
+  }
+}
 
 export async function getUserLibraryFavorites(userId: number): Promise<string[]> {
   const db = await getDb();

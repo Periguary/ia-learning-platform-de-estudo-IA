@@ -1,5 +1,5 @@
 import { useLocation, useRoute } from "wouter";
-import { ArrowLeft, BookOpen, Clock, CheckCircle2, ExternalLink, FileText, Code, Lightbulb } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, CheckCircle2, ExternalLink, FileText, Code, Lightbulb, NotebookPen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
@@ -113,6 +113,25 @@ export default function CourseDetail() {
     if (nextLesson) setSelectedLesson(nextLesson.id);
   };
 
+  const prepareLessonForNotebookLm = async () => {
+    if (!selectedContent) return;
+    const markdown = `# ${selectedContent.title}\n\n## Curso\n${courseData.title}\n\n## Conteúdo\n\n${selectedContent.content}\n\n## Exemplos práticos\n\n${(selectedContent.examples ?? []).map((example: string) => `- ${example}`).join("\\n")}\n`;
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${module}-${String(selectedContent.title).toLowerCase().replace(/[^a-z0-9]+/g, "-")}-gemini-notebook.md`;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+    try {
+      await navigator.clipboard.writeText(markdown);
+      alert("Aula copiada e baixada em Markdown. Abra o Gemini Notebook e adicione o arquivo como fonte.");
+    } catch {
+      alert("Aula baixada em Markdown. Abra o Gemini Notebook e faça upload do arquivo como fonte.");
+    }
+    window.open("https://notebooklm.google/", "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="w-full">
       {/* Header */}
@@ -173,14 +192,19 @@ export default function CourseDetail() {
             {selectedContent ? (
               // Show lesson content
               <div className="p-6 border border-border rounded-xl bg-card space-y-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
-                  <button
+                  <div className="flex items-center gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={() => void prepareLessonForNotebookLm()} className="gap-1.5 text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
+                      <NotebookPen className="size-3.5" /> Gemini Notebook
+                    </Button>
+                    <button
                     onClick={() => setSelectedLesson(null)}
                     className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl"
                   >
                     ✕
                   </button>
+                  </div>
                 </div>
 
                 <div className="max-w-none">

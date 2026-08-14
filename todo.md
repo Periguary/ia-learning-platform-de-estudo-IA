@@ -317,8 +317,24 @@
 
 
 ## Evolução Recente: Radar Automatizado, Exportação em PDF e Áreas Detalhadas de IA
-- [ ] Atualizar o Radar de IA com fontes oficiais automatizadas (OpenAI, DeepMind, Hugging Face, arXiv) e painel editorial detalhado para aprovadores
-- [ ] Implementar exportação direta do guia de estudos e notas para PDF usando jsPDF ou print-friendly formatting com layout profissional
-- [ ] Criar a página de Especializações e Áreas de IA (`/specializations`) detalhando IA em Frontend, Backend, DevOps, Data Engineering, Research e Produto
-- [ ] Adicionar testes automatizados para ingestão, PDF e áreas de IA
-- [ ] Validar no preview, salvar checkpoint e entregar o resultado final
+- [x] Atualizar o Radar de IA com fontes oficiais automatizadas (OpenAI, DeepMind, Hugging Face, arXiv) e painel editorial detalhado para aprovadores
+- [x] Implementar exportação direta do guia de estudos e notas para PDF usando jsPDF ou print-friendly formatting com layout profissional
+- [x] Criar a página de Especializações e Áreas de IA (`/specializations`) detalhando IA em Frontend, Backend, DevOps, Data Engineering, Research e Produto
+- [x] Adicionar testes automatizados para ingestão, PDF e áreas de IA
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Nova Evolução: Favoritos no Radar, PDF Seletivo, Busca em Especializações e Integração com NotebookLM/Gemini
+- [ ] Criar tabela e tRPC procedures para favoritos no Radar de IA
+- [ ] Adicionar modal/controles de seleção de seções para exportação em PDF em `Videos.tsx`
+- [ ] Implementar barra de pesquisa e filtros por área/stack em `Specializations.tsx`
+- [ ] Criar funcionalidade de exportação e emparelhamento com o NotebookLM / Google Gemini para aulas, vídeos e materiais
+- [ ] Adicionar testes e salvar checkpoint final
+
+
+## Nova Evolução: Favoritos, PDF Seletivo, Filtros e NotebookLM
+- [x] Implementar sistema de favoritos persistentes no Radar de IA para salvar artigos e notícias para leitura posterior
+- [x] Melhorar exportação para PDF permitindo escolher seções (metadados, notas, guia de estudos)
+- [x] Adicionar barra de pesquisa e filtros na página de especializações em IA
+- [x] Criar ponte de exportação para NotebookLM/Gemini em aulas, vídeos e materiais da plataforma
+- [x] Validar testes automatizados, preview e salvar checkpoint final

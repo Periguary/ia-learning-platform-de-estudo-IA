@@ -7,6 +7,8 @@ const dbMock = vi.hoisted(() => ({
   saveAIConversation: vi.fn(),
   getAIConversationsForUserAndModule: vi.fn(),
   clearAIConversationsForUserAndModule: vi.fn(),
+  getUserRadarFavorites: vi.fn(),
+  toggleUserRadarFavorite: vi.fn(),
 }));
 
 const curatorMock = vi.hoisted(() => ({
@@ -32,6 +34,8 @@ describe("ai updates", () => {
     dbMock.getApprovedAIUpdateCandidates.mockResolvedValue([]);
     dbMock.getPendingAIUpdateCandidates.mockResolvedValue([]);
     dbMock.updateAIUpdateCandidateStatus.mockResolvedValue(undefined);
+    dbMock.getUserRadarFavorites.mockResolvedValue([]);
+    dbMock.toggleUserRadarFavorite.mockResolvedValue(true);
     curatorMock.curateAIUpdates.mockResolvedValue({ scanned: 4, created: 2, skipped: 1, failed: 1 });
   });
 
@@ -67,6 +71,38 @@ describe("ai updates", () => {
 
     await expect(caller.ai.pendingUpdates()).rejects.toThrow();
     expect(dbMock.getPendingAIUpdateCandidates).not.toHaveBeenCalled();
+  });
+
+  it("lista e alterna favoritos do Radar para um aluno autenticado", async () => {
+    const caller = appRouter.createCaller(createContext({
+      id: 2,
+      openId: "student",
+      name: "Aluno",
+      email: "student@example.com",
+      loginMethod: "test",
+      role: "user",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastSignedIn: new Date(),
+    }));
+
+    const favorites = await caller.ai.radarFavorites();
+    const toggled = await caller.ai.toggleRadarFavorite({
+      radarItemId: "openai-update-1",
+      title: "Novo artigo oficial",
+      summary: "Resumo didático da atualização.",
+      category: "Modelos",
+      sourceName: "OpenAI News",
+      sourceUrl: "https://openai.com/news/",
+      relatedModules: ["llms"],
+      learningAction: "Revise a aula relacionada.",
+      publishedAt: "2026-08-14",
+    });
+
+    expect(favorites).toEqual([]);
+    expect(toggled).toEqual({ isFavorited: true });
+    expect(dbMock.getUserRadarFavorites).toHaveBeenCalledWith(2);
+    expect(dbMock.toggleUserRadarFavorite).toHaveBeenCalledWith(2, expect.objectContaining({ radarItemId: "openai-update-1" }));
   });
 
   it("executa a curadoria e permite aprovação apenas ao administrador", async () => {

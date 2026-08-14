@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ExternalLink, Play, Video, Youtube, CheckCircle2, Circle, Sparkles, Calendar, BookOpen, FileText, Clock, Trash2, Download, ExternalLink as LinkIcon } from "lucide-react";
+import { ExternalLink, Play, Video, Youtube, CheckCircle2, Circle, Sparkles, Calendar, BookOpen, FileText, Clock, Trash2, Download, ExternalLink as LinkIcon, Settings2, Copy, NotebookPen } from "lucide-react";
 import { videoCatalog, type VideoCategory, type VideoItem } from "@/data/videoCatalog";
 import { Button } from "@/components/ui/button";
 import { ShareActions } from "@/components/ShareActions";
@@ -34,6 +34,8 @@ export default function Videos() {
   const [noteInput, setNoteInput] = useState<string>("");
   const [playerStartSeconds, setPlayerStartSeconds] = useState(0);
   const [generatedMaterial, setGeneratedMaterial] = useState<string | null>(null);
+  const [showPdfOptions, setShowPdfOptions] = useState(false);
+  const [pdfSections, setPdfSections] = useState({ metadata: true, notes: true, generatedMaterial: true });
 
   const favoritesQuery = trpc.ai.favorites.useQuery();
   const notesQuery = trpc.videoNotes.list.useQuery({ videoId: selectedVideo.id });
@@ -142,8 +144,52 @@ export default function Videos() {
     window.open(uri, "_blank", "noopener,noreferrer");
   };
 
+  const prepareForGeminiNotebook = async () => {
+    const notes = notesQuery.data || [];
+    const noteLines = notes.map(note => {
+      const mins = Math.floor(note.timestampSeconds / 60);
+      const secs = note.timestampSeconds % 60;
+      return `- [${mins}:${secs < 10 ? "0" : ""}${secs}] ${note.noteText}`;
+    }).join("\n");
+    const sections = [
+      pdfSections.metadata ? `# ${selectedVideo.title}\n\n- Provedor: ${selectedVideo.provider}\n- Fonte original: ${selectedVideo.sourceUrl}` : "",
+      pdfSections.notes ? `## Anotações com timestamps\n\n${noteLines || "Nenhuma anotação registrada."}` : "",
+      pdfSections.generatedMaterial && generatedMaterial ? `## Resumo ou guia de estudos gerado por IA\n\n${generatedMaterial}` : "",
+    ].filter(Boolean).join("\n\n");
+    const blob = new Blob([sections], { type: "text/markdown;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${selectedVideo.id}-gemini-notebook.md`;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+    try {
+      await navigator.clipboard.writeText(`${selectedVideo.sourceUrl}\n${sections}`);
+      alert("Markdown baixado e fonte copiada. Abra o Gemini Notebook e adicione o arquivo e a URL como fontes.");
+    } catch {
+      alert("Markdown baixado. Abra o Gemini Notebook e adicione o arquivo e a URL da aula como fontes.");
+    }
+    window.open("https://notebooklm.google/", "_blank", "noopener,noreferrer");
+  };
+
   const exportNotesPdf = () => {
     const notes = notesQuery.data || [];
+    if (!pdfSections.metadata && !pdfSections.notes && !pdfSections.generatedMaterial) {
+      alert("Selecione pelo menos uma seção para exportar.");
+      return;
+    }
+    const escapeHtml = (value: string) => value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+    const notesHtml = notes.map(n => {
+      const mins = Math.floor(n.timestampSeconds / 60);
+      const secs = n.timestampSeconds % 60;
+      const timeLabel = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+      return `<div class="note-card"><span class="time">[${timeLabel}]</span> ${escapeHtml(n.noteText)}</div>`;
+    }).join("");
     const printWindow = window.open("", "_blank");
     if (!printWindow) {
       alert("Permita pop-ups para gerar o PDF.");
@@ -154,7 +200,7 @@ export default function Videos() {
       <html lang="pt-BR">
       <head>
         <meta charset="utf-8">
-        <title>Notas - ${selectedVideo.title}</title>
+        <title>IA Academy - ${escapeHtml(selectedVideo.title)}</title>
         <style>
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #111; line-height: 1.6; }
           h1 { color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; }
@@ -165,16 +211,9 @@ export default function Videos() {
         </style>
       </head>
       <body>
-        <h1>${selectedVideo.title}</h1>
-        <div class="meta">Plataforma IA Academy — Notebook LM & Obsidian Sync</div>
-        <h2>Anotações com Timestamps (${notes.length})</h2>
-        ${notes.length === 0 ? "<p>Nenhuma anotação registrada.</p>" : notes.map(n => {
-          const mins = Math.floor(n.timestampSeconds / 60);
-          const secs = n.timestampSeconds % 60;
-          const timeLabel = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-          return `<div class="note-card"><span class="time">[${timeLabel}]</span> ${n.noteText}</div>`;
-        }).join("")}
-        ${generatedMaterial ? `<h2>Material Gerado por IA / Guia de Estudos</h2><div class="material">${generatedMaterial}</div>` : ""}
+        ${pdfSections.metadata ? `<h1>${escapeHtml(selectedVideo.title)}</h1><div class="meta">Plataforma IA Academy — Notebook LM & Obsidian Sync<br>Provedor: ${escapeHtml(selectedVideo.provider)}<br>Fonte original: ${escapeHtml(selectedVideo.sourceUrl)}</div>` : ""}
+        ${pdfSections.notes ? `<h2>Anotações com Timestamps (${notes.length})</h2>${notes.length === 0 ? "<p>Nenhuma anotação registrada.</p>" : notesHtml}` : ""}
+        ${pdfSections.generatedMaterial && generatedMaterial ? `<h2>Material Gerado por IA / Guia de Estudos</h2><div class="material">${escapeHtml(generatedMaterial)}</div>` : ""}
         <script>window.print();</script>
       </body>
       </html>
@@ -307,8 +346,14 @@ export default function Videos() {
               <Button variant="outline" size="sm" onClick={openObsidianVault} className="gap-1.5 text-purple-400 border-purple-500/30 hover:bg-purple-500/10">
                 <LinkIcon className="size-4" /> Emparelhar com Obsidian
               </Button>
+              <Button variant="outline" size="sm" onClick={() => setShowPdfOptions(value => !value)} aria-expanded={showPdfOptions} aria-controls="pdf-export-options" className="gap-1.5">
+                <Settings2 className="size-4" /> Seções do PDF
+              </Button>
               <Button variant="outline" size="sm" onClick={exportNotesPdf} className="gap-1.5 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10">
                 <Download className="size-4" /> Baixar PDF
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => void prepareForGeminiNotebook()} className="gap-1.5 text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
+                <NotebookPen className="size-4" /> Preparar Gemini Notebook
               </Button>
               <Button variant="outline" size="sm" disabled={!notesQuery.data?.length || summarizeNotesMutation.isPending} onClick={() => summarizeNotesMutation.mutate({ videoId: selectedVideo.id, videoTitle: selectedVideo.title, mode: "summary" })} className="gap-1.5">
                 <Sparkles className="size-4" /> Gerar Resumo IA
@@ -318,6 +363,35 @@ export default function Videos() {
               </Button>
             </div>
           </div>
+
+          {showPdfOptions && (
+            <div id="pdf-export-options" className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4" aria-label="Seções incluídas no PDF">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h4 className="font-semibold text-foreground">Personalizar o PDF</h4>
+                  <p className="text-xs text-muted-foreground">Escolha o que deseja levar para a revisão ou para o Gemini Notebook.</p>
+                </div>
+                <span className="text-xs text-muted-foreground">{Object.values(pdfSections).filter(Boolean).length}/3 selecionadas</span>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {([
+                  ["metadata", "Informações da aula"],
+                  ["notes", "Notas com timestamps"],
+                  ["generatedMaterial", "Resumo ou guia de estudos"],
+                ] as const).map(([key, label]) => (
+                  <label key={key} className="flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-background/60 p-3 text-sm transition-colors hover:border-primary/40">
+                    <input
+                      type="checkbox"
+                      checked={pdfSections[key]}
+                      onChange={event => setPdfSections(previous => ({ ...previous, [key]: event.target.checked }))}
+                      className="size-4 accent-primary"
+                    />
+                    <span>{label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleAddNote} className="grid gap-4 sm:grid-cols-[auto_1fr_auto]">
             <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2">
