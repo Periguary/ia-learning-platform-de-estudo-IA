@@ -49,6 +49,9 @@ describe("InteractiveCertifications page", () => {
     expect(screen.getAllByText(/100%/i).length).toBeGreaterThan(0);
     expect(screen.getByRole("link", { name: /LinkedIn/i })).toBeTruthy();
     expect(screen.getByRole("link", { name: /X\/Twitter/i })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /Pré-visualizar certificado/i }));
+    expect(screen.getByRole("heading", { name: /Pré-visualização do certificado/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Baixar certificado em PDF/i })).toBeTruthy();
     expect(screen.getAllByText(/Primeira Conquista/i).length).toBeGreaterThan(0);
   });
 });

@@ -364,3 +364,11 @@
 - [x] Integrar rota `/profile` no App.tsx e link de acesso na Navigation.tsx
 - [x] Criar testes unitários e de interação para as novas funcionalidades e perfil
 - [x] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint
+
+
+## Nova Evolução: Estatísticas de Estudo, Pré-visualização de Certificado e Edição de Perfil
+- [x] Adicionar estatísticas de tempo total de estudo e barra de progresso até a próxima medalha na página de perfil
+- [x] Implementar modal de pré-visualização do certificado em PDF e botão de compartilhamento direto no LinkedIn
+- [x] Criar modal de edição de perfil para alterar nome, biografia e avatar personalizado com persistência local
+- [x] Criar testes unitários e de interação para as novas seções de estatísticas, pré-visualização e edição
+- [x] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
