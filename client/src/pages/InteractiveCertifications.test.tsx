@@ -4,6 +4,10 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import InteractiveCertifications from "./InteractiveCertifications";
 
+vi.mock("@/_core/hooks/useAuth", () => ({
+  useAuth: () => ({ user: { name: "Ada Lovelace" }, loading: false }),
+}));
+
 const navigate = vi.fn();
 vi.mock("wouter", () => ({
   useLocation: () => ["/interactive-certifications", navigate],

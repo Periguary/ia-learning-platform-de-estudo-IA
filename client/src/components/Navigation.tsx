@@ -108,6 +108,12 @@ export default function Navigation() {
                 Dashboard
               </button>
               <button
+                onClick={() => navigate("/profile")}
+                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer nav-underline color-transition"
+              >
+                Perfil
+              </button>
+              <button
                 onClick={() => logout()}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
@@ -155,6 +161,17 @@ export default function Navigation() {
                 {item.label}
               </button>
             ))}
+            {user && (
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setIsOpen(false);
+                }}
+                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer w-full text-left nav-button color-transition"
+              >
+                Perfil
+              </button>
+            )}
             {!user && (
               <Button
                 asChild

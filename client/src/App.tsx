@@ -19,6 +19,7 @@ import Library from "./pages/Library";
 import Videos from "./pages/Videos";
 import Specializations from "./pages/Specializations";
 import InteractiveCertifications from "./pages/InteractiveCertifications";
+import Profile from "./pages/Profile";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -40,6 +41,7 @@ function Router() {
       <Route path={"/videos"} component={Videos} />
       <Route path={"/specializations"} component={Specializations} />
       <Route path={"/interactive-certifications"} component={InteractiveCertifications} />
+      <Route path={"/profile"} component={Profile} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

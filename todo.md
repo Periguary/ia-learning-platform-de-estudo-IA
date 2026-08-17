@@ -355,3 +355,12 @@
 - [x] Adicionar botões de compartilhamento para LinkedIn e X/Twitter após conclusão
 - [x] Criar testes de interação para busca, filtros, progresso, badges e compartilhamento
 - [x] Validar a suíte completa, TypeScript e preview e salvar checkpoint
+
+
+## Nova Evolução: Celebrações de Medalhas, Certificado em PDF e Página de Perfil
+- [x] Adicionar animações de celebração e feedback visual ao desbloquear medalhas ou atingir 100% de aproveitamento
+- [x] Implementar gerador e download de certificado personalizado em PDF com o nome do aluno
+- [x] Criar a página de perfil do usuário (`/profile`) com galeria de medalhas e histórico de certificações
+- [x] Integrar rota `/profile` no App.tsx e link de acesso na Navigation.tsx
+- [x] Criar testes unitários e de interação para as novas funcionalidades e perfil
+- [x] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint
