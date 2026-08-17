@@ -346,3 +346,12 @@
 - [x] Implementar o novo módulo de Certificação Interativa em IA (`InteractiveCertifications.tsx` e `interactiveCertificationCatalog.ts`) seguindo a metodologia
 - [x] Gerar documento de conteúdo para apresentação em slides da arquitetura e benefícios da skill
 - [x] Executar a suíte completa de testes (83 testes 100% verdes) e salvar checkpoint final
+
+
+## Nova Evolução: Busca, Compartilhamento e Engajamento em Certificações Interativas
+- [x] Adicionar barra de pesquisa e filtros por nível de dificuldade e provedor em `InteractiveCertifications.tsx`
+- [x] Persistir o progresso dos simuladores localmente e exibir barras de progresso por certificação
+- [x] Implementar conclusão do simulador, badges de engajamento e painel de conquistas
+- [x] Adicionar botões de compartilhamento para LinkedIn e X/Twitter após conclusão
+- [x] Criar testes de interação para busca, filtros, progresso, badges e compartilhamento
+- [x] Validar a suíte completa, TypeScript e preview e salvar checkpoint
