@@ -338,3 +338,11 @@
 - [x] Adicionar barra de pesquisa e filtros na página de especializações em IA
 - [x] Criar ponte de exportação para NotebookLM/Gemini em aulas, vídeos e materiais da plataforma
 - [x] Validar testes automatizados, preview e salvar checkpoint final
+
+
+## Nova Evolução: Skill `ia-academy-evolution`, Testes de Skill, Slides de Arquitetura e Certificação Interativa
+- [x] Criar e documentar a habilidade reutilizável `ia-academy-evolution` com SKILL.md estruturado
+- [x] Adicionar testes automatizados para validar a integridade e frontmatter da nova skill
+- [x] Implementar o novo módulo de Certificação Interativa em IA (`InteractiveCertifications.tsx` e `interactiveCertificationCatalog.ts`) seguindo a metodologia
+- [x] Gerar documento de conteúdo para apresentação em slides da arquitetura e benefícios da skill
+- [x] Executar a suíte completa de testes (83 testes 100% verdes) e salvar checkpoint final
