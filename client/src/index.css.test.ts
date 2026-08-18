@@ -28,5 +28,8 @@ describe("global theme contract", () => {
     expect(css).toContain(".futurist-grid");
     expect(css).toContain(".futurist-panel");
     expect(css).toContain(".futurist-button");
+    expect(css).toContain("html.neon-high-contrast");
+    expect(css).toContain("--primary: 178 100% 58%;");
+    expect(css).toContain(".neon-high-contrast :focus-visible");
   });
 });

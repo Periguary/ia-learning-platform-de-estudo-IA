@@ -24,6 +24,24 @@
   --radius: 0.65rem;
 }
 
+html.neon-high-contrast {
+  --background: 240 35% 2%;
+  --foreground: 0 0% 100%;
+  --card: 240 30% 7%;
+  --card-foreground: 0 0% 100%;
+  --primary: 178 100% 58%;
+  --primary-foreground: 240 35% 2%;
+  --secondary: 285 100% 74%;
+  --secondary-foreground: 240 35% 2%;
+  --accent: 76 100% 62%;
+  --accent-foreground: 240 35% 2%;
+  --muted: 240 20% 16%;
+  --muted-foreground: 215 30% 82%;
+  --border: 180 90% 36%;
+  --input: 180 90% 36%;
+  --ring: 178 100% 58%;
+}
+
 html.light {
   --background: 210 40% 98%;
   --foreground: 10 14% 8%;
@@ -177,6 +195,20 @@ code {
 
 .futurist-button:active {
   transform: translateY(0) scale(0.98);
+}
+
+.neon-high-contrast .futurist-panel {
+  border-color: hsla(var(--primary), 0.58);
+  box-shadow: 0 0 0 1px hsla(var(--secondary), 0.18), 0 0 42px hsla(var(--primary), 0.16), inset 0 1px 0 hsla(0 0% 100%, 0.12);
+}
+
+.neon-high-contrast .futurist-button {
+  box-shadow: 0 0 28px hsla(var(--primary), 0.42), 0 0 58px hsla(var(--secondary), 0.22);
+}
+
+.neon-high-contrast :focus-visible {
+  outline: 3px solid hsl(var(--accent));
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {

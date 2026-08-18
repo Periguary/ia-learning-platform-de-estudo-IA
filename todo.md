@@ -383,3 +383,8 @@
 
 - [x] Evoluir a identidade visual global para uma direção mais agressiva e futurista, com alto contraste, acentos neon, superfícies técnicas e estados interativos mais marcantes.
 - [x] Validar a nova linguagem visual em landing page, navegação e áreas internas sem regressões de acessibilidade ou responsividade.
+
+- [x] Implementar modo de alto contraste neon configurável nas preferências do perfil do aluno com persistência no navegador.
+- [x] Adicionar elementos visuais de progresso no estilo HUD ao Dashboard.
+- [x] Aplicar a linguagem visual futurista e agressiva nas páginas internas de Cursos, Dashboard e Perfil.
+- [x] Criar testes unitários e de regressão para o alto contraste neon e o HUD do Dashboard.

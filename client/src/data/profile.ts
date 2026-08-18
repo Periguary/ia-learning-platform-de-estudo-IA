@@ -7,6 +7,7 @@ export type ProfilePreferences = {
   offsetY?: number;
   publicToken?: string;
   publicEnabled?: boolean;
+  highContrastNeon?: boolean;
 };
 
 export type StudyActivity = {
