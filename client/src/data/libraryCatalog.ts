@@ -82,8 +82,8 @@ export const libraryCatalog: LibraryItem[] = [
     year: "2026",
     description: "Análise detalhada sobre a aplicação de soluções híbridas (Redes Neurais e Sistemas Especialistas) na detecção de fraudes financeiras utilizando a base do Kaggle.",
     format: "Artigo",
-    officialUrl: "/papers/analise-fraude-cartao.md",
-    localFileHint: "Documento de análise acadêmica desenvolvido para a disciplina de Imersão Profissional.",
+    officialUrl: "https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud",
+    localFileHint: "A análise local usa como referência o conjunto de dados público de fraude de cartões disponível no Kaggle.",
     relatedModule: "ml-fundamentals",
   },
 ];

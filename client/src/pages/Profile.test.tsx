@@ -20,6 +20,8 @@ describe("Profile page", () => {
     renderProfile();
     expect(screen.getByRole("heading", { name: "Ada Lovelace" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: /Medalhas do seu percurso/i })).toBeTruthy();
+    expect(screen.getByText("ACHIEVEMENT GRID // LIVE")).toBeTruthy();
+    expect(screen.getByText("0/3 desbloqueadas")).toBeTruthy();
     expect(screen.getByText(/Seu histórico começará aqui/i)).toBeTruthy();
     expect(screen.getByText("0 min")).toBeTruthy();
     expect(screen.getByRole("progressbar", { name: /Progresso até Primeira Conquista/i })).toBeTruthy();

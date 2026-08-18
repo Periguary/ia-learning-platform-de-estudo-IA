@@ -31,5 +31,9 @@ describe("global theme contract", () => {
     expect(css).toContain("html.neon-high-contrast");
     expect(css).toContain("--primary: 178 100% 58%;");
     expect(css).toContain(".neon-high-contrast :focus-visible");
+    expect(css).toContain(".neon-interactive");
+    expect(css).toContain(".neon-achievement-unlocked");
+    expect(css).toContain(".hud-page-loader");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
   });
 });

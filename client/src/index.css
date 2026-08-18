@@ -197,6 +197,141 @@ code {
   transform: translateY(0) scale(0.98);
 }
 
+.neon-interactive {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease, border-color 180ms ease;
+}
+
+.neon-interactive::before {
+  content: "";
+  position: absolute;
+  inset: -40% 35% -40% -35%;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 25%, hsla(var(--primary), 0.45), hsla(var(--secondary), 0.5), transparent 75%);
+  opacity: 0;
+  transform: translateX(-90%) skewX(-18deg);
+  transition: opacity 180ms ease, transform 360ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.neon-interactive:hover,
+.neon-interactive:focus-visible {
+  border-color: hsla(var(--primary), 0.75);
+  filter: saturate(1.2) brightness(1.08);
+  box-shadow: 0 0 0 1px hsla(var(--primary), 0.18), 0 0 24px hsla(var(--primary), 0.3), 0 0 56px hsla(var(--secondary), 0.16);
+  transform: translateY(-2px);
+}
+
+.neon-interactive:hover::before,
+.neon-interactive:focus-visible::before {
+  opacity: 1;
+  transform: translateX(260%) skewX(-18deg);
+}
+
+.neon-interactive:active {
+  transform: translateY(0) scale(0.98);
+}
+
+
+.neon-achievement {
+  position: relative;
+  overflow: hidden;
+  border-color: hsla(var(--primary), 0.24);
+  background-image: linear-gradient(135deg, hsla(var(--primary), 0.05), transparent 55%);
+}
+
+.neon-achievement-unlocked {
+  box-shadow: 0 0 0 1px hsla(var(--primary), 0.12), 0 0 26px hsla(var(--primary), 0.14);
+}
+
+.neon-achievement-unlocked::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -70% 15%;
+  height: 100%;
+  background: radial-gradient(circle, hsla(var(--accent), 0.26), transparent 68%);
+  pointer-events: none;
+}
+
+.neon-achievement-emblem {
+  border: 1px solid hsla(var(--primary), 0.5);
+  box-shadow: 0 0 18px hsla(var(--primary), 0.28), inset 0 0 16px hsla(var(--secondary), 0.12);
+}
+
+.neon-achievement-locked .neon-achievement-emblem {
+  border-color: hsla(var(--muted-foreground), 0.25);
+  box-shadow: none;
+}
+
+.hud-page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  background: hsla(var(--background), 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.hud-page-loader__panel {
+  min-width: min(22rem, calc(100vw - 2rem));
+  border: 1px solid hsla(var(--primary), 0.52);
+  background: linear-gradient(135deg, hsla(var(--card), 0.96), hsla(var(--background), 0.96));
+  box-shadow: 0 0 0 1px hsla(var(--secondary), 0.16), 0 0 42px hsla(var(--primary), 0.22);
+  padding: 1.25rem;
+}
+
+.hud-page-loader__reticle {
+  position: relative;
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid hsl(var(--primary));
+  border-radius: 999px;
+  box-shadow: 0 0 20px hsla(var(--primary), 0.52);
+}
+
+.hud-page-loader__reticle::before,
+.hud-page-loader__reticle::after {
+  content: "";
+  position: absolute;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: hsl(var(--accent));
+  box-shadow: 0 0 14px hsl(var(--accent));
+}
+
+.hud-page-loader__reticle::after {
+  width: 0.2rem;
+  height: 2.2rem;
+  border-radius: 0;
+  background: linear-gradient(to bottom, transparent, hsl(var(--primary)), transparent);
+}
+
+.hud-page-loader__bar {
+  height: 0.35rem;
+  overflow: hidden;
+  background: hsl(var(--muted));
+}
+
+.hud-page-loader__bar::before {
+  content: "";
+  display: block;
+  width: 42%;
+  height: 100%;
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
+  box-shadow: 0 0 18px hsla(var(--primary), 0.7);
+  animation: hud-loader-scan 900ms cubic-bezier(0.23, 1, 0.32, 1) infinite alternate;
+}
+
+@keyframes hud-loader-scan {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(260%); }
+}
+
 .neon-high-contrast .futurist-panel {
   border-color: hsla(var(--primary), 0.58);
   box-shadow: 0 0 0 1px hsla(var(--secondary), 0.18), 0 0 42px hsla(var(--primary), 0.16), inset 0 1px 0 hsla(0 0% 100%, 0.12);
@@ -214,8 +349,15 @@ code {
 @media (prefers-reduced-motion: reduce) {
   .futurist-nav-item,
   .futurist-nav-item::after,
-  .futurist-button {
+  .futurist-button,
+  .neon-interactive,
+  .neon-interactive::before {
     transition: none;
+  }
+
+  .hud-page-loader__bar::before {
+    animation: none;
+    transform: translateX(120%);
   }
 }
 

@@ -23,6 +23,7 @@ import Profile from "./pages/Profile";
 import PublicProfile from "./pages/PublicProfile";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import PageTransitionLoader from "./components/PageTransitionLoader";
 
 function Router() {
   return (
@@ -61,7 +62,8 @@ function App() {
           <Toaster />
           <div className="min-h-screen flex flex-col bg-background text-foreground">
             <Navigation />
-            <main className="flex-1">
+            <main className="flex-1 relative">
+              <PageTransitionLoader />
               <Router />
             </main>
             <Footer />

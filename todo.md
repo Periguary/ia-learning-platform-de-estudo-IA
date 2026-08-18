@@ -388,3 +388,9 @@
 - [x] Adicionar elementos visuais de progresso no estilo HUD ao Dashboard.
 - [x] Aplicar a linguagem visual futurista e agressiva nas páginas internas de Cursos, Dashboard e Perfil.
 - [x] Criar testes unitários e de regressão para o alto contraste neon e o HUD do Dashboard.
+
+- [x] Adicionar feedback visual neon nos botões com brilho em hover/foco e suporte a movimento reduzido.
+- [x] Criar painel de conquistas no Perfil com emblemas neon, estados bloqueado/desbloqueado e progresso.
+- [x] Implementar animação de carregamento HUD futurista para transições de navegação entre páginas.
+- [x] Atualizar a habilidade notebooklm-exporter para documentar este fluxo de evolução visual e validação.
+- [x] Criar e executar testes de regressão para brilho, conquistas e carregamento HUD.
