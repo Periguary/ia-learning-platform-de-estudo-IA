@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
 import { markLessonComplete, readProgress, writeProgress } from "@/data/progress";
+import { recordStudyActivity } from "@/data/profile";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
 
 export default function CourseDetail() {
@@ -101,7 +102,9 @@ export default function CourseDetail() {
   const lessonSequence = courseData.sections.flatMap((section: any) => section.lessons);
   const handleCompleteLesson = () => {
     if (typeof selectedLesson !== "number") return;
+    if (progressState[module]?.includes(selectedLesson)) return;
     const nextProgress = markLessonComplete(progressState, module, selectedLesson);
+    recordStudyActivity({ completedLessons: 1 });
     setProgressState(nextProgress);
     writeProgress(nextProgress);
   };

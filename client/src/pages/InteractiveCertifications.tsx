@@ -6,6 +6,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Award, ArrowRight, CheckCircle2, Download, ExternalLink, Eye, Filter, Linkedin, RotateCcw, Search, ShieldCheck, Sparkles, Trophy, Twitter, UserRound } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { recordStudyActivity } from "@/data/profile";
 
 type Celebration = { title: string; description: string; kind: "badge" | "perfect" };
 
@@ -75,6 +76,7 @@ export default function InteractiveCertifications() {
     const wasCompleted = getCertificationStats(selectedCert, answerHistory[selectedCert.id]).completed && Boolean(completionHistory[selectedCert.id]);
     const wasPerfect = completionHistory[selectedCert.id]?.scorePercentage === 100;
     saveCompletion(selectedCert.id, stats);
+    recordStudyActivity({ certificationAttempts: 1 });
     const nextHistory = readCompletionHistory();
     setCompletionHistory(nextHistory);
     setShowResults(true);

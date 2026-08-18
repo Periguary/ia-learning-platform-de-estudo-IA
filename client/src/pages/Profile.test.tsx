@@ -38,14 +38,35 @@ describe("Profile page", () => {
     expect(screen.getByRole("link", { name: /Compartilhar no LinkedIn/i })).toBeTruthy();
   });
 
-  it("permite editar nome e biografia e persiste as preferências locais", () => {
+  it("exibe atividade semanal e sequência com dados registrados", () => {
+    const today = new Date().toISOString().slice(0, 10);
+    window.localStorage.setItem("ia-academy-study-activity", JSON.stringify({ [today]: { completedLessons: 3, certificationAttempts: 1 } }));
+    render(<Profile />);
+    expect(screen.getByText("1 dias consecutivos")).toBeTruthy();
+    expect(screen.getByText(/4 ações registradas/i)).toBeTruthy();
+    expect(screen.getAllByLabelText("Gráfico de atividade semanal").length).toBeGreaterThan(0);
+  });
+
+  it("gera um link público e oferece controles de corte do avatar", async () => {
+    window.localStorage.setItem("ia-academy-profile-preferences", JSON.stringify({ avatarDataUrl: "data:image/png;base64,AAAA" }));
+    render(<Profile />);
+    fireEvent.click(screen.getAllByRole("button", { name: /Criar link público/i }).at(-1)!);
+    expect(window.localStorage.getItem("ia-academy-profile-preferences")).toContain("publicEnabled");
+    expect((await screen.findByRole("status")).textContent).toMatch(/Link público copiado/i);
+    fireEvent.click(screen.getAllByRole("button", { name: /Editar perfil/i }).at(-1)!);
+    expect(screen.getByLabelText("Ajustar zoom do avatar")).toBeTruthy();
+    expect(screen.getByLabelText("Ajustar posição horizontal do avatar")).toBeTruthy();
+    expect(screen.getByLabelText("Ajustar posição vertical do avatar")).toBeTruthy();
+  });
+
+  it("permite editar nome e biografia e persiste as preferências locais", async () => {
     render(<Profile />);
     fireEvent.click(screen.getAllByRole("button", { name: /Editar perfil/i }).at(-1)!);
-    fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Ada IA" } });
-    fireEvent.change(screen.getByLabelText("Biografia breve"), { target: { value: "Estudando agentes e sistemas generativos." } });
-    fireEvent.click(screen.getByRole("button", { name: /Salvar perfil/i }));
+    fireEvent.change(screen.getAllByLabelText("Nome").at(-1)!, { target: { value: "Ada IA" } });
+    fireEvent.change(screen.getAllByLabelText("Biografia breve").at(-1)!, { target: { value: "Estudando agentes e sistemas generativos." } });
+    fireEvent.click(screen.getAllByRole("button", { name: /Salvar perfil/i }).at(-1)!);
 
-    expect(screen.getByRole("heading", { name: "Ada IA" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: "Ada IA" })).toBeTruthy();
     expect(screen.getByText("Estudando agentes e sistemas generativos.")).toBeTruthy();
     expect(JSON.parse(window.localStorage.getItem("ia-academy-profile-preferences") || "{}")).toMatchObject({ name: "Ada IA", bio: "Estudando agentes e sistemas generativos." });
   });

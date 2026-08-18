@@ -372,3 +372,11 @@
 - [x] Criar modal de edição de perfil para alterar nome, biografia e avatar personalizado com persistência local
 - [x] Criar testes unitários e de interação para as novas seções de estatísticas, pré-visualização e edição
 - [x] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
+
+
+## Nova Evolução: Perfil Público, Atividade Semanal e Ajuste de Avatar
+- [ ] Implementar modo de visualização pública com link exclusivo para portfólio (`/profile/public` ou query `?public=1`)
+- [ ] Adicionar gráfico de atividade semanal e contador de dias consecutivos de estudo nas estatísticas
+- [ ] Adicionar ferramenta de corte, zoom e ajuste de imagem no modal de upload de avatar
+- [ ] Criar testes automatizados para o modo público, atividade e corte de avatar
+- [ ] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
