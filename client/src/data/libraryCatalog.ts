@@ -74,4 +74,16 @@ export const libraryCatalog: LibraryItem[] = [
     localFileHint: "Inclui guias passo a passo para integração com VS Code.",
     relatedModule: "llms",
   },
+  {
+    id: "fraude-cartao-ia-analise",
+    title: "IA na Detecção de Fraudes em Cartões de Crédito: Uma Análise Crítica",
+    category: "Artigos Fundamentais",
+    author: "Periguary Cysne Lima (Análise por Manus AI)",
+    year: "2026",
+    description: "Análise detalhada sobre a aplicação de soluções híbridas (Redes Neurais e Sistemas Especialistas) na detecção de fraudes financeiras utilizando a base do Kaggle.",
+    format: "Artigo",
+    officialUrl: "/papers/analise-fraude-cartao.md",
+    localFileHint: "Documento de análise acadêmica desenvolvido para a disciplina de Imersão Profissional.",
+    relatedModule: "ml-fundamentals",
+  },
 ];
