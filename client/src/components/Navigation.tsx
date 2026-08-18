@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { AIGlossary } from "@/components/AIGlossary";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +57,7 @@ export default function Navigation() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-4">
+          <AIGlossary />
           {/* Search Bar */}
           {searchOpen && (
             <form

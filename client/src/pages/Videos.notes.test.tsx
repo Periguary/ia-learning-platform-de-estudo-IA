@@ -15,6 +15,7 @@ vi.mock("@/lib/trpc", () => ({
     },
     videoNotes: {
       list: { useQuery: () => ({ data: [{ id: 1, videoId: "google-generative-ai-intro", timestampSeconds: 65, noteText: "Conceito de Transformer", createdAt: new Date() }] }) },
+      all: { useQuery: () => ({ data: [{ id: 1, videoId: "google-generative-ai-intro", timestampSeconds: 65, noteText: "Conceito de Transformer", createdAt: new Date() }] }) },
       add: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
       remove: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
     },
@@ -31,6 +32,7 @@ describe("Videos notes and Obsidian sync", () => {
     expect(screen.getByText(/1:05/i)).toBeTruthy();
     expect(screen.getByRole("button", { name: /Baixar Markdown/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Emparelhar com Obsidian/i })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Exportar todas \(1\)/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Gerar Resumo IA/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Guia de Estudos/i })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Seções do PDF/i })).toBeTruthy();

@@ -18,6 +18,7 @@ import {
   getLibraryReviews,
   addLibraryReview,
   getVideoNotes,
+  getAllVideoNotes,
   addVideoNote,
   deleteVideoNote,
 } from "./db";
@@ -258,6 +259,10 @@ export const appRouter = router({
         if (!ctx.user?.id) return [];
         return getVideoNotes(ctx.user.id, input.videoId);
       }),
+    all: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return getAllVideoNotes(ctx.user.id);
+    }),
     add: publicProcedure
       .input(z.object({ videoId: z.string().min(1).max(128), timestampSeconds: z.number().int().min(0), noteText: z.string().trim().min(1).max(2_000) }))
       .mutation(async ({ input, ctx }) => {

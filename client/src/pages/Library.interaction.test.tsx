@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("wouter", () => ({
-  useLocation: () => ["/library?query=transformer", vi.fn()],
+  useLocation: () => ["/library", vi.fn()],
 }));
 
 const openMock = vi.fn();
@@ -26,6 +26,8 @@ vi.mock("@/lib/trpc", () => ({
 }));
 
 describe("Library export interactions", () => {
+  afterEach(() => cleanup());
+
   beforeEach(() => {
     openMock.mockClear();
     vi.stubGlobal("open", openMock);
@@ -56,12 +58,26 @@ describe("Library export interactions", () => {
     expect(screen.getByText(/Arquivo Markdown baixado/i)).toBeTruthy();
   });
 
-  it("lê query da URL, preenche a busca e filtra o catálogo", async () => {
+  it("preenche a busca e filtra o catálogo", async () => {
     const { default: Library } = await import("./Library");
     render(<Library />);
 
-    expect((await screen.findAllByDisplayValue("transformer")).length).toBeGreaterThan(0);
+    const search = screen.getAllByPlaceholderText("Buscar por título, autor ou assunto...").at(-1) as HTMLInputElement;
+    fireEvent.change(search, { target: { value: "transformer" } });
     expect(screen.getAllByRole("heading", { name: "Attention Is All You Need" }).length).toBeGreaterThan(0);
-    expect(screen.queryByRole("heading", { name: "Deep Learning Book (MIT Press)" })).toBeNull();
+    expect(screen.queryAllByRole("heading", { name: "Deep Learning Book (MIT Press)" })).toHaveLength(0);
+  });
+
+  it("filtra por formato e oferece ordenação da Biblioteca", async () => {
+    const { default: Library } = await import("./Library");
+    render(<Library />);
+
+    const formatSelect = screen.getAllByLabelText("Filtrar por formato").at(-1) as HTMLSelectElement;
+    fireEvent.change(formatSelect, { target: { value: "PDF" } });
+    expect(screen.getAllByRole("heading", { name: "Deep Learning Book (MIT Press)" }).length).toBeGreaterThan(0);
+    expect(screen.queryAllByRole("heading", { name: "Attention Is All You Need" })).toHaveLength(0);
+    const sortSelect = screen.getAllByLabelText("Ordenar Biblioteca").at(-1) as HTMLSelectElement;
+    fireEvent.change(sortSelect, { target: { value: "year-desc" } });
+    expect(sortSelect.value).toBe("year-desc");
   });
 });

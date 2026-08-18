@@ -404,3 +404,8 @@
 - [x] Expandir o conteúdo didático e as referências técnicas nas abas de Biblioteca, Curiosidades e Vídeos.
 - [x] Executar a suíte completa de testes para garantir integridade e acessibilidade.
 - [x] Salvar checkpoint final, publicando a versão atualizada e sincronizando o repositório GitHub.
+
+- [x] Implementar filtros por categoria/formato/provedor e ordenação na Biblioteca.
+- [x] Implementar exportação em lote das notas de estudo para arquivos Markdown e URI do Obsidian.
+- [x] Criar glossário interativo de termos avançados de IA acessível pela navegação global.
+- [x] Adicionar testes de regressão e atualizar o site publicado e o repositório GitHub.

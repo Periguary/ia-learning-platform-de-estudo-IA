@@ -39,6 +39,7 @@ export default function Videos() {
 
   const favoritesQuery = trpc.ai.favorites.useQuery();
   const notesQuery = trpc.videoNotes.list.useQuery({ videoId: selectedVideo.id });
+  const allNotesQuery = trpc.videoNotes.all.useQuery();
   const addNoteMutation = trpc.videoNotes.add.useMutation({
     onSuccess: () => {
       setNoteInput("");
@@ -127,6 +128,39 @@ export default function Videos() {
     link.download = `${selectedVideo.id}-obsidian-notes.md`;
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const exportAllNotesToObsidian = () => {
+    const allNotes = allNotesQuery.data || [];
+    if (allNotes.length === 0) {
+      alert("Salve pelo menos uma anotação em uma vídeo-aula antes de exportar em lote.");
+      return;
+    }
+    const grouped = new Map<string, typeof allNotes>();
+    allNotes.forEach(note => grouped.set(note.videoId, [...(grouped.get(note.videoId) || []), note]));
+    const sections = Array.from(grouped.entries()).map(([videoId, notes]) => {
+      const video = videoCatalog.find(item => item.id === videoId);
+      const title = video?.title || videoId;
+      const lines = notes.sort((a, b) => a.timestampSeconds - b.timestampSeconds).map(note => {
+        const mins = Math.floor(note.timestampSeconds / 60);
+        const secs = note.timestampSeconds % 60;
+        return `- [${mins}:${secs < 10 ? "0" : ""}${secs}] ${note.noteText}`;
+      }).join("\\n");
+      return `## ${title}\\n\\n${video ? `- **Provedor:** ${video.provider}\\n- **Fonte:** ${video.sourceUrl}\\n\\n` : ""}${lines}`;
+    }).join("\\n\\n");
+    const markdown = `---\\ntags: [ia-academy, notas, estudo]\\nexportado: ${new Date().toISOString()}\\n---\\n\\n# IA Academy — Caderno de Notas\\n\\nÍndice consolidado de ${allNotes.length} anotações em ${grouped.size} vídeo-aulas.\\n\\n${sections}\\n\\n---\\nGerado pela IA Academy para uso no Obsidian.\\n`;
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = "ia-academy-notas-completas-obsidian.md";
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+    const vaultName = prompt("Digite o nome do seu Vault no Obsidian para abrir a nota consolidada (opcional):", "IA-Academy");
+    if (vaultName) {
+      const uri = `obsidian://new?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent("IA Academy/Notas Completas")}&content=${encodeURIComponent(markdown)}`;
+      window.open(uri, "_blank", "noopener,noreferrer");
+    }
   };
 
   const openObsidianVault = () => {
@@ -345,6 +379,9 @@ export default function Videos() {
               </Button>
               <Button variant="outline" size="sm" onClick={openObsidianVault} className="gap-1.5 text-purple-400 border-purple-500/30 hover:bg-purple-500/10">
                 <LinkIcon className="size-4" /> Emparelhar com Obsidian
+              </Button>
+              <Button variant="outline" size="sm" disabled={!allNotesQuery.data?.length} onClick={exportAllNotesToObsidian} className="gap-1.5 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/10">
+                <Download className="size-4" /> Exportar todas ({allNotesQuery.data?.length || 0})
               </Button>
               <Button variant="outline" size="sm" onClick={() => setShowPdfOptions(value => !value)} aria-expanded={showPdfOptions} aria-controls="pdf-export-options" className="gap-1.5">
                 <Settings2 className="size-4" /> Seções do PDF

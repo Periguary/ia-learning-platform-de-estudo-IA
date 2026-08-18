@@ -14,6 +14,8 @@ export default function Library() {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [selectedFormat, setSelectedFormat] = useState<string>("Todos");
+  const [sortBy, setSortBy] = useState<"relevance" | "title-asc" | "year-desc" | "category">("relevance");
   const [activeTab, setActiveTab] = useState<"catalog" | "reading-list">("catalog");
   const [selectedItem, setSelectedItem] = useState<LibraryItem | null>(null);
   const [newComment, setNewComment] = useState("");
@@ -50,12 +52,19 @@ export default function Library() {
   const favorites = favoritesQuery.data ?? [];
 
   const filteredItems = libraryCatalog.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+    const matchesSearch = !normalizedSearch || [item.title, item.author, item.description, item.relatedModule].join(" ").toLowerCase().includes(normalizedSearch);
     const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
+    const matchesFormat = selectedFormat === "Todos" || item.format === selectedFormat;
     const matchesTab = activeTab === "catalog" || favorites.includes(item.id);
-    return matchesSearch && matchesCategory && matchesTab;
+    return matchesSearch && matchesCategory && matchesFormat && matchesTab;
+  });
+
+  const sortedItems = [...filteredItems].sort((left, right) => {
+    if (sortBy === "title-asc") return left.title.localeCompare(right.title, "pt-BR");
+    if (sortBy === "category") return left.category.localeCompare(right.category, "pt-BR") || left.title.localeCompare(right.title, "pt-BR");
+    if (sortBy === "year-desc") return Number(right.year) - Number(left.year) || left.title.localeCompare(right.title, "pt-BR");
+    return 0;
   });
 
   const readingListItems = libraryCatalog.filter(item => favorites.includes(item.id));
@@ -177,7 +186,7 @@ export default function Library() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-center">
+          <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-end">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3.5 top-3 size-4 text-muted-foreground" />
               <Input
@@ -206,6 +215,10 @@ export default function Library() {
                 </Button>
               ))}
             </div>
+            <div className="flex flex-wrap gap-3">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Formato<select aria-label="Filtrar por formato" value={selectedFormat} onChange={event => setSelectedFormat(event.target.value)} className="mt-1 block min-w-36 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>PDF</option><option>Notebook</option><option>Artigo</option><option>Repositório</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Ordenar por<select aria-label="Ordenar Biblioteca" value={sortBy} onChange={event => setSortBy(event.target.value as typeof sortBy)} className="mt-1 block min-w-44 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option value="relevance">Relevância</option><option value="title-asc">Título A–Z</option><option value="year-desc">Mais recentes</option><option value="category">Categoria</option></select></label>
+            </div>
           </div>
         </div>
       </section>
@@ -218,7 +231,7 @@ export default function Library() {
         )}
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredItems.map(item => {
+          {sortedItems.map(item => {
             const isFav = favorites.includes(item.id);
             const isSelected = selectedItem?.id === item.id;
             return (

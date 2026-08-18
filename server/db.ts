@@ -327,6 +327,12 @@ export async function getVideoNotes(userId: number, videoId: string) {
   return db.select().from(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.videoId, videoId)));
 }
 
+export async function getAllVideoNotes(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(videoNotes).where(eq(videoNotes.userId, userId));
+}
+
 export async function addVideoNote(userId: number, videoId: string, timestampSeconds: number, noteText: string) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
