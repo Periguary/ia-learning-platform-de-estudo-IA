@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Sparkles, History, BookMarked, Loader2, RotateCcw, Trash2 } from "lucide-react";
+import { Sparkles, History, BookMarked, Loader2, RotateCcw, Trash2, HelpCircle, CheckCircle2 } from "lucide-react";
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,30 @@ export function AIAssistantBox({
 }: AIAssistantBoxProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [quizModalOpen, setQuizModalOpen] = useState(false);
+  const [quizData, setQuizData] = useState<{
+    quizTitle: string;
+    questions: Array<{
+      question: string;
+      options: string[];
+      correctIndex: number;
+      explanation: string;
+    }>;
+  } | null>(null);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
+
+  const quizMutation = trpc.ai.generateQuiz.useMutation({
+    onSuccess: (data) => {
+      setQuizData(data);
+      setSelectedAnswers({});
+      setQuizSubmitted(false);
+      setQuizModalOpen(true);
+    },
+    onError: (err) => {
+      alert(err.message || "Erro ao gerar quiz.");
+    }
+  });
 
   const historyQuery = trpc.ai.history.useQuery(
     { moduleId },
@@ -127,7 +151,18 @@ export function AIAssistantBox({
             </div>
           </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10"
+            onClick={() => quizMutation.mutate({ moduleId, courseTitle, lessonTitle, lessonContent })}
+            disabled={quizMutation.isPending}
+            title="Gerar quiz interativo sob demanda com base nesta aula"
+          >
+            {quizMutation.isPending ? <Loader2 className="size-3.5 animate-spin" /> : <HelpCircle className="size-3.5" />}
+            Gerar Quiz
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -204,6 +239,88 @@ export function AIAssistantBox({
           suggestedPrompts={defaultPrompts}
           className="rounded-none border-0 shadow-none"
         />
+      )}
+
+      {/* Quiz Modal */}
+      {quizModalOpen && quizData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="futurist-panel max-w-2xl w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto rounded-none border border-primary/40 bg-card">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-primary">Quiz Interativo Sob Demanda</span>
+                <h3 className="text-xl font-bold mt-1">{quizData.quizTitle}</h3>
+              </div>
+              <button
+                onClick={() => setQuizModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground text-xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {quizData.questions.map((q, qIndex) => {
+                const isAnswered = selectedAnswers[qIndex] !== undefined;
+                const isCorrect = selectedAnswers[qIndex] === q.correctIndex;
+                return (
+                  <div key={`quiz-q-${qIndex}`} className="p-4 border border-border bg-muted/20 space-y-3">
+                    <p className="font-semibold text-sm">
+                      {qIndex + 1}. {q.question}
+                    </p>
+                    <div className="grid gap-2">
+                      {q.options.map((option, optIndex) => {
+                        let btnStyle = "border-border bg-card hover:bg-accent/50 text-foreground";
+                        if (selectedAnswers[qIndex] === optIndex) {
+                          btnStyle = "border-primary bg-primary/20 text-primary-foreground font-medium";
+                        }
+                        if (quizSubmitted) {
+                          if (optIndex === q.correctIndex) {
+                            btnStyle = "border-emerald-500 bg-emerald-500/20 text-emerald-300 font-semibold";
+                          } else if (selectedAnswers[qIndex] === optIndex && optIndex !== q.correctIndex) {
+                            btnStyle = "border-destructive bg-destructive/20 text-destructive-foreground";
+                          }
+                        }
+                        return (
+                          <button
+                            key={`opt-${optIndex}`}
+                            onClick={() => {
+                              if (!quizSubmitted) {
+                                setSelectedAnswers(prev => ({ ...prev, [qIndex]: optIndex }));
+                              }
+                            }}
+                            className={`w-full text-left p-3 rounded-none border text-xs sm:text-sm transition-colors ${btnStyle}`}
+                          >
+                            {option}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {quizSubmitted && (
+                      <div className="text-xs mt-2 p-2 rounded bg-muted text-muted-foreground border border-border">
+                        <span className="font-semibold text-foreground">Explicação:</span> {q.explanation}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-border">
+              {!quizSubmitted ? (
+                <Button
+                  onClick={() => setQuizSubmitted(true)}
+                  disabled={Object.keys(selectedAnswers).length < quizData.questions.length}
+                >
+                  Enviar Respostas
+                </Button>
+              ) : (
+                <Button onClick={() => setQuizModalOpen(false)}>
+                  Concluir Quiz
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

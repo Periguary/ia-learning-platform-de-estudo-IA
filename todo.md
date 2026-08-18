@@ -417,4 +417,7 @@
 
 - [x] Evoluir o Tutor IA em um Professor Virtual conversacional com explicações didáticas, analogias, modo aula completa e exercícios guiados.
 - [x] Atualizar o prompt e a interface do assistente para estruturar aulas passo a passo e checagem de compreensão.
-- [x] Executar testes de regressão, atualizar o site publicado e sincronizar o repositório GitHub.
+- [x] Integrar Google Colab e VS Code Web diretamente na aba de aulas e no ecossistema conectado.
+- [x] Implementar quizzes interativos gerados sob demanda pelo Professor Virtual ao final de cada tópico.
+- [x] Adicionar exportação de explicações e salvamento na Lista de Leitura do aluno.
+- [x] Executar testes de regressão (106 testes aprovados), atualizar o site publicado e sincronizar o repositório GitHub.

@@ -197,13 +197,19 @@ export default function CourseDetail() {
               <div className="futurist-panel rounded-none p-6 space-y-6">
                 <div className="flex items-center justify-between gap-3">
                   <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")} className="gap-1.5 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/10">
+                      <Code className="size-3.5" /> Google Colab
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://vscode.dev/", "_blank", "noopener,noreferrer")} className="gap-1.5 text-blue-300 border-blue-500/30 hover:bg-blue-500/10">
+                      <ExternalLink className="size-3.5" /> VS Code Web
+                    </Button>
                     <Button type="button" variant="outline" size="sm" onClick={() => void prepareLessonForNotebookLm()} className="gap-1.5 text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
                       <NotebookPen className="size-3.5" /> Gemini Notebook
                     </Button>
                     <button
                     onClick={() => setSelectedLesson(null)}
-                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl"
+                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl ml-2"
                   >
                     ✕
                   </button>
@@ -275,10 +281,42 @@ export default function CourseDetail() {
                   </div>
                 </div>
 
-                {/* Resources Section */}
+                {/* Ecosystem & Resources Section */}
                 <div className="space-y-6 mt-6">
-                  <h2 className="text-2xl font-bold">Recursos Adicionais</h2>
+                  <h2 className="text-2xl font-bold">Ecossistema Conectado e Recursos</h2>
                   <div className="grid md:grid-cols-2 gap-4">
+                    <button
+                      onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")}
+                      className="futurist-panel p-4 rounded-none hover:border-primary/60 transition-colors text-left group nav-button"
+                    >
+                      <div className="flex items-start gap-3">
+                        <Code className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-1" />
+                        <div className="flex-1">
+                          <h3 className="font-semibold group-hover:text-cyan-400 transition-colors">Google Colab</h3>
+                          <p className="text-sm text-muted-foreground mt-1">Ambiente de notebooks Python com GPU na nuvem para praticar algoritmos.</p>
+                          <div className="flex items-center gap-2 mt-3 text-cyan-400 text-sm">
+                            Abrir Colab <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => window.open("https://vscode.dev/", "_blank", "noopener,noreferrer")}
+                      className="futurist-panel p-4 rounded-none hover:border-primary/60 transition-colors text-left group nav-button"
+                    >
+                      <div className="flex items-start gap-3">
+                        <ExternalLink className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
+                        <div className="flex-1">
+                          <h3 className="font-semibold group-hover:text-blue-400 transition-colors">VS Code Web</h3>
+                          <p className="text-sm text-muted-foreground mt-1">IDE profissional direto no navegador para codificar sem instalação.</p>
+                          <div className="flex items-center gap-2 mt-3 text-blue-400 text-sm">
+                            Abrir VS Code <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+
                     {additionalResources.map((resource) => {
                       const IconComponent = resource.icon;
                       return (

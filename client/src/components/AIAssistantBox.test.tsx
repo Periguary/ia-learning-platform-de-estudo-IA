@@ -65,6 +65,12 @@ vi.mock("@/lib/trpc", () => ({
           },
         }),
       },
+      generateQuiz: {
+        useMutation: () => ({
+          isPending: false,
+          mutate: vi.fn(),
+        }),
+      },
     },
   },
 }));

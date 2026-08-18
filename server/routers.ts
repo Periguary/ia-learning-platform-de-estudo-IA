@@ -131,6 +131,81 @@ export const appRouter = router({
           throw new Error("Não foi possível responder agora. Revise o conteúdo da aula e tente novamente em alguns instantes.");
         }
       }),
+    generateQuiz: publicProcedure
+      .input(z.object({
+        moduleId: z.string().trim().min(1).max(120),
+        courseTitle: z.string().trim().min(1).max(200),
+        lessonTitle: z.string().trim().max(300).optional(),
+        lessonContent: z.string().trim().max(10_000).optional(),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const response = await invokeLLM({
+            model: "gpt-5-mini",
+            maxTokens: 1200,
+            response_format: {
+              type: "json_schema",
+              json_schema: {
+                name: "quiz_schema",
+                strict: true,
+                schema: {
+                  type: "object",
+                  properties: {
+                    quizTitle: { type: "string" },
+                    questions: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          question: { type: "string" },
+                          options: {
+                            type: "array",
+                            items: { type: "string" },
+                            minItems: 4,
+                            maxItems: 4
+                          },
+                          correctIndex: { type: "integer", minimum: 0, maximum: 3 },
+                          explanation: { type: "string" }
+                        },
+                        required: ["question", "options", "correctIndex", "explanation"],
+                        additionalProperties: false
+                      },
+                      minItems: 3,
+                      maxItems: 3
+                    }
+                  },
+                  required: ["quizTitle", "questions"],
+                  additionalProperties: false
+                }
+              }
+            },
+            messages: [
+              {
+                role: "system",
+                content: "Você é um professor titular e especialista em avaliação educacional de IA. Crie um quiz desafiador e didático com exatamente 3 perguntas de múltipla escolha (4 opções cada, com apenas uma correta) testando o conhecimento do aluno sobre o tópico fornecido. Responda estritamente em JSON válido conforme o esquema."
+              },
+              {
+                role: "user",
+                content: `Curso: ${input.courseTitle}\nTópico/Aula: ${input.lessonTitle || input.moduleId}\nConteúdo de referência:\n${input.lessonContent || "Conceitos fundamentais do módulo"}`
+              }
+            ]
+          });
+          const content = response.choices[0]?.message?.content;
+          const parsed = JSON.parse(content ? extractText(content) : "{}");
+          return parsed as {
+            quizTitle: string;
+            questions: Array<{
+              question: string;
+              options: string[];
+              correctIndex: number;
+              explanation: string;
+            }>;
+          };
+        } catch (error) {
+          console.error("Failed to generate quiz", error);
+          throw new Error("Não foi possível gerar o quiz interativo agora. Tente novamente em instantes.");
+        }
+      }),
     summarizeNotes: publicProcedure
       .input(z.object({
         videoId: z.string().trim().min(1).max(128),
