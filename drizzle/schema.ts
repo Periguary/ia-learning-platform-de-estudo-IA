@@ -90,6 +90,18 @@ export const userLibraryFavorites = mysqlTable("user_library_favorites", {
 export type UserLibraryFavorite = typeof userLibraryFavorites.$inferSelect;
 export type InsertUserLibraryFavorite = typeof userLibraryFavorites.$inferInsert;
 
+export const savedExplanations = mysqlTable("saved_explanations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  content: text("content").notNull(),
+  moduleId: varchar("moduleId", { length: 120 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SavedExplanation = typeof savedExplanations.$inferSelect;
+export type InsertSavedExplanation = typeof savedExplanations.$inferInsert;
+
 export const libraryReviews = mysqlTable("library_reviews", {
   id: int("id").autoincrement().primaryKey(),
   libraryItemId: varchar("libraryItemId", { length: 120 }).notNull(),

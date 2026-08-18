@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -351,4 +351,21 @@ export async function deleteVideoNote(userId: number, noteId: number, videoId: s
   if (!db) throw new Error("Database not available");
   await db.delete(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.id, noteId)));
   return getVideoNotes(userId, videoId);
+}
+
+export async function saveExplanation(userId: number, title: string, content: string, moduleId: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(savedExplanations).values({
+    userId,
+    title,
+    content,
+    moduleId,
+  });
+}
+
+export async function getSavedExplanations(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(savedExplanations).where(eq(savedExplanations.userId, userId)).orderBy(desc(savedExplanations.createdAt));
 }

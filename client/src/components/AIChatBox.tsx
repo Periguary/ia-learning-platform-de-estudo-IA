@@ -57,6 +57,11 @@ export type AIChatBoxProps = {
    * Click to send directly
    */
   suggestedPrompts?: string[];
+
+  /**
+   * Callback when user wants to save an assistant response to reading list
+   */
+  onSaveExplanation?: (content: string) => void;
 };
 
 /**
@@ -119,7 +124,29 @@ export function AIChatBox({
   height = "600px",
   emptyStateMessage = "Start a conversation with AI",
   suggestedPrompts,
+  onSaveExplanation,
 }: AIChatBoxProps) {
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+
+  const handleSpeak = (text: string, index: number) => {
+    if (!("speechSynthesis" in window)) {
+      alert("Seu navegador não suporta síntese de voz nativa (TTS).");
+      return;
+    }
+    if (speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1.0;
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  };
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -254,16 +281,36 @@ export function AIChatBox({
 
                     <div
                       className={cn(
-                        "max-w-[80%] rounded-lg px-4 py-2.5",
+                        "max-w-[85%] rounded-lg px-4 py-2.5 space-y-2",
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
                       )}
                     >
                       {message.role === "assistant" ? (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <Streamdown>{message.content}</Streamdown>
-                        </div>
+                        <>
+                          <div className="prose prose-sm dark:prose-invert max-w-none">
+                            <Streamdown>{message.content}</Streamdown>
+                          </div>
+                          <div className="flex items-center gap-2 pt-2 border-t border-border/40 text-xs">
+                            <button
+                              type="button"
+                              onClick={() => handleSpeak(message.content, index)}
+                              className="flex items-center gap-1 text-primary hover:underline font-medium"
+                            >
+                              🔊 {speakingIndex === index ? "Parar Áudio" : "Ouvir Explicação"}
+                            </button>
+                            {onSaveExplanation && (
+                              <button
+                                type="button"
+                                onClick={() => onSaveExplanation(message.content)}
+                                className="flex items-center gap-1 text-emerald-400 hover:underline font-medium ml-auto"
+                              >
+                                📌 Salvar na Lista de Leitura
+                              </button>
+                            )}
+                          </div>
+                        </>
                       ) : (
                         <p className="whitespace-pre-wrap text-sm">
                           {message.content}

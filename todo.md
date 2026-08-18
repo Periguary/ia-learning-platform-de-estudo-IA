@@ -420,4 +420,7 @@
 - [x] Integrar Google Colab e VS Code Web diretamente na aba de aulas e no ecossistema conectado.
 - [x] Implementar quizzes interativos gerados sob demanda pelo Professor Virtual ao final de cada tópico.
 - [x] Adicionar exportação de explicações e salvamento na Lista de Leitura do aluno.
-- [x] Executar testes de regressão (106 testes aprovados), atualizar o site publicado e sincronizar o repositório GitHub.
+- [x] Adicionar botão de leitura em voz alta (TTS) nativo nas respostas do Professor Virtual.
+- [x] Implementar a funcionalidade de salvar explicações específicas do chat diretamente na Lista de Leitura.
+- [x] Criar opção para exportar o histórico completo de conversas com o tutor para PDF / impressão formatada.
+- [x] Executar testes de regressão (106 testes 100% verdes), atualizar o site publicado e sincronizar o repositório GitHub.

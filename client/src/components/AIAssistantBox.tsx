@@ -66,6 +66,68 @@ export function AIAssistantBox({
     },
   });
 
+  const saveExplanationMutation = trpc.ai.saveExplanation.useMutation({
+    onSuccess: () => {
+      alert("Explicação salva na sua Lista de Leitura com sucesso!");
+    },
+    onError: (err) => {
+      alert(err.message || "Faça login para salvar na Lista de Leitura.");
+    },
+  });
+
+  const handleSaveExplanation = (content: string) => {
+    const title = lessonTitle ? `Aula: ${lessonTitle}` : `Tópico de ${courseTitle}`;
+    saveExplanationMutation.mutate({
+      title,
+      content,
+      moduleId,
+    });
+  };
+
+  const exportChatPdf = () => {
+    const chatText = messages
+      .filter(m => m.role !== "system")
+      .map(m => `${m.role === "user" ? "Aluno" : "Professor Virtual"}:\n${m.content}\n\n`)
+      .join("---\n\n");
+    if (!chatText) {
+      alert("Nenhuma conversa para exportar ainda.");
+      return;
+    }
+    const htmlContent = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Histórico do Professor Virtual — ${courseTitle}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #111; line-height: 1.6; }
+    h1 { color: #0284c7; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; }
+    .meta { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+    .msg { margin-bottom: 20px; padding: 16px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; }
+    .msg.user { background: #f0f9ff; border-color: #bae6fd; }
+    .role { font-weight: bold; margin-bottom: 6px; color: #0369a1; }
+    .msg.user .role { color: #0369a1; }
+  </style>
+</head>
+<body>
+  <h1>Professor Virtual de IA — Histórico de Conversas</h1>
+  <div class="meta">Curso: <strong>${courseTitle}</strong> | Aula: <strong>${lessonTitle || "Visão Geral"}</strong> | Data: ${new Date().toLocaleDateString()}</div>
+  <hr style="border:0; border-top: 1px solid #cbd5e1; margin-bottom: 24px;">
+  ${messages.filter(m => m.role !== "system").map(m => `
+    <div class="msg ${m.role}">
+      <div class="role">${m.role === "user" ? "Aluno" : "Professor Virtual"}</div>
+      <div>${m.content.replace(/\n/g, "<br>")}</div>
+    </div>
+  `).join("")}
+  <script>window.print();</script>
+</body>
+</html>`;
+    const win = window.open("", "_blank");
+    if (win) {
+      win.document.write(htmlContent);
+      win.document.close();
+    }
+  };
+
   const askMutation = trpc.ai.ask.useMutation({
     onSuccess: ({ answer }) => {
       setMessages(previous => [
@@ -187,6 +249,15 @@ export function AIAssistantBox({
           <Button
             variant="outline"
             size="sm"
+            className="gap-1.5 text-xs text-amber-300 border-amber-500/30 hover:bg-amber-500/10"
+            onClick={exportChatPdf}
+            title="Exportar histórico da conversa para PDF / Impressão"
+          >
+            📄 Exportar PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             className="gap-2 text-xs"
             onClick={() => setShowHistory(prev => !prev)}
           >
@@ -238,6 +309,7 @@ export function AIAssistantBox({
           emptyStateMessage="Pergunte ao tutor e receba explicações e links de materiais complementares."
           suggestedPrompts={defaultPrompts}
           className="rounded-none border-0 shadow-none"
+          onSaveExplanation={handleSaveExplanation}
         />
       )}
 

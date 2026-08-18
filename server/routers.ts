@@ -21,6 +21,8 @@ import {
   getAllVideoNotes,
   addVideoNote,
   deleteVideoNote,
+  saveExplanation,
+  getSavedExplanations,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -252,6 +254,21 @@ export const appRouter = router({
         await clearAIConversationsForUserAndModule(ctx.user.id, input.moduleId);
         return { success: true } as const;
       }),
+    saveExplanation: publicProcedure
+      .input(z.object({
+        title: z.string().trim().min(1).max(300),
+        content: z.string().trim().min(1).max(20_000),
+        moduleId: z.string().trim().min(1).max(120),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para salvar explicações na Lista de Leitura.");
+        await saveExplanation(ctx.user.id, input.title, input.content, input.moduleId);
+        return { success: true } as const;
+      }),
+    savedExplanations: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getSavedExplanations(ctx.user.id);
+    }),
     updates: publicProcedure.query(async () => {
       return await getApprovedAIUpdateCandidates();
     }),

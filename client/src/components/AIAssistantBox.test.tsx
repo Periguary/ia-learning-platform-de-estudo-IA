@@ -71,6 +71,12 @@ vi.mock("@/lib/trpc", () => ({
           mutate: vi.fn(),
         }),
       },
+      saveExplanation: {
+        useMutation: () => ({
+          isPending: false,
+          mutate: vi.fn(),
+        }),
+      },
     },
   },
 }));
