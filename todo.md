@@ -399,3 +399,8 @@
 - [x] Criar painel de estatísticas avançadas por categoria de IA com gráficos neon no Dashboard.
 - [x] Adicionar efeitos sonoros opcionais para botões e conquistas com controle de volume no Perfil.
 - [x] Criar e executar testes de regressão para exportação, estatísticas e preferências sonoras.
+
+- [x] Implementar painel HUD de destaques e métricas de inteligência artificial na Homepage.
+- [x] Expandir o conteúdo didático e as referências técnicas nas abas de Biblioteca, Curiosidades e Vídeos.
+- [x] Executar a suíte completa de testes para garantir integridade e acessibilidade.
+- [x] Salvar checkpoint final, publicando a versão atualizada e sincronizando o repositório GitHub.

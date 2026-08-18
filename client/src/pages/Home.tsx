@@ -114,55 +114,58 @@ export default function Home() {
 
           {/* Right Preview Card */}
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent blur-xl opacity-20 animate-pulse"></div>
-            <div className="relative futurist-panel p-8 space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent blur-xl opacity-25 animate-pulse" aria-hidden="true" />
+            <div className="relative futurist-panel p-8 space-y-6 border border-primary/40 bg-[linear-gradient(145deg,rgba(10,14,28,0.95),rgba(17,24,39,0.98))]">
+              <div className="flex items-center justify-between border-b border-primary/20 pb-4">
+                <div className="flex items-center gap-2" aria-hidden="true">
+                  <span className="size-3 rounded-full bg-rose-500 inline-block" />
+                  <span className="size-3 rounded-full bg-amber-400 inline-block" />
+                  <span className="size-3 rounded-full bg-emerald-400 inline-block" />
                 </div>
-                <span className="text-xs text-slate-400 font-mono">ia-academy.platform</span>
+                <span className="text-xs text-cyan-400 font-mono tracking-wider">ia-academy.platform // hud</span>
               </div>
 
-              <div className="space-y-4">
-                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
-                  <div className="p-3 bg-primary/15 text-primary rounded-none">
-                    <BookOpen className="w-6 h-6" />
-                  </div>
+              <div className="space-y-3 font-mono text-sm">
+                <div className="border border-cyan-500/30 bg-cyan-950/25 p-3.5 flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-sm">Fase 1: Fundamentos Matemáticos</p>
-                    <p className="text-xs text-slate-400">Álgebra Linear, Estatística e Probabilidade</p>
+                    <p className="text-cyan-300 font-bold text-xs uppercase">Trilha Principal</p>
+                    <p className="text-slate-100 text-sm font-semibold mt-0.5">8 Fases Completas</p>
                   </div>
+                  <span className="text-xs font-bold text-cyan-400 border border-cyan-500/40 px-2.5 py-1">200+h</span>
                 </div>
 
-                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
-                  <div className="p-3 bg-secondary/15 text-secondary rounded-none">
-                    <Zap className="w-6 h-6" />
-                  </div>
+                <div className="border border-purple-500/30 bg-purple-950/25 p-3.5 flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-sm">Fase 5: Machine Learning</p>
-                    <p className="text-xs text-slate-400">Modelos Preditivos e Scikit-Learn</p>
+                    <p className="text-purple-300 font-bold text-xs uppercase">Simuladores Oficiais</p>
+                    <p className="text-slate-100 text-sm font-semibold mt-0.5">Certificações Globais</p>
                   </div>
+                  <span className="text-xs font-bold text-purple-400 border border-purple-500/40 px-2.5 py-1">7 Provedores</span>
                 </div>
 
-                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
-                  <div className="p-3 bg-accent/15 text-accent rounded-none">
-                    <Award className="w-6 h-6" />
-                  </div>
+                <div className="border border-emerald-500/30 bg-emerald-950/25 p-3.5 flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-sm">Fase 7: IA Generativa & LLMs</p>
-                    <p className="text-xs text-slate-400">Transformers, RAG e Agentes</p>
+                    <p className="text-emerald-300 font-bold text-xs uppercase">Ecossistema Conectado</p>
+                    <p className="text-slate-100 text-sm font-semibold mt-0.5">NotebookLM &amp; Obsidian</p>
                   </div>
+                  <span className="text-xs font-bold text-emerald-400 border border-emerald-500/40 px-2.5 py-1">Ativo</span>
                 </div>
               </div>
 
-              <Button
-                onClick={() => navigate("/learning-path")}
-                className="w-full futurist-button text-white font-bold py-3 rounded-none cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Play className="w-4 h-4 fill-white" /> Iniciar Meus Estudos
-              </Button>
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <Button
+                  onClick={() => navigate("/interactive-certifications")}
+                  variant="outline"
+                  className="h-12 rounded-none border-primary/40 font-bold text-xs uppercase tracking-wider text-primary hover:bg-primary/10 cursor-pointer"
+                >
+                  Certificações
+                </Button>
+                <Button
+                  onClick={() => navigate("/learning-path")}
+                  className="bg-gradient-to-r from-cyan-500 via-purple-600 to-lime-400 text-slate-950 font-black tracking-wider uppercase h-12 rounded-none hover:opacity-95 cursor-pointer"
+                >
+                  <Play className="w-3.5 h-3.5 mr-1.5 fill-slate-950" /> Trilha
+                </Button>
+              </div>
             </div>
           </div>
         </div>
