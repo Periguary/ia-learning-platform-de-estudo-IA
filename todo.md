@@ -325,11 +325,11 @@
 
 
 ## Nova Evolução: Favoritos no Radar, PDF Seletivo, Busca em Especializações e Integração com NotebookLM/Gemini
-- [ ] Criar tabela e tRPC procedures para favoritos no Radar de IA
-- [ ] Adicionar modal/controles de seleção de seções para exportação em PDF em `Videos.tsx`
-- [ ] Implementar barra de pesquisa e filtros por área/stack em `Specializations.tsx`
-- [ ] Criar funcionalidade de exportação e emparelhamento com o NotebookLM / Google Gemini para aulas, vídeos e materiais
-- [ ] Adicionar testes e salvar checkpoint final
+- [x] Criar tabela e tRPC procedures para favoritos no Radar de IA
+- [x] Adicionar modal/controles de seleção de seções para exportação em PDF em `Videos.tsx`
+- [x] Implementar barra de pesquisa e filtros por área/stack em `Specializations.tsx`
+- [x] Criar funcionalidade de exportação e emparelhamento com o NotebookLM / Google Gemini para aulas, vídeos e materiais
+- [x] Adicionar testes e salvar checkpoint final
 
 
 ## Nova Evolução: Favoritos, PDF Seletivo, Filtros e NotebookLM
@@ -375,11 +375,11 @@
 
 
 ## Nova Evolução: Perfil Público, Atividade Semanal e Ajuste de Avatar
-- [ ] Implementar modo de visualização pública com link exclusivo para portfólio (`/profile/public` ou query `?public=1`)
-- [ ] Adicionar gráfico de atividade semanal e contador de dias consecutivos de estudo nas estatísticas
-- [ ] Adicionar ferramenta de corte, zoom e ajuste de imagem no modal de upload de avatar
-- [ ] Criar testes automatizados para o modo público, atividade e corte de avatar
-- [ ] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
+- [x] Implementar modo de visualização pública com link exclusivo para portfólio (`/profile/public` ou query `?public=1`)
+- [x] Adicionar gráfico de atividade semanal e contador de dias consecutivos de estudo nas estatísticas
+- [x] Adicionar ferramenta de corte, zoom e ajuste de imagem no modal de upload de avatar
+- [x] Criar testes automatizados para o modo público, atividade e corte de avatar
+- [x] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
 
 - [x] Evoluir a identidade visual global para uma direção mais agressiva e futurista, com alto contraste, acentos neon, superfícies técnicas e estados interativos mais marcantes.
 - [x] Validar a nova linguagem visual em landing page, navegação e áreas internas sem regressões de acessibilidade ou responsividade.
