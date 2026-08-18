@@ -409,3 +409,8 @@
 - [x] Implementar exportação em lote das notas de estudo para arquivos Markdown e URI do Obsidian.
 - [x] Criar glossário interativo de termos avançados de IA acessível pela navegação global.
 - [x] Adicionar testes de regressão e atualizar o site publicado e o repositório GitHub.
+
+- [x] Vincular termos do glossário interativo a aulas relacionadas com navegação direta.
+- [x] Implementar exportação em múltiplos arquivos estruturados para o Obsidian (notas por vídeo + índice).
+- [x] Adicionar filtros por provedor e nível de dificuldade na Biblioteca.
+- [x] Executar testes de regressão e atualizar a publicação e o repositório GitHub.

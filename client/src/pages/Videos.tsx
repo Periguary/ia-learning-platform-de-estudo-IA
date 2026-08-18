@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ShareActions } from "@/components/ShareActions";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
 import { trpc } from "@/lib/trpc";
+import { createObsidianVaultFiles, downloadObsidianVaultFiles } from "@/utils/obsidianVaultExport";
 
 const categories: VideoCategory[] = ["Fundamentos", "Machine Learning", "LLMs e Transformers", "IA Responsável"];
 
@@ -136,29 +137,12 @@ export default function Videos() {
       alert("Salve pelo menos uma anotação em uma vídeo-aula antes de exportar em lote.");
       return;
     }
-    const grouped = new Map<string, typeof allNotes>();
-    allNotes.forEach(note => grouped.set(note.videoId, [...(grouped.get(note.videoId) || []), note]));
-    const sections = Array.from(grouped.entries()).map(([videoId, notes]) => {
-      const video = videoCatalog.find(item => item.id === videoId);
-      const title = video?.title || videoId;
-      const lines = notes.sort((a, b) => a.timestampSeconds - b.timestampSeconds).map(note => {
-        const mins = Math.floor(note.timestampSeconds / 60);
-        const secs = note.timestampSeconds % 60;
-        return `- [${mins}:${secs < 10 ? "0" : ""}${secs}] ${note.noteText}`;
-      }).join("\\n");
-      return `## ${title}\\n\\n${video ? `- **Provedor:** ${video.provider}\\n- **Fonte:** ${video.sourceUrl}\\n\\n` : ""}${lines}`;
-    }).join("\\n\\n");
-    const markdown = `---\\ntags: [ia-academy, notas, estudo]\\nexportado: ${new Date().toISOString()}\\n---\\n\\n# IA Academy — Caderno de Notas\\n\\nÍndice consolidado de ${allNotes.length} anotações em ${grouped.size} vídeo-aulas.\\n\\n${sections}\\n\\n---\\nGerado pela IA Academy para uso no Obsidian.\\n`;
-    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectUrl;
-    link.download = "ia-academy-notas-completas-obsidian.md";
-    link.click();
-    URL.revokeObjectURL(objectUrl);
-    const vaultName = prompt("Digite o nome do seu Vault no Obsidian para abrir a nota consolidada (opcional):", "IA-Academy");
+    const files = createObsidianVaultFiles(allNotes, videoCatalog);
+    downloadObsidianVaultFiles(files);
+    const vaultName = prompt("Digite o nome do seu Vault no Obsidian para abrir o índice (opcional):", "IA-Academy");
     if (vaultName) {
-      const uri = `obsidian://new?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent("IA Academy/Notas Completas")}&content=${encodeURIComponent(markdown)}`;
+      const indexFile = files.find(file => file.path === "00-Índice.md");
+      const uri = `obsidian://new?vault=${encodeURIComponent(vaultName)}&file=${encodeURIComponent("IA Academy/00-Índice")}&content=${encodeURIComponent(indexFile?.content || "")}`;
       window.open(uri, "_blank", "noopener,noreferrer");
     }
   };

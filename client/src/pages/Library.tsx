@@ -15,6 +15,8 @@ export default function Library() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
   const [selectedFormat, setSelectedFormat] = useState<string>("Todos");
+  const [selectedProvider, setSelectedProvider] = useState<string>("Todos");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("Todos");
   const [sortBy, setSortBy] = useState<"relevance" | "title-asc" | "year-desc" | "category">("relevance");
   const [activeTab, setActiveTab] = useState<"catalog" | "reading-list">("catalog");
   const [selectedItem, setSelectedItem] = useState<LibraryItem | null>(null);
@@ -56,8 +58,10 @@ export default function Library() {
     const matchesSearch = !normalizedSearch || [item.title, item.author, item.description, item.relatedModule].join(" ").toLowerCase().includes(normalizedSearch);
     const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
     const matchesFormat = selectedFormat === "Todos" || item.format === selectedFormat;
+    const matchesProvider = selectedProvider === "Todos" || item.provider === selectedProvider;
+    const matchesDifficulty = selectedDifficulty === "Todos" || item.difficulty === selectedDifficulty;
     const matchesTab = activeTab === "catalog" || favorites.includes(item.id);
-    return matchesSearch && matchesCategory && matchesFormat && matchesTab;
+    return matchesSearch && matchesCategory && matchesFormat && matchesProvider && matchesDifficulty && matchesTab;
   });
 
   const sortedItems = [...filteredItems].sort((left, right) => {
@@ -217,6 +221,8 @@ export default function Library() {
             </div>
             <div className="flex flex-wrap gap-3">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Formato<select aria-label="Filtrar por formato" value={selectedFormat} onChange={event => setSelectedFormat(event.target.value)} className="mt-1 block min-w-36 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>PDF</option><option>Notebook</option><option>Artigo</option><option>Repositório</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Provedor<select aria-label="Filtrar por provedor" value={selectedProvider} onChange={event => setSelectedProvider(event.target.value)} className="mt-1 block min-w-40 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>MIT Press</option><option>Google Research</option><option>scikit-learn</option><option>NIST</option><option>Hugging Face</option><option>Kaggle</option><option>Meta AI</option><option>OpenAI</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Dificuldade<select aria-label="Filtrar por dificuldade" value={selectedDifficulty} onChange={event => setSelectedDifficulty(event.target.value)} className="mt-1 block min-w-36 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>Fundamental</option><option>Intermediário</option><option>Avançado</option></select></label>
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Ordenar por<select aria-label="Ordenar Biblioteca" value={sortBy} onChange={event => setSortBy(event.target.value as typeof sortBy)} className="mt-1 block min-w-44 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option value="relevance">Relevância</option><option value="title-asc">Título A–Z</option><option value="year-desc">Mais recentes</option><option value="category">Categoria</option></select></label>
             </div>
           </div>
@@ -260,6 +266,7 @@ export default function Library() {
 
                 <h3 className="mt-4 text-xl font-bold leading-tight">{item.title}</h3>
                 <p className="mt-1 text-xs font-medium text-muted-foreground">Por {item.author} ({item.year})</p>
+                <div className="mt-2 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><span className="border border-primary/20 px-2 py-1 text-primary">{item.provider}</span><span className="border border-secondary/20 px-2 py-1 text-secondary">{item.difficulty}</span></div>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
 
                 <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground">

@@ -80,4 +80,15 @@ describe("Library export interactions", () => {
     fireEvent.change(sortSelect, { target: { value: "year-desc" } });
     expect(sortSelect.value).toBe("year-desc");
   });
+
+  it("refina a busca por provedor e nível de dificuldade", async () => {
+    const { default: Library } = await import("./Library");
+    render(<Library />);
+
+    fireEvent.change(screen.getByLabelText("Filtrar por provedor"), { target: { value: "OpenAI" } });
+    expect(screen.getByRole("heading", { name: "GPT-4 Technical Report" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Llama 3 Open Foundation and Fine-Tuned Chat Models" })).toBeNull();
+    fireEvent.change(screen.getByLabelText("Filtrar por dificuldade"), { target: { value: "Fundamental" } });
+    expect(screen.queryByRole("heading", { name: "GPT-4 Technical Report" })).toBeNull();
+  });
 });
