@@ -17,11 +17,14 @@ describe("Dashboard - Futuristic HUD regressions", () => {
     expect(source).toContain("progressData");
     expect(source).toContain("aria-label={`Progresso geral: ${overallProgress}%`}");
     expect(source).toContain("conic-gradient");
+    expect(source).toContain("CategoryProgressPanel");
+    expect(source).toContain("categoryStats");
   });
 
   it("keeps reduced-motion support in the shared CSS contract", () => {
     const css = readFileSync(new URL("../index.css", import.meta.url), "utf8");
     expect(css).toContain("@media (prefers-reduced-motion: reduce)");
     expect(css).toContain(".futurist-button");
+    expect(css).toContain(".neon-interactive");
   });
 });

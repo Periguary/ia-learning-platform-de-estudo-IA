@@ -22,6 +22,7 @@ describe("Profile page", () => {
     expect(screen.getByRole("heading", { name: /Medalhas do seu percurso/i })).toBeTruthy();
     expect(screen.getByText("ACHIEVEMENT GRID // LIVE")).toBeTruthy();
     expect(screen.getByText("0/3 desbloqueadas")).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Exportar imagem/i })).toBeTruthy();
     expect(screen.getByText(/Seu histórico começará aqui/i)).toBeTruthy();
     expect(screen.getByText("0 min")).toBeTruthy();
     expect(screen.getByRole("progressbar", { name: /Progresso até Primeira Conquista/i })).toBeTruthy();
@@ -75,10 +76,12 @@ describe("Profile page", () => {
     fireEvent.click(screen.getAllByRole("button", { name: /Editar perfil/i }).at(-1)!);
     fireEvent.change(screen.getAllByLabelText("Nome").at(-1)!, { target: { value: "Ada IA" } });
     fireEvent.change(screen.getAllByLabelText("Biografia breve").at(-1)!, { target: { value: "Estudando agentes e sistemas generativos." } });
+    fireEvent.click(screen.getAllByLabelText("Ativar efeitos sonoros").at(-1)!);
+    fireEvent.change(screen.getAllByLabelText("Volume dos efeitos sonoros").at(-1)!, { target: { value: "0.6" } });
     fireEvent.click(screen.getAllByRole("button", { name: /Salvar perfil/i }).at(-1)!);
 
     expect(await screen.findByRole("heading", { name: "Ada IA" })).toBeTruthy();
     expect(screen.getByText("Estudando agentes e sistemas generativos.")).toBeTruthy();
-    expect(JSON.parse(window.localStorage.getItem("ia-academy-profile-preferences") || "{}")).toMatchObject({ name: "Ada IA", bio: "Estudando agentes e sistemas generativos." });
+    expect(JSON.parse(window.localStorage.getItem("ia-academy-profile-preferences") || "{}")).toMatchObject({ name: "Ada IA", bio: "Estudando agentes e sistemas generativos.", soundEnabled: true, soundVolume: 0.6 });
   });
 });

@@ -394,3 +394,8 @@
 - [x] Implementar animação de carregamento HUD futurista para transições de navegação entre páginas.
 - [x] Atualizar a habilidade notebooklm-exporter para documentar este fluxo de evolução visual e validação.
 - [x] Criar e executar testes de regressão para brilho, conquistas e carregamento HUD.
+
+- [x] Implementar exportação da galeria de conquistas como imagem PNG estilizada e compartilhável.
+- [x] Criar painel de estatísticas avançadas por categoria de IA com gráficos neon no Dashboard.
+- [x] Adicionar efeitos sonoros opcionais para botões e conquistas com controle de volume no Perfil.
+- [x] Criar e executar testes de regressão para exportação, estatísticas e preferências sonoras.

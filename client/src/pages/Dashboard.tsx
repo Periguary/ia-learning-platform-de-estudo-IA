@@ -8,6 +8,7 @@ import { coursesData } from "@/data/coursesData";
 import { learningPhases } from "@/data/learningCatalog";
 import { getCompletedCount, readProgress } from "@/data/progress";
 import { getPhaseEntryRoute } from "@/data/learningRoutes";
+import CategoryProgressPanel from "@/components/CategoryProgressPanel";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -58,6 +59,14 @@ export default function Dashboard() {
     const completed = phase.moduleIds.reduce((sum, moduleId) => sum + getCompletedCount(progressState, moduleId), 0);
     return { phase: `Fase ${phase.id}`, completed, total };
   });
+
+  const categoryStats = progressData.map((phase) => ({
+    id: phases.find(item => item.id === Number(phase.phase.replace("Fase ", "")))?.id ?? 0,
+    title: learningPhases.find(item => item.id === Number(phase.phase.replace("Fase ", "")))?.title ?? phase.phase,
+    completed: phase.completed,
+    total: phase.total,
+    percentage: phase.total ? Math.round((phase.completed / phase.total) * 100) : 0,
+  }));
 
   const totalLessons = progressData.reduce((sum, phase) => sum + phase.total, 0);
   const completedLessons = progressData.reduce((sum, phase) => sum + phase.completed, 0);
@@ -131,6 +140,8 @@ export default function Dashboard() {
               </div>
             </div>
           </section>
+
+          <CategoryProgressPanel categories={categoryStats} />
 
           {/* Charts Row */}
           <div className="grid lg:grid-cols-2 gap-8">

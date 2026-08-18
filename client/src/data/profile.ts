@@ -8,6 +8,8 @@ export type ProfilePreferences = {
   publicToken?: string;
   publicEnabled?: boolean;
   highContrastNeon?: boolean;
+  soundEnabled?: boolean;
+  soundVolume?: number;
 };
 
 export type StudyActivity = {

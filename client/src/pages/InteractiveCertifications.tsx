@@ -7,6 +7,7 @@ import { Award, ArrowRight, CheckCircle2, Download, ExternalLink, Eye, Filter, L
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { recordStudyActivity } from "@/data/profile";
+import { playInterfaceSound } from "@/hooks/useInterfaceSound";
 
 type Celebration = { title: string; description: string; kind: "badge" | "perfect" };
 
@@ -80,8 +81,13 @@ export default function InteractiveCertifications() {
     const nextHistory = readCompletionHistory();
     setCompletionHistory(nextHistory);
     setShowResults(true);
-    if (stats.scorePercentage === 100 && !wasPerfect) setCelebration({ kind: "perfect", title: "Aproveitamento perfeito!", description: "Você desbloqueou a medalha de excelência neste simulador." });
-    else if (!wasCompleted) setCelebration({ kind: "badge", title: "Nova medalha conquistada!", description: "Sua primeira conclusão foi registrada no seu perfil." });
+    if (stats.scorePercentage === 100 && !wasPerfect) {
+      playInterfaceSound("achievement");
+      setCelebration({ kind: "perfect", title: "Aproveitamento perfeito!", description: "Você desbloqueou a medalha de excelência neste simulador." });
+    } else if (!wasCompleted) {
+      playInterfaceSound("achievement");
+      setCelebration({ kind: "badge", title: "Nova medalha conquistada!", description: "Sua primeira conclusão foi registrada no seu perfil." });
+    }
   };
 
   const handleReset = () => { setAnswerHistory(prev => ({ ...prev, [selectedCert.id]: {} })); setCurrentQuestionIndex(0); setShowResults(false); };
