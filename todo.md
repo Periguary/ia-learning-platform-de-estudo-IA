@@ -414,3 +414,7 @@
 - [x] Implementar exportação em múltiplos arquivos estruturados para o Obsidian (notas por vídeo + índice).
 - [x] Adicionar filtros por provedor e nível de dificuldade na Biblioteca.
 - [x] Executar testes de regressão e atualizar a publicação e o repositório GitHub.
+
+- [x] Evoluir o Tutor IA em um Professor Virtual conversacional com explicações didáticas, analogias, modo aula completa e exercícios guiados.
+- [x] Atualizar o prompt e a interface do assistente para estruturar aulas passo a passo e checagem de compreensão.
+- [x] Executar testes de regressão, atualizar o site publicado e sincronizar o repositório GitHub.

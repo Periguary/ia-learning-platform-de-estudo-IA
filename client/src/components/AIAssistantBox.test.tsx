@@ -147,11 +147,11 @@ describe("AIAssistantBox", () => {
       />,
     );
 
-    const prompt = screen.getByRole("button", { name: /Explique este conceito com uma analogia simples/i });
+    const prompt = screen.getByRole("button", { name: /Explique este conceito com uma analogia simples do mundo real/i });
     fireEvent.click(prompt);
 
     expect(mutationState.mutate).toHaveBeenCalledWith(expect.objectContaining({
-      question: "Explique este conceito com uma analogia simples.",
+      question: "Explique este conceito com uma analogia simples do mundo real.",
     }));
   });
 });

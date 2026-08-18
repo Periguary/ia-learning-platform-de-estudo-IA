@@ -14,10 +14,10 @@ type AIAssistantBoxProps = {
 };
 
 const defaultPrompts = [
-  "Explique este conceito com uma analogia simples.",
-  "Quais são os erros mais comuns nesta aula?",
-  "Crie um exercício curto para eu praticar.",
-  "Quais materiais complementares devo consultar?",
+  "Me dê uma aula completa explicando este conceito do zero.",
+  "Explique este conceito com uma analogia simples do mundo real.",
+  "Qual é o raciocínio passo a passo e quais erros devo evitar?",
+  "Crie um exercício prático desafiador com gabarito explicado.",
 ];
 
 export function AIAssistantBox({
@@ -113,19 +113,19 @@ export function AIAssistantBox({
       className="mt-6 overflow-hidden rounded-xl border border-primary/20 bg-card shadow-sm"
     >
       <div className="flex items-center justify-between border-b border-border bg-gradient-to-r from-primary/10 via-secondary/10 to-transparent p-5">
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-            <Sparkles className="size-5 animate-pulse" aria-hidden="true" />
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+              <Sparkles className="size-5 animate-pulse" aria-hidden="true" />
+            </div>
+            <div>
+              <h2 id="ai-assistant-title" className="text-xl font-bold">
+                Professor Virtual de IA
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Seu mentor dedicado para aulas particulares, explicações passo a passo e exercícios guiados sobre {lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`}.
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 id="ai-assistant-title" className="text-xl font-bold">
-              Tutor IA da aula
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Tire dúvidas sobre {lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`} com recomendações automáticas.
-            </p>
-          </div>
-        </div>
 
         <div className="flex items-center gap-2">
           <Button
