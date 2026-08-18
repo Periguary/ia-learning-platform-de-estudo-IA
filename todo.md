@@ -380,3 +380,6 @@
 - [ ] Adicionar ferramenta de corte, zoom e ajuste de imagem no modal de upload de avatar
 - [ ] Criar testes automatizados para o modo público, atividade e corte de avatar
 - [ ] Validar suíte completa (100% verde), TypeScript e preview, e salvar checkpoint final
+
+- [x] Evoluir a identidade visual global para uma direção mais agressiva e futurista, com alto contraste, acentos neon, superfícies técnicas e estados interativos mais marcantes.
+- [x] Validar a nova linguagem visual em landing page, navegação e áreas internas sem regressões de acessibilidade ou responsividade.

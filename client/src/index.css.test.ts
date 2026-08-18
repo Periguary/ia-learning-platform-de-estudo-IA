@@ -21,9 +21,12 @@ describe("global theme contract", () => {
   });
 
   it("keeps the visual system's high-salience colors and typography", () => {
-    expect(css).toContain("--primary: 200 100% 50%;");
-    expect(css).toContain("--secondary: 280 85% 55%;");
-    expect(css).toContain("--accent: 40 100% 50%;");
+    expect(css).toContain("--primary: 182 100% 55%;");
+    expect(css).toContain("--secondary: 275 100% 68%;");
+    expect(css).toContain("--accent: 74 100% 58%;");
     expect(css).toContain('font-family: "Inter", sans-serif;');
+    expect(css).toContain(".futurist-grid");
+    expect(css).toContain(".futurist-panel");
+    expect(css).toContain(".futurist-button");
   });
 });

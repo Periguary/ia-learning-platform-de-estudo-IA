@@ -40,9 +40,9 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-slate-100 flex flex-col font-sans futurist-grid">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2 px-4 text-sm font-medium flex items-center justify-center gap-2">
+      <div className="border-b border-primary/30 bg-[linear-gradient(90deg,#06111a,#111827,#180b2b)] text-white text-center py-2.5 px-4 text-xs font-semibold uppercase tracking-[0.18em] flex items-center justify-center gap-2">
         <Sparkles className="w-4 h-4" />
         <span>Nova Trilha de IA Generativa e LLMs Disponível!</span>
         <button onClick={() => navigate("/learning-path")} className="underline hover:text-blue-200 ml-2 font-bold cursor-pointer">
@@ -51,19 +51,19 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative py-24 px-6 md:px-12 bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800">
+      <section className="relative py-28 px-6 md:px-12 bg-transparent futurist-scanline border-b border-primary/20">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/25 text-sm font-semibold">
+            <div className="futurist-kicker inline-flex items-center gap-2 border border-primary/35 bg-primary/10 px-3 py-2">
               <GraduationCap className="w-4 h-4" />
               <span>Plataforma Líder em Educação de IA</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
-              Aprenda o que importa para <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">acelerar sua carreira</span>
+            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-[-0.06em] leading-[0.94]">
+              Aprenda o que importa para <span className="futurist-mark text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">acelerar sua carreira</span>
             </h1>
 
-            <p className="text-lg text-slate-300 leading-relaxed">
+            <p className="max-w-xl text-lg text-slate-300 leading-relaxed">
               Domine Inteligência Artificial, Machine Learning, Deep Learning e Ciência de Dados do zero ao nível profissional com trilhas estruturadas e projetos reais.
             </p>
 
@@ -71,14 +71,14 @@ export default function Home() {
               {user ? (
                 <Button
                   onClick={() => navigate("/learning-path")}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
+                  className="futurist-button h-12 px-8 rounded-none font-bold flex items-center justify-center gap-2 text-base cursor-pointer"
                 >
                   Continuar Trilha <ArrowRight className="w-5 h-5" />
                 </Button>
               ) : (
                 <Button
                   asChild
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
+                  className="futurist-button h-12 px-8 rounded-none font-bold flex items-center justify-center gap-2 text-base cursor-pointer"
                 >
                   <a href={getLoginUrl()}>
                     Começar Gratuitamente <ArrowRight className="w-5 h-5" />
@@ -89,24 +89,24 @@ export default function Home() {
               <Button
                 onClick={() => navigate("/learning-path")}
                 variant="outline"
-                className="border-slate-700 bg-slate-900/50 hover:bg-slate-800 text-slate-200 h-12 px-8 rounded-xl font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
+                className="border-primary/35 bg-card/60 hover:bg-primary/10 text-slate-200 h-12 px-8 rounded-none font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
               >
                 <Compass className="w-5 h-5 text-blue-400" /> Explorar Trilha
               </Button>
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800/80">
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-primary/20">
               <div>
-                <p className="text-2xl font-bold text-blue-400">200+</p>
+                <p className="text-2xl font-black text-primary futurist-mark">200+</p>
                 <p className="text-xs text-slate-400">Horas de Conteúdo</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-purple-400">8 Fases</p>
+                <p className="text-2xl font-black text-secondary futurist-mark">8 Fases</p>
                 <p className="text-xs text-slate-400">Trilha Completa</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-emerald-400">{availableModuleCount}</p>
+                <p className="text-2xl font-black text-accent futurist-mark">{availableModuleCount}</p>
                 <p className="text-xs text-slate-400">Módulos disponíveis</p>
               </div>
             </div>
@@ -114,8 +114,8 @@ export default function Home() {
 
           {/* Right Preview Card */}
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
-            <div className="relative bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent blur-xl opacity-20 animate-pulse"></div>
+            <div className="relative futurist-panel p-8 space-y-6">
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -126,8 +126,8 @@ export default function Home() {
               </div>
 
               <div className="space-y-4">
-                <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 flex items-center gap-4">
-                  <div className="p-3 bg-blue-500/20 text-blue-400 rounded-lg">
+                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
+                  <div className="p-3 bg-primary/15 text-primary rounded-none">
                     <BookOpen className="w-6 h-6" />
                   </div>
                   <div>
@@ -136,8 +136,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 flex items-center gap-4">
-                  <div className="p-3 bg-purple-500/20 text-purple-400 rounded-lg">
+                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
+                  <div className="p-3 bg-secondary/15 text-secondary rounded-none">
                     <Zap className="w-6 h-6" />
                   </div>
                   <div>
@@ -146,8 +146,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/50 flex items-center gap-4">
-                  <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-lg">
+                <div className="bg-primary/5 p-4 rounded-none border border-primary/20 flex items-center gap-4">
+                  <div className="p-3 bg-accent/15 text-accent rounded-none">
                     <Award className="w-6 h-6" />
                   </div>
                   <div>
@@ -159,7 +159,7 @@ export default function Home() {
 
               <Button
                 onClick={() => navigate("/learning-path")}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2"
+                className="w-full futurist-button text-white font-bold py-3 rounded-none cursor-pointer flex items-center justify-center gap-2"
               >
                 <Play className="w-4 h-4 fill-white" /> Iniciar Meus Estudos
               </Button>
@@ -169,7 +169,7 @@ export default function Home() {
       </section>
 
       {/* Categories Grid */}
-      <section className="py-20 px-6 md:px-12 bg-slate-950">
+      <section className="py-24 px-6 md:px-12 bg-transparent">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold">Explore por Categoria</h2>
@@ -181,7 +181,7 @@ export default function Home() {
               <div
                 key={idx}
                 onClick={() => navigate("/learning-path")}
-                className="bg-slate-900 border border-slate-800 hover:border-slate-700 p-6 rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group"
+                className="futurist-panel hover:border-primary/60 p-6 rounded-none cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_36px_hsla(var(--primary),0.18)] group"
               >
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-3xl p-3 bg-slate-800/80 rounded-xl group-hover:scale-110 transition-transform">{cat.icon}</span>
@@ -196,7 +196,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 px-6 md:px-12 bg-slate-900/50 border-t border-slate-800">
+      <section className="py-24 px-6 md:px-12 bg-card/20 border-t border-primary/15">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold">Por que escolher a IA Academy?</h2>
@@ -205,8 +205,8 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feat, idx) => (
-              <div key={idx} className="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4">
-                <div className="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center font-bold">
+              <div key={idx} className="futurist-panel p-8 rounded-none space-y-4">
+                <div className="bg-primary/10 text-primary rounded-none flex items-center justify-center font-bold shadow-[0_0_24px_hsla(var(--primary),0.22)]">
                   <feat.icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-bold text-slate-200">{feat.title}</h3>
@@ -218,9 +218,9 @@ export default function Home() {
       </section>
 
       {/* Methodology and evidence */}
-      <section className="py-20 px-6 md:px-12 bg-slate-950">
+      <section className="py-24 px-6 md:px-12 bg-transparent">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-stretch">
-          <div className="rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 via-slate-900 to-indigo-500/10 p-8 md:p-10">
+          <div className="futurist-panel border-primary/35 bg-gradient-to-br from-primary/10 via-card to-secondary/10 p-8 md:p-10">
             <div className="flex items-center gap-3 text-blue-300 mb-5">
               <ShieldCheck className="w-6 h-6" />
               <span className="text-sm font-semibold uppercase tracking-[0.18em]">Como a plataforma funciona</span>
@@ -233,7 +233,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8 md:p-10">
+          <div className="futurist-panel p-8 md:p-10">
             <h3 className="text-xl font-bold text-white">Explore antes de decidir</h3>
             <p className="mt-3 text-slate-400 leading-relaxed">Veja a trilha, abra uma aula e conheça os projetos disponíveis. Não usamos avaliações ou depoimentos inventados para representar a experiência dos alunos.</p>
             <div className="mt-8 space-y-4">
@@ -253,7 +253,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-12 px-6 md:px-12 text-center text-slate-400 text-sm mt-auto">
+      <footer className="bg-[hsl(240_28%_3%)] border-t border-primary/20 py-12 px-6 md:px-12 text-center text-slate-400 text-sm mt-auto">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2 font-bold text-white text-lg">
             <Zap className="w-5 h-5 text-blue-500" /> IA Academy

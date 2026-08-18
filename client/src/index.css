@@ -4,24 +4,24 @@
 
 /* CSS Variables for Theme */
 :root {
-  --background: 10 14% 8%;
+  --background: 240 28% 4%;
   --foreground: 210 40% 96%;
-  --card: 20 14% 12%;
+  --card: 240 24% 8%;
   --card-foreground: 210 40% 96%;
-  --primary: 200 100% 50%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 280 85% 55%;
-  --secondary-foreground: 210 40% 98%;
-  --accent: 40 100% 50%;
-  --accent-foreground: 10 14% 8%;
-  --muted: 210 11% 35%;
-  --muted-foreground: 210 10% 60%;
-  --destructive: 0 84% 60%;
+  --primary: 182 100% 55%;
+  --primary-foreground: 240 28% 4%;
+  --secondary: 275 100% 68%;
+  --secondary-foreground: 240 28% 4%;
+  --accent: 74 100% 58%;
+  --accent-foreground: 240 28% 4%;
+  --muted: 240 16% 18%;
+  --muted-foreground: 215 20% 68%;
+  --destructive: 0 88% 64%;
   --destructive-foreground: 210 40% 98%;
-  --border: 210 13% 20%;
-  --input: 210 13% 20%;
-  --ring: 200 100% 50%;
-  --radius: 0.75rem;
+  --border: 215 28% 22%;
+  --input: 215 28% 22%;
+  --ring: 182 100% 55%;
+  --radius: 0.65rem;
 }
 
 html.light {
@@ -77,11 +77,114 @@ html.dark {
 body {
   font-family: "Inter", sans-serif;
   background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(circle at 8% 0%, hsla(var(--primary), 0.12), transparent 28rem),
+    radial-gradient(circle at 96% 12%, hsla(var(--secondary), 0.1), transparent 30rem),
+    linear-gradient(180deg, hsl(var(--background)) 0%, hsl(240 25% 6%) 100%);
+  background-attachment: fixed;
   color: hsl(var(--foreground));
 }
 
 code {
   font-family: "JetBrains Mono", monospace;
+}
+
+/* Futuristic visual language */
+.futurist-grid {
+  background-image: linear-gradient(hsla(var(--primary), 0.055) 1px, transparent 1px), linear-gradient(90deg, hsla(var(--primary), 0.055) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.futurist-panel {
+  background: linear-gradient(145deg, hsla(var(--card), 0.94), hsla(240 28% 5%, 0.82));
+  border: 1px solid hsla(var(--primary), 0.22);
+  box-shadow: 0 0 0 1px hsla(var(--secondary), 0.05), 0 24px 80px hsla(240 80% 4%, 0.42), inset 0 1px 0 hsla(0 0% 100%, 0.06);
+}
+
+.futurist-kicker {
+  color: hsl(var(--primary));
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.futurist-mark {
+  color: hsl(var(--accent));
+  text-shadow: 0 0 24px hsla(var(--accent), 0.5);
+}
+
+.futurist-line {
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--secondary)), transparent);
+}
+
+.futurist-scanline {
+  background-image: linear-gradient(180deg, transparent 0%, hsla(var(--primary), 0.08) 50%, transparent 100%);
+  background-size: 100% 4px;
+}
+
+.futurist-nav {
+  background: hsla(240 28% 4%, 0.78);
+  border-bottom: 1px solid hsla(var(--primary), 0.18);
+  box-shadow: 0 12px 40px hsla(240 80% 3%, 0.32);
+}
+
+.futurist-nav-item {
+  position: relative;
+  color: hsl(var(--muted-foreground));
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.futurist-nav-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.55rem;
+  height: 2px;
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+
+.futurist-nav-item:hover,
+.futurist-nav-item:focus-visible {
+  color: hsl(var(--primary));
+  transform: translateY(-1px);
+}
+
+.futurist-nav-item:hover::after,
+.futurist-nav-item:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.futurist-button {
+  border: 1px solid hsla(var(--primary), 0.42);
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 0 24px hsla(var(--primary), 0.22);
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.futurist-button:hover,
+.futurist-button:focus-visible {
+  filter: saturate(1.2) brightness(1.08);
+  box-shadow: 0 0 34px hsla(var(--primary), 0.38), 0 0 70px hsla(var(--secondary), 0.18);
+  transform: translateY(-2px);
+}
+
+.futurist-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .futurist-nav-item,
+  .futurist-nav-item::after,
+  .futurist-button {
+    transition: none;
+  }
 }
 
 /* Typography */
