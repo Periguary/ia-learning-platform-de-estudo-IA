@@ -23,6 +23,10 @@ import {
   deleteVideoNote,
   saveExplanation,
   getSavedExplanations,
+  upsertStudentMemory,
+  getStudentMemories,
+  saveStudyPlan,
+  getStudyPlans,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -42,21 +46,12 @@ const extractText = (content: string | Array<{ type: string; text?: string }>) =
     .trim();
 };
 
-const assistantPrompt = `Você é um Professor Titular de Inteligência Artificial e Engenharia de Software na IA Academy, uma plataforma educacional de elite em português do Brasil.
-
-Seu objetivo é conduzir o aluno como um mentor humano dedicado, explicativo e altamente didático, como se estivesse na frente de um aluno em uma aula particular ou sala de aula universitária de excelência.
-
-### Diretrizes Pedagógicas
-1. **Abordagem Didática e Progressiva:** Explique conceitos complexos dividindo-os em partes simples. Use analogias intuitivas do mundo real, intuição matemática acessível e intuição computacional antes de entrar em fórmulas ou sintaxe densas.
-2. **Modo Aula Completa / Aprofundamento:** Quando o aluno pedir uma explicação ampla, uma aula detalhada ou fizer uma pergunta conceitual ("O que é...", "Como funciona..."), estruture sua resposta como uma mini-aula estructurada em:
-   - **Introdução e Intuição:** O que é e por que isso importa no mundo real.
-   - **Como Funciona na Prática:** O mecanismo passo a passo.
-   - **Exemplo Prático ou Código Explicado:** Demonstração comentada.
-   - **Check de Compreensão / Pergunta Desafiadora:** Uma pergunta final para testar o entendimento do aluno.
-3. **Uso de Contexto e Limites:** Baseie-se estritamente no contexto do módulo, aula atual e anotações pessoais do aluno fornecidas. Se a dúvida estiver fora do contexto, oriente o aluno com carinho sobre qual tópico da grade curricular ele deve revisar.
-4. **Tom Encorajador:** Valorize o raciocínio do aluno, corrija equívocos com paciência e estimule a curiosidade científica.
-
-No final de cada explicação, inclua obrigatoriamente uma seção intitulada "### Materiais e Aulas Recomendadas" contendo 1 ou 2 sugestões práticas de aprofundamento (leituras, artigos recomendados na Biblioteca da plataforma ou vídeo-aulas complementares).`;
+const personalityPrompts: Record<string, string> = {
+  socratico: `Você é o Professor Virtual em modo Socrático. Em vez de dar a resposta pronta, faça perguntas instigantes, guiadas e reflexivas que levem o aluno a deduzir e descobrir o conceito de Inteligência Artificial por si próprio.`,
+  "bem-humorado": `Você é o Professor Virtual em modo Bem-Humorado. Explique conceitos profundos de IA e ciência de dados usando analogias cativantes e divertidas do cotidiano, mantendo o rigor técnico com leveza e carisma.`,
+  rigoroso: `Você é o Professor Virtual em modo Rigoroso/Acadêmico. Foque na fundamentação matemática estrita, notação formal, cálculo de perda, otimização e padrões avançados de arquitetura de software e modelos.`,
+  padrao: `Você é um Professor Titular de Inteligência Artificial e Engenharia de Software na IA Academy, empático e altamente didático, utilizando analogias intuitivas e checagens de compreensão.`
+};
 
 export const appRouter = router({
   system: systemRouter,
@@ -81,33 +76,49 @@ export const appRouter = router({
         studentNotes: z.string().trim().max(12_000).optional(),
         question: z.string().trim().min(1, "Escreva uma dúvida antes de enviar.").max(2_000),
         history: assistantHistorySchema.default([]),
+        personality: z.string().trim().optional(),
       }))
       .mutation(async ({ input, ctx }) => {
-        const storedNotes = ctx.user?.id && input.moduleId.startsWith("video-")
-          ? await getVideoNotes(ctx.user.id, input.moduleId.slice("video-".length))
+        const userId = ctx.user?.id;
+        const storedNotes = userId && input.moduleId.startsWith("video-")
+          ? await getVideoNotes(userId, input.moduleId.slice("video-".length))
           : [];
         const notesContext = storedNotes.length > 0
           ? storedNotes.map(note => `[${Math.floor(note.timestampSeconds / 60)}:${String(note.timestampSeconds % 60).padStart(2, "0")}] ${note.noteText}`).join("\n")
           : input.studentNotes || "Nenhuma anotação pessoal disponível para esta aula.";
+
+        const memories = userId ? await getStudentMemories(userId) : [];
+        const memoryContext = memories.length > 0
+          ? memories.map(m => `- [${m.category}] ${m.topic}: ${m.summary}`).join("\n")
+          : "Nenhuma memória de longo prazo anterior.";
+
         const context = [
           `Módulo: ${input.courseTitle} (${input.moduleId})`,
           `Descrição: ${input.courseDescription || "Não informada"}`,
           input.lessonTitle ? `Aula atual: ${input.lessonTitle}` : "Aula atual: visão geral do módulo",
           input.lessonContent ? `Conteúdo didático disponível:\n${input.lessonContent}` : "Conteúdo didático específico não selecionado.",
-          `Anotações pessoais do aluno (material privado, use apenas para personalizar a resposta):\n${notesContext}`,
+          `Anotações pessoais do aluno:\n${notesContext}`,
+          `Memória de longo prazo (histórico e progresso prévio do aluno):\n${memoryContext}`,
         ].join("\n\n");
+
+        const promptKey = input.personality && personalityPrompts[input.personality] ? input.personality : "padrao";
+        const systemPrompt = personalityPrompts[promptKey];
 
         try {
           const response = await invokeLLM({
             model: "gpt-5-mini",
             maxTokens: 1100,
             messages: [
-              { role: "system", content: assistantPrompt },
+              { role: "system", content: systemPrompt },
               { role: "system", content: `Contexto autorizado para esta resposta:\n${context}` },
               ...input.history,
               { role: "user", content: input.question },
             ],
           });
+
+          if (userId) {
+            await upsertStudentMemory(userId, input.moduleId, `Tópico: ${input.lessonTitle || input.courseTitle} - Dúvida recente: ${input.question.slice(0, 120)}`, "Aprendizado");
+          }
 
           const content = response.choices[0]?.message?.content;
           const answer = content ? extractText(content) : "";
@@ -270,6 +281,52 @@ export const appRouter = router({
       if (!ctx.user?.id) return [];
       return await getSavedExplanations(ctx.user.id);
     }),
+    studentMemories: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getStudentMemories(ctx.user.id);
+    }),
+    studyPlans: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getStudyPlans(ctx.user.id);
+    }),
+    generateStudyPlan: publicProcedure
+      .input(z.object({
+        focusArea: z.string().trim().min(1).max(120),
+        goal: z.string().trim().min(1).max(500),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para gerar um plano de estudos personalizado.");
+        const userId = ctx.user.id;
+        const memories = await getStudentMemories(userId);
+        const memoriesSummary = memories.length > 0
+          ? memories.map(m => `- ${m.topic}: ${m.summary}`).join("\n")
+          : "Nenhum histórico anterior registrado.";
+
+        try {
+          const response = await invokeLLM({
+            model: "gpt-5-mini",
+            maxTokens: 1500,
+            messages: [
+              {
+                role: "system",
+                content: "Você é um orientador pedagógico sênior de IA. Com base na área de foco solicitada, no objetivo do aluno e no histórico de suas memórias/dúvidas, crie um plano de estudos semanal detalhado, prático e estruturado em Markdown, contendo metas diárias, tópicos essenciais, recomendações de prática e checagem de progresso."
+              },
+              {
+                role: "user",
+                content: `Área de Foco: ${input.focusArea}\nObjetivo: ${input.goal}\nHistórico de Aprendizado do Aluno:\n${memoriesSummary}`
+              }
+            ]
+          });
+          const content = response.choices[0]?.message?.content;
+          const planContent = content ? extractText(content) : "Plano gerado com sucesso.";
+          const title = `Plano: ${input.focusArea} (${new Date().toLocaleDateString()})`;
+          await saveStudyPlan(userId, title, planContent, input.focusArea);
+          return { success: true, title, content: planContent } as const;
+        } catch (error) {
+          console.error("Failed to generate study plan", error);
+          throw new Error("Não foi possível gerar o plano de estudos personalizado agora.");
+        }
+      }),
     updates: publicProcedure.query(async () => {
       return await getApprovedAIUpdateCandidates();
     }),

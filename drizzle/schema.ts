@@ -103,6 +103,30 @@ export const savedExplanations = mysqlTable("saved_explanations", {
 export type SavedExplanation = typeof savedExplanations.$inferSelect;
 export type InsertSavedExplanation = typeof savedExplanations.$inferInsert;
 
+export const studentMemories = mysqlTable("student_memories", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  topic: varchar("topic", { length: 255 }).notNull(),
+  summary: text("summary").notNull(),
+  category: varchar("category", { length: 80 }).default("Geral").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export type StudentMemory = typeof studentMemories.$inferSelect;
+export type InsertStudentMemory = typeof studentMemories.$inferInsert;
+
+export const studyPlans = mysqlTable("study_plans", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+  focusArea: varchar("focusArea", { length: 120 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type StudyPlan = typeof studyPlans.$inferSelect;
+export type InsertStudyPlan = typeof studyPlans.$inferInsert;
+
 export const libraryReviews = mysqlTable("library_reviews", {
   id: int("id").autoincrement().primaryKey(),
   libraryItemId: varchar("libraryItemId", { length: 120 }).notNull(),

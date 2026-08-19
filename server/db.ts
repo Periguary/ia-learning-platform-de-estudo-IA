@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -369,4 +369,34 @@ export async function getSavedExplanations(userId: number) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(savedExplanations).where(eq(savedExplanations.userId, userId)).orderBy(desc(savedExplanations.createdAt));
+}
+
+export async function upsertStudentMemory(userId: number, topic: string, summary: string, category: string = "Geral") {
+  const db = await getDb();
+  if (!db) return;
+  // Check if memory for this topic exists
+  const existing = await db.select().from(studentMemories).where(and(eq(studentMemories.userId, userId), eq(studentMemories.topic, topic)));
+  if (existing.length > 0) {
+    await db.update(studentMemories).set({ summary, category, updatedAt: new Date() }).where(eq(studentMemories.id, existing[0].id));
+  } else {
+    await db.insert(studentMemories).values({ userId, topic, summary, category });
+  }
+}
+
+export async function getStudentMemories(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(studentMemories).where(eq(studentMemories.userId, userId)).orderBy(desc(studentMemories.updatedAt));
+}
+
+export async function saveStudyPlan(userId: number, title: string, content: string, focusArea: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(studyPlans).values({ userId, title, content, focusArea });
+}
+
+export async function getStudyPlans(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(studyPlans).where(eq(studyPlans.userId, userId)).orderBy(desc(studyPlans.createdAt));
 }

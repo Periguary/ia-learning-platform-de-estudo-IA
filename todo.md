@@ -426,4 +426,7 @@
 - [x] Criar página dedicada de revisão (`/saved-explanations`) para visualizar, buscar e filtrar explicações salvas do Professor Virtual.
 - [x] Implementar organização por tags e categorias personalizadas (Conceitos, Matemática, Código & Python, Machine Learning, Arquitetura de IA) ao salvar explicações.
 - [x] Adicionar seletor de velocidade de áudio (1.0x, 1.25x, 1.5x) para a leitura em voz alta (TTS) do Professor Virtual.
+- [x] Implementar gerador de planos de estudo personalizados com base nas interações e objetivos do aluno.
+- [x] Adicionar seletor de personalidade pedagógica (Padrão, Socrático, Bem-Humorado, Rigoroso/Acadêmico).
+- [x] Desenvolver sistema de memória de longo prazo para que o Professor Virtual lembre do progresso e dúvidas anteriores do aluno.
 - [x] Executar testes de regressão (106 testes 100% verdes), atualizar o site publicado e sincronizar o repositório GitHub.

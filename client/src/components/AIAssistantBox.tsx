@@ -3,6 +3,7 @@ import { Sparkles, History, BookMarked, Loader2, RotateCcw, Trash2, HelpCircle, 
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
+import { Streamdown } from "streamdown";
 
 type AIAssistantBoxProps = {
   moduleId: string;
@@ -42,6 +43,19 @@ export function AIAssistantBox({
   } | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [personality, setPersonality] = useState<string>("padrao");
+  const [studyPlanModalOpen, setStudyPlanModalOpen] = useState(false);
+  const [studyPlanGoal, setStudyPlanGoal] = useState("");
+  const [studyPlanResult, setStudyPlanResult] = useState<{ title: string; content: string } | null>(null);
+
+  const studyPlanMutation = trpc.ai.generateStudyPlan.useMutation({
+    onSuccess: (data) => {
+      setStudyPlanResult(data);
+    },
+    onError: (err) => {
+      alert(err.message || "Erro ao gerar plano de estudos.");
+    }
+  });
 
   const quizMutation = trpc.ai.generateQuiz.useMutation({
     onSuccess: (data) => {
@@ -170,6 +184,7 @@ export function AIAssistantBox({
       studentNotes,
       question: content,
       history: previousConversation,
+      personality,
     });
   };
 
@@ -200,21 +215,44 @@ export function AIAssistantBox({
       className="mt-6 overflow-hidden rounded-xl border border-primary/20 bg-card shadow-sm"
     >
       <div className="flex items-center justify-between border-b border-border bg-gradient-to-r from-primary/10 via-secondary/10 to-transparent p-5">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-              <Sparkles className="size-5 animate-pulse" aria-hidden="true" />
-            </div>
-            <div>
-              <h2 id="ai-assistant-title" className="text-xl font-bold">
-                Professor Virtual de IA
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Seu mentor dedicado para aulas particulares, explicações passo a passo e exercícios guiados sobre {lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`}.
-              </p>
-            </div>
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <Sparkles className="size-5 animate-pulse" aria-hidden="true" />
           </div>
+          <div>
+            <h2 id="ai-assistant-title" className="text-xl font-bold">
+              Professor Virtual de IA
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Seu mentor dedicado para aulas particulares, explicações passo a passo e exercícios guiados sobre {lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`}.
+            </p>
+          </div>
+        </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1.5 bg-background border border-border rounded-lg px-2 py-1">
+            <span className="text-[11px] text-muted-foreground font-semibold">Estilo:</span>
+            <select
+              value={personality}
+              onChange={(e) => setPersonality(e.target.value)}
+              className="bg-background text-foreground text-xs font-medium outline-none cursor-pointer"
+              title="Escolha a personalidade do professor"
+            >
+              <option value="padrao">Padrão Didático</option>
+              <option value="socratico">Socrático (Guiado)</option>
+              <option value="bem-humorado">Bem-Humorado</option>
+              <option value="rigoroso">Rigoroso / Acadêmico</option>
+            </select>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-xs text-purple-400 border-purple-500/30 hover:bg-purple-500/10"
+            onClick={() => setStudyPlanModalOpen(true)}
+            title="Criar plano de estudos semanal personalizado com IA"
+          >
+            🎯 Plano de Estudos
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -229,12 +267,11 @@ export function AIAssistantBox({
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 text-xs"
-            onClick={startNewTopic}
-            title="Começar um novo tópico sem apagar o histórico salvo"
+            className="gap-1.5 text-xs text-amber-300 border-amber-500/30 hover:bg-amber-500/10"
+            onClick={exportChatPdf}
+            title="Exportar conversa em PDF"
           >
-            <RotateCcw className="size-4" />
-            Novo Tópico
+            📥 Exportar PDF
           </Button>
           <Button
             variant="outline"
@@ -242,7 +279,7 @@ export function AIAssistantBox({
             className="gap-2 text-xs text-destructive hover:text-destructive"
             onClick={clearSavedHistory}
             disabled={clearHistoryMutation.isPending}
-            title="Apagar o histórico salvo deste módulo"
+            title="Limpar Histórico"
           >
             {clearHistoryMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
             Limpar Histórico
@@ -250,20 +287,12 @@ export function AIAssistantBox({
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 text-xs text-amber-300 border-amber-500/30 hover:bg-amber-500/10"
-            onClick={exportChatPdf}
-            title="Exportar histórico da conversa para PDF / Impressão"
-          >
-            📄 Exportar PDF
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
             className="gap-2 text-xs"
-            onClick={() => setShowHistory(prev => !prev)}
+            onClick={startNewTopic}
+            title="Começar um novo tópico sem apagar o histórico salvo"
           >
-            <History className="size-4" />
-            {showHistory ? "Voltar ao Chat" : "Histórico Salvo"}
+            <RotateCcw className="size-4" />
+            Novo Tópico
           </Button>
         </div>
       </div>
@@ -312,6 +341,70 @@ export function AIAssistantBox({
           className="rounded-none border-0 shadow-none"
           onSaveExplanation={handleSaveExplanation}
         />
+      )}
+
+      {/* Study Plan Modal */}
+      {studyPlanModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="futurist-panel max-w-xl w-full p-6 space-y-6 rounded-none border border-primary/40 bg-card">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-purple-400">Plano de Estudos Personalizado</span>
+                <h3 className="text-xl font-bold mt-1">Gerador de Roteiro com IA</h3>
+              </div>
+              <button
+                onClick={() => setStudyPlanModalOpen(false)}
+                className="text-muted-foreground hover:text-foreground text-xl"
+              >
+                ✕
+              </button>
+            </div>
+
+            {studyPlanResult ? (
+              <div className="space-y-4">
+                <div className="p-4 bg-muted/20 border border-border rounded-lg max-h-80 overflow-y-auto text-sm">
+                  <h4 className="font-bold text-primary mb-2">{studyPlanResult.title}</h4>
+                  <div className="prose prose-sm dark:prose-invert">
+                    <Streamdown>{studyPlanResult.content}</Streamdown>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 pt-2">
+                  <Button variant="outline" onClick={() => setStudyPlanResult(null)}>
+                    Criar Novo Plano
+                  </Button>
+                  <Button onClick={() => setStudyPlanModalOpen(false)}>
+                    Concluir
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Área de Foco</label>
+                  <input
+                    type="text"
+                    placeholder="Ex: Machine Learning em Produção, Fine-Tuning de LLMs..."
+                    value={studyPlanGoal}
+                    onChange={(e) => setStudyPlanGoal(e.target.value)}
+                    className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div className="flex justify-end gap-3 pt-4 border-t border-border">
+                  <Button variant="outline" onClick={() => setStudyPlanModalOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={() => studyPlanMutation.mutate({ focusArea: lessonTitle || courseTitle, goal: studyPlanGoal || "Dominar os conceitos avançados de IA e aplicação prática" })}
+                    disabled={studyPlanMutation.isPending}
+                  >
+                    {studyPlanMutation.isPending ? <Loader2 className="size-4 animate-spin mr-2" /> : null}
+                    Gerar Meu Plano Semanal
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Quiz Modal */}

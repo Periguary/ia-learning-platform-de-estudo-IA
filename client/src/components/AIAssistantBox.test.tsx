@@ -77,8 +77,18 @@ vi.mock("@/lib/trpc", () => ({
           mutate: vi.fn(),
         }),
       },
+      generateStudyPlan: {
+        useMutation: () => ({
+          isPending: false,
+          mutate: vi.fn(),
+        }),
+      },
     },
   },
+}));
+
+vi.mock("streamdown", () => ({
+  Streamdown: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 import { AIAssistantBox } from "./AIAssistantBox";
