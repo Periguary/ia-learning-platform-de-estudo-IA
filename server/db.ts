@@ -400,3 +400,37 @@ export async function getStudyPlans(userId: number) {
   if (!db) return [];
   return db.select().from(studyPlans).where(eq(studyPlans.userId, userId)).orderBy(desc(studyPlans.createdAt));
 }
+
+export async function updateStudyPlanProgress(userId: number, planId: number, progressPercent: number, isCompleted: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(studyPlans)
+    .set({ progressPercent, isCompleted })
+    .where(and(eq(studyPlans.id, planId), eq(studyPlans.userId, userId)));
+}
+
+export async function deleteStudyPlan(userId: number, planId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .delete(studyPlans)
+    .where(and(eq(studyPlans.id, planId), eq(studyPlans.userId, userId)));
+}
+
+export async function deleteStudentMemory(userId: number, memoryId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .delete(studentMemories)
+    .where(and(eq(studentMemories.id, memoryId), eq(studentMemories.userId, userId)));
+}
+
+export async function updateStudentMemory(userId: number, memoryId: number, topic: string, summary: string, category: string) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(studentMemories)
+    .set({ topic, summary, category, updatedAt: new Date() })
+    .where(and(eq(studentMemories.id, memoryId), eq(studentMemories.userId, userId)));
+}

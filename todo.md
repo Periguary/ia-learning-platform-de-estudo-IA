@@ -429,4 +429,7 @@
 - [x] Implementar gerador de planos de estudo personalizados com base nas interações e objetivos do aluno.
 - [x] Adicionar seletor de personalidade pedagógica (Padrão, Socrático, Bem-Humorado, Rigoroso/Acadêmico).
 - [x] Desenvolver sistema de memória de longo prazo para que o Professor Virtual lembre do progresso e dúvidas anteriores do aluno.
+- [x] Implementar barra de progresso visual interativa para acompanhar a conclusão de tarefas semanais dos planos de estudo.
+- [x] Criar seção de gerenciamento de memórias de longo prazo na página de perfil do usuário.
+- [x] Adicionar exportação de planos de estudo para arquivo PDF e Markdown.
 - [x] Executar testes de regressão (106 testes 100% verdes), atualizar o site publicado e sincronizar o repositório GitHub.

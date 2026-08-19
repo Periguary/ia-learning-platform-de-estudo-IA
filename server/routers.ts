@@ -27,6 +27,10 @@ import {
   getStudentMemories,
   saveStudyPlan,
   getStudyPlans,
+  updateStudyPlanProgress,
+  deleteStudyPlan,
+  deleteStudentMemory,
+  updateStudentMemory,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -289,6 +293,43 @@ export const appRouter = router({
       if (!ctx.user?.id) return [];
       return await getStudyPlans(ctx.user.id);
     }),
+    updateStudyPlanProgress: publicProcedure
+      .input(z.object({
+        planId: z.number().int().positive(),
+        progressPercent: z.number().int().min(0).max(100),
+        isCompleted: z.number().int().min(0).max(1),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await updateStudyPlanProgress(ctx.user.id, input.planId, input.progressPercent, input.isCompleted);
+        return { success: true } as const;
+      }),
+    deleteStudyPlan: publicProcedure
+      .input(z.object({ planId: z.number().int().positive() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await deleteStudyPlan(ctx.user.id, input.planId);
+        return { success: true } as const;
+      }),
+    deleteStudentMemory: publicProcedure
+      .input(z.object({ memoryId: z.number().int().positive() }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await deleteStudentMemory(ctx.user.id, input.memoryId);
+        return { success: true } as const;
+      }),
+    updateStudentMemory: publicProcedure
+      .input(z.object({
+        memoryId: z.number().int().positive(),
+        topic: z.string().trim().min(1).max(255),
+        summary: z.string().trim().min(1).max(5_000),
+        category: z.string().trim().min(1).max(80),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await updateStudentMemory(ctx.user.id, input.memoryId, input.topic, input.summary, input.category);
+        return { success: true } as const;
+      }),
     generateStudyPlan: publicProcedure
       .input(z.object({
         focusArea: z.string().trim().min(1).max(120),

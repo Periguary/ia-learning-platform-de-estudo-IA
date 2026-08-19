@@ -121,6 +121,8 @@ export const studyPlans = mysqlTable("study_plans", {
   title: varchar("title", { length: 255 }).notNull(),
   content: text("content").notNull(),
   focusArea: varchar("focusArea", { length: 120 }).notNull(),
+  isCompleted: int("isCompleted").default(0).notNull(), // 0 ou 1
+  progressPercent: int("progressPercent").default(0).notNull(), // 0 a 100
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
