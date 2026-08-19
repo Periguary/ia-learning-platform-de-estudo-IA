@@ -61,7 +61,7 @@ export type AIChatBoxProps = {
   /**
    * Callback when user wants to save an assistant response to reading list
    */
-  onSaveExplanation?: (content: string) => void;
+  onSaveExplanation?: (content: string, category: string) => void;
 };
 
 /**
@@ -127,6 +127,8 @@ export function AIChatBox({
   onSaveExplanation,
 }: AIChatBoxProps) {
   const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+  const [playbackRate, setPlaybackRate] = useState<number>(1.0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("Conceitos");
 
   const handleSpeak = (text: string, index: number) => {
     if (!("speechSynthesis" in window)) {
@@ -141,7 +143,7 @@ export function AIChatBox({
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "pt-BR";
-    utterance.rate = 1.0;
+    utterance.rate = playbackRate;
     utterance.onend = () => setSpeakingIndex(null);
     utterance.onerror = () => setSpeakingIndex(null);
     setSpeakingIndex(index);
@@ -292,22 +294,48 @@ export function AIChatBox({
                           <div className="prose prose-sm dark:prose-invert max-w-none">
                             <Streamdown>{message.content}</Streamdown>
                           </div>
-                          <div className="flex items-center gap-2 pt-2 border-t border-border/40 text-xs">
-                            <button
-                              type="button"
-                              onClick={() => handleSpeak(message.content, index)}
-                              className="flex items-center gap-1 text-primary hover:underline font-medium"
-                            >
-                              🔊 {speakingIndex === index ? "Parar Áudio" : "Ouvir Explicação"}
-                            </button>
-                            {onSaveExplanation && (
+                          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/40 text-xs">
+                            <div className="flex items-center gap-1.5">
                               <button
                                 type="button"
-                                onClick={() => onSaveExplanation(message.content)}
-                                className="flex items-center gap-1 text-emerald-400 hover:underline font-medium ml-auto"
+                                onClick={() => handleSpeak(message.content, index)}
+                                className="flex items-center gap-1 text-primary hover:underline font-medium"
                               >
-                                📌 Salvar na Lista de Leitura
+                                🔊 {speakingIndex === index ? "Parar Áudio" : "Ouvir"}
                               </button>
+                              <select
+                                value={playbackRate}
+                                onChange={(e) => setPlaybackRate(Number(e.target.value))}
+                                className="bg-background text-foreground border border-border rounded px-1.5 py-0.5 text-[11px]"
+                                title="Velocidade da voz"
+                              >
+                                <option value={1.0}>1.0x</option>
+                                <option value={1.25}>1.25x</option>
+                                <option value={1.5}>1.5x</option>
+                              </select>
+                            </div>
+                            {onSaveExplanation && (
+                              <div className="flex items-center gap-1.5 ml-auto">
+                                <select
+                                  value={selectedCategory}
+                                  onChange={(e) => setSelectedCategory(e.target.value)}
+                                  className="bg-background text-foreground border border-border rounded px-1.5 py-0.5 text-[11px]"
+                                  title="Categoria / Tag"
+                                >
+                                  <option value="Conceitos">Conceitos</option>
+                                  <option value="Matemática">Matemática</option>
+                                  <option value="Código & Python">Código & Python</option>
+                                  <option value="Machine Learning">Machine Learning</option>
+                                  <option value="Arquitetura de IA">Arquitetura de IA</option>
+                                </select>
+                                <button
+                                  type="button"
+                                  onClick={() => onSaveExplanation(message.content, selectedCategory)}
+                                  className="flex items-center gap-1 text-emerald-400 hover:underline font-medium"
+                                >
+                                  📌 Salvar
+                                </button>
+                              </div>
                             )}
                           </div>
                         </>

@@ -96,6 +96,7 @@ export const savedExplanations = mysqlTable("saved_explanations", {
   title: varchar("title", { length: 300 }).notNull(),
   content: text("content").notNull(),
   moduleId: varchar("moduleId", { length: 120 }).notNull(),
+  category: varchar("category", { length: 80 }).default("Geral").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

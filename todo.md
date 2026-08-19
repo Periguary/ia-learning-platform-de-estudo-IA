@@ -423,4 +423,7 @@
 - [x] Adicionar botão de leitura em voz alta (TTS) nativo nas respostas do Professor Virtual.
 - [x] Implementar a funcionalidade de salvar explicações específicas do chat diretamente na Lista de Leitura.
 - [x] Criar opção para exportar o histórico completo de conversas com o tutor para PDF / impressão formatada.
+- [x] Criar página dedicada de revisão (`/saved-explanations`) para visualizar, buscar e filtrar explicações salvas do Professor Virtual.
+- [x] Implementar organização por tags e categorias personalizadas (Conceitos, Matemática, Código & Python, Machine Learning, Arquitetura de IA) ao salvar explicações.
+- [x] Adicionar seletor de velocidade de áudio (1.0x, 1.25x, 1.5x) para a leitura em voz alta (TTS) do Professor Virtual.
 - [x] Executar testes de regressão (106 testes 100% verdes), atualizar o site publicado e sincronizar o repositório GitHub.

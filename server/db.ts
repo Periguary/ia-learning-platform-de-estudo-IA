@@ -353,7 +353,7 @@ export async function deleteVideoNote(userId: number, noteId: number, videoId: s
   return getVideoNotes(userId, videoId);
 }
 
-export async function saveExplanation(userId: number, title: string, content: string, moduleId: string) {
+export async function saveExplanation(userId: number, title: string, content: string, moduleId: string, category: string = "Geral") {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   await db.insert(savedExplanations).values({
@@ -361,6 +361,7 @@ export async function saveExplanation(userId: number, title: string, content: st
     title,
     content,
     moduleId,
+    category,
   });
 }
 

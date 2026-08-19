@@ -75,12 +75,13 @@ export function AIAssistantBox({
     },
   });
 
-  const handleSaveExplanation = (content: string) => {
+  const handleSaveExplanation = (content: string, category: string = "Conceitos") => {
     const title = lessonTitle ? `Aula: ${lessonTitle}` : `Tópico de ${courseTitle}`;
     saveExplanationMutation.mutate({
       title,
       content,
       moduleId,
+      category,
     });
   };
 

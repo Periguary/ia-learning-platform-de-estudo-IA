@@ -110,6 +110,13 @@ export default function Navigation() {
                 Dashboard
               </button>
               <button
+                onClick={() => navigate("/saved-explanations")}
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-primary bg-transparent border-none cursor-pointer futurist-nav-item"
+                title="Minhas Explicações Salvas"
+              >
+                Explicações Salvas
+              </button>
+              <button
                 onClick={() => navigate("/profile")}
                 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer futurist-nav-item"
               >
