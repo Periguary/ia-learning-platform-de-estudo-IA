@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        header { margin-bottom: 40px; }
+        .kicker { color: #00f0ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        h2 { font-size: 44px; font-weight: 900; text-transform: uppercase; }
+
+        .erd-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            position: relative;
+            z-index: 2;
+        }
+        .table-block {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(112, 0, 255, 0.3);
+            padding: 0;
+        }
+        .table-header {
+            background: rgba(112, 0, 255, 0.1);
+            border-bottom: 1px solid #7000ff;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-header i { color: #7000ff; font-size: 14px; }
+        .table-header h3 { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .table-body { padding: 15px 20px; }
+        .column {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .column:last-child { border-bottom: none; }
+        .col-name { color: #fff; font-family: 'JetBrains Mono', monospace; }
+        .col-type { color: #666; font-size: 12px; text-transform: uppercase; }
+        .pk { color: #00f0ff; font-weight: bold; }
+        .fk { color: #39ff14; font-weight: bold; }
+
+        .summary-box {
+            grid-column: span 2;
+            margin-top: 10px;
+            padding: 20px;
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px dashed rgba(0, 240, 255, 0.2);
+            font-size: 16px;
+            color: #a0a0a0;
+            line-height: 1.4;
+        }
+        .summary-box strong { color: #00f0ff; }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="grid-overlay"></div>
+        <header>
+            <div class="kicker">Data Architecture // MySQL</div>
+            <h2>Arquitetura de Dados Relacional</h2>
+        </header>
+        
+        <div class="erd-container">
+            <div class="table-block">
+                <div class="table-header"><i class="fas fa-user"></i><h3>users</h3></div>
+                <div class="table-body">
+                    <div class="column"><span class="col-name pk">id</span><span class="col-type">int (pk)</span></div>
+                    <div class="column"><span class="col-name">openId</span><span class="col-type">varchar(191)</span></div>
+                    <div class="column"><span class="col-name">name</span><span class="col-type">varchar(160)</span></div>
+                    <div class="column"><span class="col-name">role</span><span class="col-type">enum('admin','user')</span></div>
+                </div>
+            </div>
+
+            <div class="table-block">
+                <div class="table-header"><i class="fas fa-brain"></i><h3>student_memories</h3></div>
+                <div class="table-body">
+                    <div class="column"><span class="col-name pk">id</span><span class="col-type">int (pk)</span></div>
+                    <div class="column"><span class="col-name fk">userId</span><span class="col-type">int (fk)</span></div>
+                    <div class="column"><span class="col-name">topic</span><span class="col-type">varchar(255)</span></div>
+                    <div class="column"><span class="col-name">summary</span><span class="col-type">text</span></div>
+                </div>
+            </div>
+
+            <div class="table-block">
+                <div class="table-header"><i class="fas fa-save"></i><h3>saved_explanations</h3></div>
+                <div class="table-body">
+                    <div class="column"><span class="col-name pk">id</span><span class="col-type">int (pk)</span></div>
+                    <div class="column"><span class="col-name fk">userId</span><span class="col-type">int (fk)</span></div>
+                    <div class="column"><span class="col-name">title</span><span class="col-type">varchar(300)</span></div>
+                    <div class="column"><span class="col-name">category</span><span class="col-type">varchar(80)</span></div>
+                </div>
+            </div>
+
+            <div class="table-block">
+                <div class="table-header"><i class="fas fa-calendar-check"></i><h3>study_plans</h3></div>
+                <div class="table-body">
+                    <div class="column"><span class="col-name pk">id</span><span class="col-type">int (pk)</span></div>
+                    <div class="column"><span class="col-name fk">userId</span><span class="col-type">int (fk)</span></div>
+                    <div class="column"><span class="col-name">progressPercent</span><span class="col-type">int</span></div>
+                    <div class="column"><span class="col-name">isCompleted</span><span class="col-type">int</span></div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                O schema foi projetado para <strong>persistência de longo prazo</strong> e <strong>personalização extrema</strong>. Através do Drizzle ORM, garantimos consultas type-safe que alimentam a memória do Professor Virtual e o radar de competências em tempo real.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

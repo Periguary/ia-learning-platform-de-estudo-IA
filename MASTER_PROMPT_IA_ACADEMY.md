@@ -1,6 +1,6 @@
 # Prompt Mestre e Arquitetura Completa: IA Academy
 
-Este documento consolida a arquitetura, o modelo de dados, as regras de negócio, as funcionalidades interativas e as instruções completas para recriar do zero a **IA Academy**, uma plataforma educacional de ponta em Inteligência Artificial, Machine Learning, Deep Learning, IA Generativa e Engenharia de Software.
+Este documento consolida a arquitetura, o modelo de dados relacional, as regras de negócio, o guia de execução com IA local (Ollama) e as instruções completas para recriar do zero a **IA Academy**, uma plataforma educacional de ponta em Inteligência Artificial, Machine Learning, Deep Learning, IA Generativa e Engenharia de Software.
 
 ---
 
@@ -24,43 +24,106 @@ A **IA Academy** é projetada sob uma estética futurista "Elevify-inspired" com
 
 ---
 
-## 3. Modelo de Dados (Esquema Drizzle / MySQL)
+## 3. Arquitetura de Banco de Dados Relacional (Schema Drizzle / MySQL)
 
-### 3.1. `saved_explanations` (Explicações Salvas do Professor Virtual)
+O banco de dados relacional gerencia o ciclo de vida do aluno, preferências, histórico de chat, memórias de longo prazo, planos de estudo e certificações.
+
+### 3.1. Tabela `users` (Usuários e Papéis)
+Gerencia a autenticação e permissões da plataforma.
 - `id`: `int`, PK, Auto-increment
-- `userId`: `int`, Not Null
+- `openId`: `varchar(191)`, Unique, Not Null
+- `name`: `varchar(160)`, Not Null
+- `email`: `varchar(191)`, Not Null
+- `role`: `enum('admin', 'user')`, Default `'user'`, Not Null
+- `createdAt`: `timestamp`, Default Now
+
+### 3.2. Tabela `saved_explanations` (Explicações Salvas do Professor Virtual)
+Armazena as respostas explicativas do tutor marcadas pelo aluno.
+- `id`: `int`, PK, Auto-increment
+- `userId`: `int`, Foreign Key (`users.id`), Not Null
 - `title`: `varchar(300)`, Not Null
 - `content`: `text`, Not Null
 - `moduleId`: `varchar(120)`, Not Null
-- `category`: `varchar(80)`, Default `"Geral"` (ex: Conceitos, Matemática, Código & Python, Machine Learning, Arquitetura de IA)
+- `category`: `varchar(80)`, Default `"Geral"`, Not Null (Ex: Conceitos, Matemática, Código & Python, Machine Learning, Arquitetura de IA)
 - `createdAt`: `timestamp`, Default Now
 
-### 3.2. `student_memories` (Memória de Longo Prazo do Aluno)
+### 3.3. Tabela `student_memories` (Memória de Longo Prazo do Aluno)
+Registra o perfil de aprendizado, dúvidas recorrentes e tópicos dominados.
 - `id`: `int`, PK, Auto-increment
-- `userId`: `int`, Not Null
+- `userId`: `int`, Foreign Key (`users.id`), Not Null
 - `topic`: `varchar(255)`, Not Null
 - `summary`: `text`, Not Null
-- `category`: `varchar(80)`, Default `"Geral"`
+- `category`: `varchar(80)`, Default `"Geral"`, Not Null
 - `updatedAt`: `timestamp`, Default Now
 
-### 3.3. `study_plans` (Planos de Estudo Semanais Personalizados)
+### 3.4. Tabela `study_plans` (Planos de Estudo Semanais Personalizados)
+Mantém os roteiros gerados pela IA e o progresso das tarefas.
 - `id`: `int`, PK, Auto-increment
-- `userId`: `int`, Not Null
+- `userId`: `int`, Foreign Key (`users.id`), Not Null
 - `title`: `varchar(255)`, Not Null
 - `content`: `text`, Not Null
 - `focusArea`: `varchar(120)`, Not Null
-- `isCompleted`: `int`, Default `0` (0 ou 1)
-- `progressPercent`: `int`, Default `0` (0 a 100)
+- `isCompleted`: `int`, Default `0`, Not Null (0 = Em andamento, 1 = Concluído 100%)
+- `progressPercent`: `int`, Default `0`, Not Null (0 a 100%)
 - `createdAt`: `timestamp`, Default Now
 
-### 3.4. Tabelas de Suporte (`library_reviews`, `user_library_favorites`, `user_radar_favorites`, `video_notes`, `ai_conversations`)
-- Gerenciam avaliações de itens da biblioteca, favoritos do radar e da biblioteca, notas com timestamps em vídeo-aulas e histórico de conversas com o chat.
+### 3.5. Tabelas de Suporte e Estado (`ai_conversations`, `user_library_favorites`, `library_reviews`, `video_notes`)
+- `ai_conversations`: Histórico de perguntas e respostas do chat por módulo e usuário.
+- `user_library_favorites`: Favoritos da biblioteca técnica e whitepapers.
+- `library_reviews`: Avaliações e comentários dos alunos nos artigos.
+- `video_notes`: Anotações sincronizadas com timestamps em vídeo-aulas.
 
 ---
 
-## 4. Módulos Principais e Regras de Negócio
+## 4. Guia de Adaptação para Execução Local com Ollama
 
-### 4.1. Professor Virtual de IA (Tutor Especializado)
+Para rodar o sistema utilizando uma API de IA local via **Ollama** (substituindo o provedor remoto de LLM), siga as orientações abaixo:
+
+### 4.1. Configuração do Ollama
+1. Instale o Ollama em sua máquina (`ollama run llama3` ou `ollama run mistral`).
+2. Certifique-se de que o servidor local está rodando em `http://localhost:11434`.
+
+### 4.2. Adaptação do Helper LLM no Backend (`server/_core/llm.ts`)
+Substitua ou adicione um adaptador HTTP no arquivo de chamada de IA para redirecionar as requisições para a API REST do Ollama:
+
+```ts
+import fetch from "node-fetch";
+
+export async function invokeLocalLLM({ model = "llama3", messages, temperature = 0.7 }) {
+  const response = await fetch("http://localhost:11434/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model,
+      messages: messages.map(m => ({ role: m.role, content: typeof m.content === "string" ? m.content : JSON.stringify(m.content) })),
+      stream: false,
+      options: { temperature }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ollama API error: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return {
+    choices: [
+      {
+        message: {
+          role: "assistant",
+          content: data.message?.content || ""
+        }
+      }
+    ]
+  };
+}
+```
+
+---
+
+## 5. Módulos Principais e Regras de Negócio
+
+### 5.1. Professor Virtual de IA (Tutor Especializado)
 - **Personalidades Pedagógicas**: O aluno pode alternar entre quatro estilos docentes ao iniciar uma dúvida:
   1. *Padrão Didático*: Exemplo equilibrado, claro e profissional.
   2. *Socrático*: O professor não entrega a resposta pronta, fazendo perguntas guiadas para instigar o raciocínio.
@@ -71,20 +134,20 @@ A **IA Academy** é projetada sob uma estética futurista "Elevify-inspired" com
 - **Leitura em Voz Alta (TTS)**: Integração nativa com `window.speechSynthesis` com seletor de velocidade de áudio (`1.0x`, `1.25x`, `1.5x`).
 - **Exportação e Salvamento**: Permite salvar explicações diretamente na Lista de Leitura (com escolha de categoria) e exportar o histórico completo da conversa para PDF formatado para impressão.
 
-### 4.2. Planos de Estudo Semanais e Progresso
-- Geração automática via IA (`gpt-5-mini`) considerando a área de foco, objetivo do aluno e o histórico recuperado das **memórias de longo prazo**.
+### 5.2. Planos de Estudo Semanais e Progresso
+- Geração automática via IA considerando a área de foco, objetivo do aluno e o histórico recuperado das **memórias de longo prazo**.
 - **Barra de Progresso Interativa**: Cada tarefa semanal possui marcação de conclusão com atualização instantânea no banco de dados e cálculo automático de porcentagem.
 - **Conquistas Automáticas**: Ao atingir 100% de progresso em um plano de estudo, a plataforma desbloqueia automaticamente uma medalha temática no perfil do aluno.
 - **Compartilhamento Público**: Geração de link público seguro via token para que colegas e recrutadores possam visualizar o plano de estudos concluído.
 
-### 4.3. Radar de Competências e Perfil
+### 5.3. Radar de Competências e Perfil
 - Seção de estatísticas no Perfil (`/profile`) exibindo tempo total de estudo, dias consecutivos (streak), gráfico de atividade semanal e um **Gráfico de Radar de Competências** calculado com base na conclusão dos planos de estudo por domínio (Machine Learning, IA Generativa, Engenharia de Software, Matemática Aplicada, Deep Learning).
 - Gerenciamento completo de memórias de longo prazo salvas pelo tutor, com opções de edição e exclusão.
 
 ---
 
-## 5. Instruções de Prompt Mestre para Reprodução em Outra IA
+## 6. Prompt Mestre para Reprodução em Outra IA
 
 Se você deseja instruir outra inteligência artificial a construir este exato sistema, utilize o comando abaixo:
 
-> *"Atue como um Arquiteto de Software Sênior e Engenheiro Frontend/Backend. Preciso que você construa do zero a plataforma **IA Academy** (React 19, Tailwind CSS 4, tRPC, Drizzle ORM, MySQL). A aplicação deve conter: (1) Um **Professor Virtual de IA** com suporte a 4 personalidades pedagógicas, geração de quizzes sob demanda, TTS com seletor de velocidade e salvamento de explicações em categorias na Lista de Leitura; (2) Um **Gerador de Planos de Estudo** baseado no histórico de interações e memórias de longo prazo do aluno, com barra de progresso interativa, exportação PDF/Markdown e links de compartilhamento público; (3) Um **Painel de Perfil** com gerenciamento de memórias, histórico de certificações e um **Gráfico de Radar de Competências**; e (4) Uma suíte de testes unitários abrangente utilizando Vitest. Siga estritamente boas práticas de tipagem, design neon futurista e responsividade mobile-first."*
+> *"Atue como um Arquiteto de Software Sênior e Engenheiro Frontend/Backend. Preciso que você construa do zero a plataforma **IA Academy** (React 19, Tailwind CSS 4, tRPC, Drizzle ORM, MySQL). A aplicação deve conter: (1) Um **Professor Virtual de IA** com suporte a 4 personalidades pedagógicas, geração de quizzes sob demanda, TTS com seletor de velocidade e salvamento de explicações em categorias na Lista de Leitura; (2) Um **Gerador de Planos de Estudo** baseado no histórico de interações e memórias de longo prazo do aluno, com barra de progresso interativa, exportação PDF/Markdown e links de compartilhamento público; (3) Um **Painel de Perfil** com gerenciamento de memórias, histórico de certificações e um **Gráfico de Radar de Competências**; (4) Esquema relacional Drizzle completo para usuários, explicações, memórias e planos; e (5) Suíte de testes unitários abrangente utilizando Vitest. Siga estritamente boas práticas de tipagem, design neon futurista e responsividade mobile-first."*
