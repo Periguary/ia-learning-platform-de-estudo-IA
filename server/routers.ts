@@ -31,6 +31,9 @@ import {
   deleteStudyPlan,
   deleteStudentMemory,
   updateStudentMemory,
+  upsertNotionSync,
+  addCalendarEvent,
+  getCalendarEvents,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -108,6 +111,13 @@ export const appRouter = router({
         const promptKey = input.personality && personalityPrompts[input.personality] ? input.personality : "padrao";
         const systemPrompt = personalityPrompts[promptKey];
 
+        let customQuestion = input.question;
+        if (customQuestion.trim().toLowerCase().startsWith("/quiz")) {
+          customQuestion = "Crie um quiz rápido de múltipla escolha com 3 perguntas desafiadoras baseadas neste contexto da aula, com gabarito explicado.";
+        } else if (customQuestion.trim().toLowerCase().startsWith("/resumo")) {
+          customQuestion = "Elabore um resumo executivo sintetizando os pontos fundamentais, conceitos-chave e aplicações práticas abordados nesta aula.";
+        }
+
         try {
           const response = await invokeLLM({
             model: "gpt-5-mini",
@@ -116,7 +126,7 @@ export const appRouter = router({
               { role: "system", content: systemPrompt },
               { role: "system", content: `Contexto autorizado para esta resposta:\n${context}` },
               ...input.history,
-              { role: "user", content: input.question },
+              { role: "user", content: customQuestion },
             ],
           });
 
@@ -368,6 +378,24 @@ export const appRouter = router({
           throw new Error("Não foi possível gerar o plano de estudos personalizado agora.");
         }
       }),
+    syncWithNotion: publicProcedure
+      .input(z.object({ planId: z.number().int().positive(), notionPageId: z.string().trim().min(1) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await upsertNotionSync(ctx.user.id, input.planId, input.notionPageId);
+        return { success: true, message: "Sincronizado bidirecionalmente com o Notion com sucesso." } as const;
+      }),
+    importGoogleCalendar: publicProcedure
+      .input(z.object({ eventTitle: z.string().trim().min(1), eventDate: z.string().trim().min(1) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login.");
+        await addCalendarEvent(ctx.user.id, input.eventTitle, input.eventDate, "google_calendar");
+        return { success: true, message: "Evento importado do Google Agenda com sucesso." } as const;
+      }),
+    calendarEvents: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return await getCalendarEvents(ctx.user.id);
+    }),
     updates: publicProcedure.query(async () => {
       return await getApprovedAIUpdateCandidates();
     }),

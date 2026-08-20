@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -433,4 +433,49 @@ export async function updateStudentMemory(userId: number, memoryId: number, topi
     .update(studentMemories)
     .set({ topic, summary, category, updatedAt: new Date() })
     .where(and(eq(studentMemories.id, memoryId), eq(studentMemories.userId, userId)));
+}
+
+export async function upsertNotionSync(userId: number, studyPlanId: number, notionPageId: string) {
+  const db = await getDb();
+  if (!db) return;
+  const existing = await db
+    .select()
+    .from(notionSyncConfigs)
+    .where(and(eq(notionSyncConfigs.userId, userId), eq(notionSyncConfigs.studyPlanId, studyPlanId)))
+    .limit(1);
+  if (existing.length > 0) {
+    await db
+      .update(notionSyncConfigs)
+      .set({ notionPageId, lastSyncedAt: new Date() })
+      .where(eq(notionSyncConfigs.id, existing[0].id));
+  } else {
+    await db.insert(notionSyncConfigs).values({ userId, studyPlanId, notionPageId });
+  }
+}
+
+export async function getNotionSync(userId: number, studyPlanId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const res = await db
+    .select()
+    .from(notionSyncConfigs)
+    .where(and(eq(notionSyncConfigs.userId, userId), eq(notionSyncConfigs.studyPlanId, studyPlanId)))
+    .limit(1);
+  return res[0] || null;
+}
+
+export async function addCalendarEvent(userId: number, eventTitle: string, eventDate: string, source: string = "google_calendar") {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(externalCalendarEvents).values({ userId, eventTitle, eventDate, source });
+}
+
+export async function getCalendarEvents(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(externalCalendarEvents)
+    .where(eq(externalCalendarEvents.userId, userId))
+    .orderBy(desc(externalCalendarEvents.createdAt));
 }

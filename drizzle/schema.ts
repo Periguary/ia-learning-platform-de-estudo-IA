@@ -151,3 +151,20 @@ export const videoNotes = mysqlTable("video_notes", {
   noteText: text("noteText").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+export const notionSyncConfigs = mysqlTable("notion_sync_configs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  studyPlanId: int("studyPlanId").notNull(),
+  notionPageId: varchar("notionPageId", { length: 191 }).notNull(),
+  lastSyncedAt: timestamp("lastSyncedAt").defaultNow().notNull(),
+});
+
+export const externalCalendarEvents = mysqlTable("external_calendar_events", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  eventTitle: varchar("eventTitle", { length: 255 }).notNull(),
+  eventDate: varchar("eventDate", { length: 64 }).notNull(),
+  source: varchar("source", { length: 64 }).default("google_calendar").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
