@@ -143,14 +143,36 @@ export function AIAssistantBox({
     }
   };
 
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamingContent, setStreamingContent] = useState("");
+  const [useLocalOllama, setUseLocalOllama] = useState(false);
+
   const askMutation = trpc.ai.ask.useMutation({
     onSuccess: ({ answer }) => {
-      setMessages(previous => [
-        ...previous,
-        { role: "assistant", content: answer },
-      ]);
+      // Simulate real-time streaming typewriter effect for natural experience
+      setIsStreaming(true);
+      setStreamingContent("");
+      
+      let index = 0;
+      const speed = 12; // milliseconds per character
+      const interval = setInterval(() => {
+        if (index < answer.length) {
+          setStreamingContent(prev => prev + answer.charAt(index));
+          index++;
+        } else {
+          clearInterval(interval);
+          setIsStreaming(false);
+          setMessages(previous => [
+            ...previous,
+            { role: "assistant", content: answer },
+          ]);
+          setStreamingContent("");
+        }
+      }, speed);
     },
     onError: error => {
+      setIsStreaming(false);
+      setStreamingContent("");
       setMessages(previous => [
         ...previous,
         {
@@ -230,6 +252,19 @@ export function AIAssistantBox({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setUseLocalOllama(prev => !prev)}
+            className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold border transition-all ${
+              useLocalOllama
+                ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+                : "bg-background text-muted-foreground border-border hover:border-primary/40"
+            }`}
+            title="Alternar entre Nuvem Padrão e API Local do Ollama (llama3)"
+          >
+            <span className={`size-2 rounded-full ${useLocalOllama ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground"}`} />
+            {useLocalOllama ? "Ollama Local (Ativo)" : "Nuvem (Padrão)"}
+          </button>
           <div className="flex items-center gap-1.5 bg-background border border-border rounded-lg px-2 py-1">
             <span className="text-[11px] text-muted-foreground font-semibold">Estilo:</span>
             <select
@@ -331,9 +366,13 @@ export function AIAssistantBox({
         </div>
       ) : (
         <AIChatBox
-          messages={messages}
+          messages={
+            isStreaming
+              ? [...messages, { role: "assistant" as const, content: streamingContent }]
+              : messages
+          }
           onSendMessage={handleSendMessage}
-          isLoading={askMutation.isPending}
+          isLoading={askMutation.isPending && !isStreaming}
           placeholder="Digite sua dúvida sobre esta aula..."
           height="420px"
           emptyStateMessage="Pergunte ao tutor e receba explicações e links de materiais complementares."

@@ -1,6 +1,6 @@
 /** @vitest-environment jsdom */
 import React from "react";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mutationState = vi.hoisted(() => ({
@@ -101,7 +101,7 @@ describe("AIAssistantBox", () => {
     clearHistoryState.mutate.mockClear();
   });
 
-  it("envia a dúvida com o contexto da aula e mostra a resposta", () => {
+  it("envia a dúvida com o contexto da aula e mostra a resposta", async () => {
     render(
       <AIAssistantBox
         moduleId="linear-algebra"
@@ -122,7 +122,11 @@ describe("AIAssistantBox", () => {
       lessonContent: "Um vetor representa direção e magnitude.",
       question: "O que é magnitude?",
     }));
-    expect(screen.getByText("A magnitude mede o comprimento do vetor.")).toBeTruthy();
+    
+    // Wait for the streaming typewriter effect to complete
+    await waitFor(() => {
+      expect(screen.getByText("A magnitude mede o comprimento do vetor.")).toBeTruthy();
+    }, { timeout: 2000 });
   });
 
   it("limpa a conversa ao iniciar um novo tópico sem apagar o histórico salvo", () => {

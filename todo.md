@@ -141,6 +141,13 @@
 - [x] Primeira aula mostra título e explicação
 - [x] Sem erro "Curso não encontrado" nos módulos exibidos
 
+## Evoluções Recentes e Sincronização GitHub
+- [x] Sincronização contínua com o repositório GitHub via checkpoint
+- [x] Efeito de digitação em tempo real (streaming visual) nas respostas do Professor Virtual
+- [x] Exportação de planos de estudo semanais concluídos para Notion e Google Agenda
+- [x] Indicador visual claro no chat para o modo de API local do Ollama
+- [x] Suíte de testes 100% verde com 106 testes aprovados
+
 ## Status
 - [x] Diagnóstico concluído
 - [x] Correção concluída
