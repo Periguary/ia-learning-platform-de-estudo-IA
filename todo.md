@@ -327,9 +327,11 @@
 ## Nova Evolução: Visão Computacional, Filtros e Favoritos do Radar
 - [x] Adicionar módulo completo de Visão Computacional e Processamento de Imagens à trilha de aprendizagem
 - [x] Criar aulas didáticas sobre imagens digitais, pré-processamento, OpenCV, CNNs, detecção, segmentação, OCR e avaliação
-- [x] Adicionar busca textual e filtros por área, nível e stack na página de Especializações
+- [x] Adicionar busca textual e filtro por área na página de Especializações, pesquisando ferramentas e papéis
 - [x] Criar tabela e procedimentos tRPC para favoritos persistentes de itens do Radar de IA
 - [x] Integrar botão de favoritar e filtro de itens salvos no Radar
 - [x] Ampliar atualizações e curiosidades de visão computacional com fontes oficiais e links verificáveis
 - [x] Adicionar testes de regressão para o novo módulo, filtros e favoritos
 - [x] Validar no preview, revisar todo o backlog, salvar checkpoint e entregar a evolução
+
+- [x] Corrigir a regressão do teste de skill adicionada pela sincronização remota e revalidar a suíte completa

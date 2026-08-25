@@ -9,8 +9,6 @@ import {
   getAIConversationsForUserAndModule,
   clearAIConversationsForUserAndModule,
   getApprovedAIUpdateCandidates,
-  getUserAIUpdateFavorites,
-  toggleAIUpdateFavorite,
   getPendingAIUpdateCandidates,
   getUserRadarFavorites,
   toggleUserRadarFavorite,
@@ -401,16 +399,6 @@ export const appRouter = router({
     updates: publicProcedure.query(async () => {
       return await getApprovedAIUpdateCandidates();
     }),
-    updateFavorites: publicProcedure.query(async ({ ctx }) => {
-      if (!ctx.user?.id) return [];
-      return await getUserAIUpdateFavorites(ctx.user.id);
-    }),
-    toggleUpdateFavorite: publicProcedure
-      .input(z.object({ updateKey: z.string().trim().min(1).max(200) }))
-      .mutation(async ({ input, ctx }) => {
-        if (!ctx.user?.id) throw new Error("Faça login para favoritar atualizações.");
-        return { isFavorited: await toggleAIUpdateFavorite(ctx.user.id, input.updateKey) };
-      }),
     pendingUpdates: adminProcedure.query(async () => {
       return await getPendingAIUpdateCandidates();
     }),
