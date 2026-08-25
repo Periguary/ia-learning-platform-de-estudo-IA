@@ -1,9 +1,10 @@
 import { useLocation, useRoute } from "wouter";
-import { ArrowLeft, BookOpen, Clock, CheckCircle2, ExternalLink, FileText, Code, Lightbulb } from "lucide-react";
+import { ArrowLeft, BookOpen, Clock, CheckCircle2, ExternalLink, FileText, Code, Lightbulb, NotebookPen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { coursesData, lessonsContentData } from "@/data/coursesData";
 import { markLessonComplete, readProgress, writeProgress } from "@/data/progress";
+import { recordStudyActivity } from "@/data/profile";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
 
 export default function CourseDetail() {
@@ -101,7 +102,9 @@ export default function CourseDetail() {
   const lessonSequence = courseData.sections.flatMap((section: any) => section.lessons);
   const handleCompleteLesson = () => {
     if (typeof selectedLesson !== "number") return;
+    if (progressState[module]?.includes(selectedLesson)) return;
     const nextProgress = markLessonComplete(progressState, module, selectedLesson);
+    recordStudyActivity({ completedLessons: 1 });
     setProgressState(nextProgress);
     writeProgress(nextProgress);
   };
@@ -113,14 +116,33 @@ export default function CourseDetail() {
     if (nextLesson) setSelectedLesson(nextLesson.id);
   };
 
+  const prepareLessonForNotebookLm = async () => {
+    if (!selectedContent) return;
+    const markdown = `# ${selectedContent.title}\n\n## Curso\n${courseData.title}\n\n## Conteúdo\n\n${selectedContent.content}\n\n## Exemplos práticos\n\n${(selectedContent.examples ?? []).map((example: string) => `- ${example}`).join("\\n")}\n`;
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${module}-${String(selectedContent.title).toLowerCase().replace(/[^a-z0-9]+/g, "-")}-gemini-notebook.md`;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+    try {
+      await navigator.clipboard.writeText(markdown);
+      alert("Aula copiada e baixada em Markdown. Abra o Gemini Notebook e adicione o arquivo como fonte.");
+    } catch {
+      alert("Aula baixada em Markdown. Abra o Gemini Notebook e faça upload do arquivo como fonte.");
+    }
+    window.open("https://notebooklm.google/", "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full futurist-grid">
       {/* Header */}
-      <section className="py-8 border-b border-border bg-card/50">
+      <section className="py-10 border-b border-primary/20 bg-transparent futurist-scanline">
         <div className="container">
           <button
             onClick={() => navigate("/learning-path")}
-            className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6 bg-transparent border-none cursor-pointer"
+            className="futurist-kicker flex items-center gap-2 hover:text-accent transition-colors mb-6 bg-transparent border-none cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
             Voltar para Trilha
@@ -128,14 +150,14 @@ export default function CourseDetail() {
 
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/20 text-primary">
+              <span className="futurist-kicker border border-primary/35 bg-primary/10 px-3 py-1">
                 Fase {courseData.phase}
               </span>
-              <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground border border-border bg-card px-2 py-1">
                 {courseData.difficulty}
               </span>
             </div>
-            <h1 className="text-4xl font-bold">{courseData.title}</h1>
+            <h1 className="text-4xl font-black uppercase tracking-[-0.05em]">{courseData.title}</h1>
             <p className="text-lg text-muted-foreground">{courseData.description}</p>
 
             <div className="flex flex-wrap gap-6 pt-4 text-sm">
@@ -151,7 +173,7 @@ export default function CourseDetail() {
 
             {/* Progress Bar */}
             <div className="space-y-2 pt-4">
-              <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+              <div className="w-full h-3 bg-muted overflow-hidden border border-primary/20">
                 <div
                   className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-500"
                   style={{ width: `${progressPercentage}%` }}
@@ -166,21 +188,32 @@ export default function CourseDetail() {
       </section>
 
       {/* Main Content */}
-      <section className="py-8 border-b border-border">
+      <section className="py-8 border-b border-primary/15">
         <div className="container grid lg:grid-cols-3 gap-8">
           {/* Left: Lessons Content */}
           <div className="lg:col-span-2">
             {selectedContent ? (
               // Show lesson content
-              <div className="p-6 border border-border rounded-xl bg-card space-y-6">
-                <div className="flex items-center justify-between">
+              <div className="futurist-panel rounded-none p-6 space-y-6">
+                <div className="flex items-center justify-between gap-3">
                   <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
-                  <button
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")} className="gap-1.5 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/10">
+                      <Code className="size-3.5" /> Google Colab
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://vscode.dev/", "_blank", "noopener,noreferrer")} className="gap-1.5 text-blue-300 border-blue-500/30 hover:bg-blue-500/10">
+                      <ExternalLink className="size-3.5" /> VS Code Web
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" onClick={() => void prepareLessonForNotebookLm()} className="gap-1.5 text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
+                      <NotebookPen className="size-3.5" /> Gemini Notebook
+                    </Button>
+                    <button
                     onClick={() => setSelectedLesson(null)}
-                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl"
+                    className="text-muted-foreground hover:text-foreground transition-colors bg-transparent border-none cursor-pointer text-xl ml-2"
                   >
                     ✕
                   </button>
+                  </div>
                 </div>
 
                 <div className="max-w-none">
@@ -190,7 +223,7 @@ export default function CourseDetail() {
                 </div>
 
                 {selectedContent.examples && selectedContent.examples.length > 0 && (
-                  <div className="bg-muted/30 p-4 rounded-lg space-y-2">
+                  <div className="border border-primary/20 bg-primary/5 p-4 rounded-none space-y-2">
                     <h4 className="font-semibold text-sm">Exemplos Práticos:</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
                       {selectedContent.examples.map((example: string, idx: number) => (
@@ -248,17 +281,49 @@ export default function CourseDetail() {
                   </div>
                 </div>
 
-                {/* Resources Section */}
+                {/* Ecosystem & Resources Section */}
                 <div className="space-y-6 mt-6">
-                  <h2 className="text-2xl font-bold">Recursos Adicionais</h2>
+                  <h2 className="text-2xl font-bold">Ecossistema Conectado e Recursos</h2>
                   <div className="grid md:grid-cols-2 gap-4">
+                    <button
+                      onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")}
+                      className="futurist-panel p-4 rounded-none hover:border-primary/60 transition-colors text-left group nav-button"
+                    >
+                      <div className="flex items-start gap-3">
+                        <Code className="w-6 h-6 text-cyan-400 flex-shrink-0 mt-1" />
+                        <div className="flex-1">
+                          <h3 className="font-semibold group-hover:text-cyan-400 transition-colors">Google Colab</h3>
+                          <p className="text-sm text-muted-foreground mt-1">Ambiente de notebooks Python com GPU na nuvem para praticar algoritmos.</p>
+                          <div className="flex items-center gap-2 mt-3 text-cyan-400 text-sm">
+                            Abrir Colab <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => window.open("https://vscode.dev/", "_blank", "noopener,noreferrer")}
+                      className="futurist-panel p-4 rounded-none hover:border-primary/60 transition-colors text-left group nav-button"
+                    >
+                      <div className="flex items-start gap-3">
+                        <ExternalLink className="w-6 h-6 text-blue-400 flex-shrink-0 mt-1" />
+                        <div className="flex-1">
+                          <h3 className="font-semibold group-hover:text-blue-400 transition-colors">VS Code Web</h3>
+                          <p className="text-sm text-muted-foreground mt-1">IDE profissional direto no navegador para codificar sem instalação.</p>
+                          <div className="flex items-center gap-2 mt-3 text-blue-400 text-sm">
+                            Abrir VS Code <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+
                     {additionalResources.map((resource) => {
                       const IconComponent = resource.icon;
                       return (
                         <button
                           key={`resource-${resource.id}`}
                           onClick={() => setSelectedLesson(resource.id)}
-                          className="p-4 border border-border rounded-lg bg-card hover:border-primary/50 transition-colors text-left group nav-button"
+                          className="futurist-panel p-4 rounded-none hover:border-primary/60 transition-colors text-left group nav-button"
                         >
                           <div className="flex items-start gap-3">
                             <IconComponent className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
@@ -294,22 +359,22 @@ export default function CourseDetail() {
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               {/* Lessons List */}
-              <div className="border border-border rounded-xl bg-card overflow-hidden">
-                <div className="p-4 border-b border-border bg-card/50">
+              <div className="futurist-panel rounded-none overflow-hidden">
+                <div className="p-4 border-b border-primary/20 bg-primary/5">
                   <h3 className="font-semibold">Aulas</h3>
                 </div>
 
                 <div className="divide-y divide-border max-h-96 overflow-y-auto">
                   {courseData.sections.map((section: any) => (
                     <div key={`section-${section.title}`}>
-                      <div className="p-4 bg-muted/30 font-semibold text-sm sticky top-0">
+                      <div className="p-4 bg-primary/5 font-semibold text-sm uppercase tracking-wider sticky top-0">
                         {section.title}
                       </div>
                       {section.lessons.map((lesson: any) => (
                         <button
                           key={`lesson-${lesson.id}`}
                           onClick={() => setSelectedLesson(lesson.id)}
-                          className={`w-full text-left p-4 hover:bg-muted/50 transition-colors flex items-start gap-3 border-b border-border last:border-b-0 bg-transparent border-none cursor-pointer ${
+                          className={`w-full text-left p-4 hover:bg-primary/10 transition-colors flex items-start gap-3 border-b border-primary/15 last:border-b-0 bg-transparent border-none cursor-pointer ${
                             selectedLesson === lesson.id ? "bg-muted/50 border-l-2 border-l-primary" : ""
                           }`}
                         >
@@ -332,7 +397,7 @@ export default function CourseDetail() {
               </div>
 
               {/* Next Steps */}
-              <div className="border border-border rounded-xl bg-card p-4 space-y-3">
+              <div className="futurist-panel rounded-none p-4 space-y-3">
                 <h4 className="font-semibold text-sm">Próximos Passos</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex gap-2">

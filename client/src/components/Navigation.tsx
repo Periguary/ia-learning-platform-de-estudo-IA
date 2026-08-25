@@ -5,6 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
+import { AIGlossary } from "@/components/AIGlossary";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Navigation() {
     { label: "Projetos", href: "/projects" },
     { label: "Carreira", href: "/careers" },
     { label: "Certificações", href: "/certifications" },
+    { label: "Certif. Interativa", href: "/interactive-certifications" },
     { label: "Curiosidades", href: "/curiosities" },
     { label: "Biblioteca", href: "/library" },
     { label: "Vídeos", href: "/videos" },
@@ -27,15 +29,15 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full futurist-nav backdrop-blur-xl">
       <div className="container flex items-center justify-between h-16">
         {/* Logo */}
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 font-bold text-xl gradient-text bg-transparent border-none cursor-pointer nav-button"
+          className="flex items-center gap-3 font-bold text-xl gradient-text bg-transparent border-none cursor-pointer nav-button tracking-tight"
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold">AI</span>
+          <div className="relative w-9 h-9 bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_24px_hsla(var(--primary),0.45)]">
+            <span className="text-[hsl(var(--primary-foreground))] font-black text-sm tracking-tighter">AI</span>
           </div>
           <span>IA Academy</span>
         </button>
@@ -46,7 +48,7 @@ export default function Navigation() {
             <button
               key={item.href}
               onClick={() => navigate(item.href)}
-              className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer nav-underline color-transition"
+              className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer futurist-nav-item"
             >
               {item.label}
             </button>
@@ -55,10 +57,11 @@ export default function Navigation() {
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-4">
+          <AIGlossary />
           {/* Search Bar */}
           {searchOpen && (
             <form
-              className="hidden sm:flex items-center gap-2 rounded-full border border-primary/40 bg-card/90 px-3 py-1.5 shadow-sm"
+              className="hidden sm:flex items-center gap-2 border border-primary/35 bg-card/90 px-3 py-1.5 shadow-[0_0_18px_hsla(var(--primary),0.12)]"
               onSubmit={(event) => {
                 event.preventDefault();
                 navigate(`/library${searchQuery.trim() ? `?query=${encodeURIComponent(searchQuery.trim())}` : ""}`);
@@ -78,7 +81,7 @@ export default function Navigation() {
           <button
             type="button"
             onClick={() => setSearchOpen((open) => !open)}
-            className={`rounded-lg p-2 transition-colors hover:bg-muted ${searchOpen ? "bg-primary/10 text-primary" : ""}`}
+            className={`p-2 border border-transparent transition-colors hover:border-primary/35 hover:bg-primary/10 ${searchOpen ? "border-primary/40 bg-primary/10 text-primary" : ""}`}
             aria-label="Abrir busca de conteúdos"
           >
             <Search className="size-5 text-muted-foreground" />
@@ -87,7 +90,7 @@ export default function Navigation() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 hover:bg-muted rounded-lg transition-colors"
+            className="p-2 border border-transparent hover:border-primary/35 hover:bg-primary/10 transition-colors"
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
@@ -102,9 +105,22 @@ export default function Navigation() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate("/dashboard")}
-                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer nav-underline color-transition"
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer futurist-nav-item"
               >
                 Dashboard
+              </button>
+              <button
+                onClick={() => navigate("/saved-explanations")}
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-primary bg-transparent border-none cursor-pointer futurist-nav-item"
+                title="Minhas Explicações Salvas"
+              >
+                Explicações Salvas
+              </button>
+              <button
+                onClick={() => navigate("/profile")}
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer futurist-nav-item"
+              >
+                Perfil
               </button>
               <button
                 onClick={() => logout()}
@@ -117,7 +133,7 @@ export default function Navigation() {
             <Button
               asChild
               size="sm"
-              className="bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/50"
+              className="futurist-button border-0"
             >
               <a href={getLoginUrl()}>Entrar</a>
             </Button>
@@ -126,7 +142,7 @@ export default function Navigation() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 hover:bg-muted rounded-lg transition-colors"
+            className="md:hidden p-2 border border-transparent hover:border-primary/35 hover:bg-primary/10 transition-colors"
             aria-label="Toggle menu"
           >
             {isOpen ? (
@@ -149,11 +165,22 @@ export default function Navigation() {
                   navigate(item.href);
                   setIsOpen(false);
                 }}
-                className="text-sm font-medium text-muted-foreground bg-transparent border-none cursor-pointer w-full text-left nav-button color-transition"
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer w-full text-left futurist-nav-item"
               >
                 {item.label}
               </button>
             ))}
+            {user && (
+              <button
+                onClick={() => {
+                  navigate("/profile");
+                  setIsOpen(false);
+                }}
+                className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer w-full text-left futurist-nav-item"
+              >
+                Perfil
+              </button>
+            )}
             {!user && (
               <Button
                 asChild

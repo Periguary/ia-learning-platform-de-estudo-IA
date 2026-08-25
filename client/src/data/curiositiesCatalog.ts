@@ -71,4 +71,13 @@ export const curiositiesCatalog: CuriosityItem[] = [
     funFact: "Auditorias de modelos exigem métricas específicas de paridade demográfica e igualdade de oportunidades.",
     readTime: "5 min de leitura",
   },
+  {
+    id: "autonomous-ai-agents",
+    title: "A Era dos Agentes Autônomos: De Chatbots a Executores de Tarefas",
+    category: "Fronteira Tecnológica",
+    teaser: "Como os LLMs deixaram de ser apenas assistentes de texto e evoluíram para agentes capazes de planejar e executar fluxos complexos.",
+    content: "A evolução da inteligência artificial generativa passou dos chatbots estáticos para os agentes autônomos. Equipados com loops de raciocínio (ReAct), acesso a ferramentas externas, memória de longo prazo e capacidade de auto-correção, esses agentes conseguem decompor objetivos complexos em subtarefas, navegar na web, escrever e testar código, e interagir com APIs de forma independente. Esse paradigma redefine a produtividade em engenharia de software e ciência de dados.",
+    funFact: "Agentes modernos utilizam arquiteturas de múltiplos agentes (Multi-Agent Systems) para debater e resolver problemas colaborativamente.",
+    readTime: "6 min de leitura",
+  },
 ];

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        header { margin-bottom: 50px; border-left: 6px solid #7000ff; padding-left: 20px; }
+        .kicker { color: #7000ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
+        h2 { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(112, 0, 255, 0.2);
+            padding: 30px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid #00f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #00f0ff;
+            flex-shrink: 0;
+        }
+        .feature-content h3 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
+        .feature-content p { font-size: 17px; color: #a0a0a0; line-height: 1.5; }
+        
+        .personality-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .tag {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            background: rgba(112, 0, 255, 0.2);
+            border: 1px solid #7000ff;
+            color: #7000ff;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="grid-overlay"></div>
+        <header>
+            <div class="kicker">AI Mentorship // Adaptive Learning</div>
+            <h2>O Professor Virtual: Pedagogia Adaptativa</h2>
+        </header>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="feature-content">
+                    <h3>Personalidades Docentes</h3>
+                    <p>Quatro estilos de ensino selecionáveis: Padrão Didático, Socrático (perguntas guiadas), Bem-Humorado e Rigoroso Acadêmico.</p>
+                    <div class="personality-tags">
+                        <span class="tag">Socrático</span>
+                        <span class="tag">Rigoroso</span>
+                        <span class="tag">Humor</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-database"></i></div>
+                <div class="feature-content">
+                    <h3>Memória de Longo Prazo</h3>
+                    <p>O tutor recorda dúvidas anteriores, progresso e objetivos do aluno, personalizando cada explicação com base no histórico real.</p>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-tasks"></i></div>
+                <div class="feature-content">
+                    <h3>Quizzes Sob Demanda</h3>
+                    <p>Geração instantânea de avaliações formativas ao final de cada tópico para validar a compreensão e fixar o conhecimento prático.</p>
+                </div>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas fa-volume-up"></i></div>
+                <div class="feature-content">
+                    <h3>Acessibilidade & TTS</h3>
+                    <p>Síntese de voz nativa com controle de velocidade (1x a 1.5x), permitindo o consumo de conteúdo em áudio de forma fluida.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

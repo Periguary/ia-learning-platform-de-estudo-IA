@@ -15,14 +15,16 @@ vi.mock("@/_core/hooks/useAuth", () => ({
 
 vi.mock("@/lib/trpc", () => ({
   trpc: {
+    useUtils: () => ({ ai: { radarFavorites: { invalidate: vi.fn() } } }),
     ai: {
       updates: {
         useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
       },
-      updateFavorites: {
+      radarFavorites: {
         useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
+        invalidate: vi.fn(),
       },
-      toggleUpdateFavorite: {
+      toggleRadarFavorite: {
         useMutation: () => ({ isPending: false, mutate: vi.fn() }),
       },
       pendingUpdates: {
@@ -45,7 +47,7 @@ describe("Updates interaction", () => {
     navigate.mockClear();
   });
 
-  it("renderiza o catálogo editorial com fonte oficial, ação de revisão e favoritos", () => {
+  it("renderiza o catálogo editorial com fonte oficial e ação de revisão", () => {
     render(<Updates />);
 
     expect(screen.getByRole("heading", { name: /Atualizações que viram aprendizado/i })).toBeTruthy();
@@ -55,15 +57,17 @@ describe("Updates interaction", () => {
     expect(screen.getAllByRole("button", { name: /Revisar LLMs/i }).length).toBeGreaterThan(0);
   });
 
-  it("permite identificar o controle de salvar para leitura posterior", () => {
-    render(<Updates />);
-    expect(screen.getAllByRole("button", { name: /Favoritar/i }).length).toBeGreaterThan(0);
-  });
-
   it("mantém as novidades acessíveis sem ativar a fila de curadoria para aluno anônimo", () => {
     render(<Updates />);
 
     expect(screen.queryByRole("button", { name: /Buscar novas atualizações/i })).toBeNull();
     expect(screen.queryByText(/Candidatos aguardando revisão/i)).toBeNull();
+  });
+
+  it("exibe o controle de leitura posterior do Radar", () => {
+    render(<Updates />);
+
+    expect(screen.getAllByRole("button", { name: /Salvas \(0\)/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: /Salvar /i }).length).toBeGreaterThan(0);
   });
 });

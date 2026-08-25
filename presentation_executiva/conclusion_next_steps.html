@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        header { margin-bottom: 30px; }
+        .kicker { color: #00f0ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        h2 { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+        
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(112, 0, 255, 0.2);
+            padding: 40px;
+        }
+        .section-box h3 { 
+            font-size: 24px; 
+            font-weight: 800; 
+            color: #7000ff; 
+            margin-bottom: 25px; 
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .item-list { list-style: none; }
+        .item-list li {
+            font-size: 18px;
+            color: #a0a0a0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            line-height: 1.4;
+        }
+        .item-list i { margin-top: 4px; font-size: 16px; }
+        .check-icon { color: #39ff14; }
+        .next-icon { color: #00f0ff; }
+        
+        .final-cta {
+            margin-top: 50px;
+            padding: 25px;
+            background: linear-gradient(to right, rgba(112, 0, 255, 0.1), rgba(0, 240, 255, 0.1));
+            border: 1px solid #7000ff;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="grid-overlay"></div>
+        <header>
+            <div class="kicker">Roadmap // Evolution</div>
+            <h2>Conclusão e Próximos Passos</h2>
+        </header>
+        
+        <div class="conclusion-grid">
+            <div class="section-box">
+                <h3><i class="fas fa-check-double"></i> Marcos Alcançados</h3>
+                <ul class="item-list">
+                    <li><i class="fas fa-check check-icon"></i> Professor Virtual com pedagogia adaptativa e 4 personalidades.</li>
+                    <li><i class="fas fa-check check-icon"></i> Geração de planos de estudo semanais com progresso interativo.</li>
+                    <li><i class="fas fa-check check-icon"></i> Ecossistema conectado (Colab, VS Code, Obsidian, NotebookLM).</li>
+                    <li><i class="fas fa-check check-icon"></i> Memória de longo prazo e radar de competências no perfil.</li>
+                </ul>
+            </div>
+            
+            <div class="section-box">
+                <h3><i class="fas fa-rocket"></i> Visão de Futuro</h3>
+                <ul class="item-list">
+                    <li><i class="fas fa-arrow-right next-icon"></i> Notificações inteligentes e lembretes de metas diárias.</li>
+                    <li><i class="fas fa-arrow-right next-icon"></i> Colaboração social: compartilhamento e avaliação de planos.</li>
+                    <li><i class="fas fa-arrow-right next-icon"></i> Radar 2.0: integração com APIs de vagas e mercado de trabalho.</li>
+                    <li><i class="fas fa-arrow-right next-icon"></i> Expansão da biblioteca com curadoria automatizada via IA.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="final-cta">
+            IA Academy: Transformando a Educação Técnica com Inteligência Artificial
+        </div>
+    </div>
+</body>
+</html>

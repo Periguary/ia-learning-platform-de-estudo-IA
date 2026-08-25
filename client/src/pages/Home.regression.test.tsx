@@ -266,3 +266,23 @@ describe('Home Component - Regression Tests (Static Analysis)', () => {
     });
   });
 });
+
+
+describe('Home Component - Futuristic Visual Direction', () => {
+  it('should expose the global futuristic visual markers in the homepage source', () => {
+    const source = readFileSync(new URL('./Home.tsx', import.meta.url), 'utf8');
+
+    expect(source).toContain('futurist-grid');
+    expect(source).toContain('futurist-scanline');
+    expect(source).toContain('futurist-panel');
+    expect(source).toContain('futurist-button');
+    expect(source).toContain('from-primary via-secondary to-accent');
+  });
+
+  it('should keep internal calls-to-action as button interactions', () => {
+    const source = readFileSync(new URL('./Home.tsx', import.meta.url), 'utf8');
+
+    expect(source).toContain('navigate("/learning-path")');
+    expect(source).not.toMatch(/<a[^>]*>\s*<Button/);
+  });
+});

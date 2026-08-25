@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { readProfilePreferences } from "@/data/profile";
 
 type Theme = "light" | "dark";
 
@@ -6,6 +7,8 @@ interface ThemeContextType {
   theme: Theme;
   toggleTheme?: () => void;
   switchable: boolean;
+  highContrastNeon: boolean;
+  setHighContrastNeon: (enabled: boolean) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -29,15 +32,18 @@ export function ThemeProvider({
     return defaultTheme;
   });
 
+  const [highContrastNeon, setHighContrastNeon] = useState(() => Boolean(readProfilePreferences().highContrastNeon));
+
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.classList.toggle("light", theme === "light");
+    root.classList.toggle("neon-high-contrast", highContrastNeon);
 
     if (switchable) {
       localStorage.setItem("theme", theme);
     }
-  }, [theme, switchable]);
+  }, [theme, switchable, highContrastNeon]);
 
   const toggleTheme = switchable
     ? () => {
@@ -46,7 +52,7 @@ export function ThemeProvider({
     : undefined;
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, switchable, highContrastNeon, setHighContrastNeon }}>
       {children}
     </ThemeContext.Provider>
   );

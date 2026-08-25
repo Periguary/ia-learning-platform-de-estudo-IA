@@ -11,6 +11,8 @@ export type LibraryItem = {
   officialUrl: string;
   localFileHint: string;
   relatedModule: string;
+  provider: "MIT Press" | "Google Research" | "scikit-learn" | "NIST" | "Hugging Face" | "Kaggle" | "Meta AI" | "OpenAI";
+  difficulty: "Fundamental" | "Intermediário" | "Avançado";
 };
 
 export const libraryCatalog: LibraryItem[] = [
@@ -20,11 +22,13 @@ export const libraryCatalog: LibraryItem[] = [
     category: "Livros Clássicos",
     author: "Ian Goodfellow, Yoshua Bengio e Aaron Courville",
     year: "2016",
-    description: "A bíblia matemática e teórica do aprendizado profundo, cobrindo algebra linear, otimização, redes neurais e aprendizado generativo.",
+    description: "A bíblia matemática e teórica do aprendizado profundo, cobrindo álgebra linear, otimização, redes neurais e aprendizado generativo.",
     format: "PDF",
     officialUrl: "https://www.deeplearningbook.org/",
     localFileHint: "Disponível gratuitamente online pelo MIT Press.",
     relatedModule: "neural-networks",
+    provider: "MIT Press",
+    difficulty: "Avançado",
   },
   {
     id: "attention-is-all-you-need-paper",
@@ -37,6 +41,8 @@ export const libraryCatalog: LibraryItem[] = [
     officialUrl: "https://arxiv.org/abs/1706.03762",
     localFileHint: "Disponível no arXiv e Hugging Face Papers.",
     relatedModule: "llms",
+    provider: "Google Research",
+    difficulty: "Avançado",
   },
   {
     id: "scikit-learn-user-guide",
@@ -49,6 +55,8 @@ export const libraryCatalog: LibraryItem[] = [
     officialUrl: "https://scikit-learn.org/stable/user_guide.html",
     localFileHint: "Acompanha exemplos executáveis em Jupyter Notebook.",
     relatedModule: "ml-fundamentals",
+    provider: "scikit-learn",
+    difficulty: "Intermediário",
   },
   {
     id: "nist-ai-rmf-guide",
@@ -61,6 +69,8 @@ export const libraryCatalog: LibraryItem[] = [
     officialUrl: "https://www.nist.gov/itl/ai-risk-management-framework",
     localFileHint: "Documento oficial de referência governamental.",
     relatedModule: "software-engineering",
+    provider: "NIST",
+    difficulty: "Intermediário",
   },
   {
     id: "huggingface-nlp-course",
@@ -68,10 +78,54 @@ export const libraryCatalog: LibraryItem[] = [
     category: "Apostilas Técnicas",
     author: "Hugging Face Community",
     year: "2026",
-    description: "Curso completo em formato de apostila interativa sobre como treinar, fine-sonar e usar modelos de Hugging Face com PyTorch.",
+    description: "Curso completo em formato de apostila interativa sobre como treinar, ajustar e usar modelos de Hugging Face com PyTorch.",
     format: "Repositório",
     officialUrl: "https://huggingface.co/docs/transformers/index",
     localFileHint: "Inclui guias passo a passo para integração com VS Code.",
     relatedModule: "llms",
+    provider: "Hugging Face",
+    difficulty: "Intermediário",
+  },
+  {
+    id: "fraude-cartao-ia-analise",
+    title: "IA na Detecção de Fraudes em Cartões de Crédito: Uma Análise Crítica",
+    category: "Artigos Fundamentais",
+    author: "Periguary Cysne Lima (Análise por Manus AI)",
+    year: "2026",
+    description: "Análise detalhada sobre a aplicação de soluções híbridas (Redes Neurais e Sistemas Especialistas) na detecção de fraudes financeiras utilizando a base do Kaggle.",
+    format: "Artigo",
+    officialUrl: "https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud",
+    localFileHint: "A análise local usa como referência o conjunto de dados público de fraude de cartões disponível no Kaggle.",
+    relatedModule: "ml-fundamentals",
+    provider: "Kaggle",
+    difficulty: "Intermediário",
+  },
+  {
+    id: "llama3-model-card",
+    title: "Llama 3 Open Foundation and Fine-Tuned Chat Models",
+    category: "Whitepapers e Guias",
+    author: "Meta AI Research Team",
+    year: "2024",
+    description: "Documentação oficial e card técnico dos modelos Llama 3, detalhando arquitetura, alinhamento de segurança, tokenizer e benchmarks comparativos.",
+    format: "PDF",
+    officialUrl: "https://ai.meta.com/research/publications/llama-3-model-card/",
+    localFileHint: "Disponível publicamente no portal de pesquisa da Meta AI.",
+    relatedModule: "llms",
+    provider: "Meta AI",
+    difficulty: "Avançado",
+  },
+  {
+    id: "openai-gpt4-technical-report",
+    title: "GPT-4 Technical Report",
+    category: "Artigos Fundamentais",
+    author: "OpenAI Research",
+    year: "2023",
+    description: "Relatório técnico explorando capacidades em larga escala, infraestrutura de treinamento, desafios de alinhamento e avaliações de segurança de modelos avançados.",
+    format: "Artigo",
+    officialUrl: "https://arxiv.org/abs/2303.08774",
+    localFileHint: "Publicado no arXiv e indexado em bases de pesquisa em IA.",
+    relatedModule: "ai-agents",
+    provider: "OpenAI",
+    difficulty: "Avançado",
   },
 ];

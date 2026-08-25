@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send } from "lucide-react";
+import { BookMarked, Code, ExternalLink, FileText, FolderGit2, HardDrive, Search, Star, Bookmark, MessageSquare, Send, NotebookPen, Copy } from "lucide-react";
 import { libraryCatalog, type LibraryCategory, type LibraryItem } from "@/data/libraryCatalog";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,10 @@ export default function Library() {
   const [location] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [selectedFormat, setSelectedFormat] = useState<string>("Todos");
+  const [selectedProvider, setSelectedProvider] = useState<string>("Todos");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("Todos");
+  const [sortBy, setSortBy] = useState<"relevance" | "title-asc" | "year-desc" | "category">("relevance");
   const [activeTab, setActiveTab] = useState<"catalog" | "reading-list">("catalog");
   const [selectedItem, setSelectedItem] = useState<LibraryItem | null>(null);
   const [newComment, setNewComment] = useState("");
@@ -50,12 +54,21 @@ export default function Library() {
   const favorites = favoritesQuery.data ?? [];
 
   const filteredItems = libraryCatalog.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+    const matchesSearch = !normalizedSearch || [item.title, item.author, item.description, item.relatedModule].join(" ").toLowerCase().includes(normalizedSearch);
     const matchesCategory = selectedCategory === "Todos" || item.category === selectedCategory;
+    const matchesFormat = selectedFormat === "Todos" || item.format === selectedFormat;
+    const matchesProvider = selectedProvider === "Todos" || item.provider === selectedProvider;
+    const matchesDifficulty = selectedDifficulty === "Todos" || item.difficulty === selectedDifficulty;
     const matchesTab = activeTab === "catalog" || favorites.includes(item.id);
-    return matchesSearch && matchesCategory && matchesTab;
+    return matchesSearch && matchesCategory && matchesFormat && matchesProvider && matchesDifficulty && matchesTab;
+  });
+
+  const sortedItems = [...filteredItems].sort((left, right) => {
+    if (sortBy === "title-asc") return left.title.localeCompare(right.title, "pt-BR");
+    if (sortBy === "category") return left.category.localeCompare(right.category, "pt-BR") || left.title.localeCompare(right.title, "pt-BR");
+    if (sortBy === "year-desc") return Number(right.year) - Number(left.year) || left.title.localeCompare(right.title, "pt-BR");
+    return 0;
   });
 
   const readingListItems = libraryCatalog.filter(item => favorites.includes(item.id));
@@ -122,6 +135,19 @@ export default function Library() {
     setTimeout(() => setNotification(null), 4000);
   };
 
+  const handlePrepareNotebookLm = async (item: LibraryItem) => {
+    const markdown = `# ${item.title}\n\n- **Autor:** ${item.author} (${item.year})\n- **Categoria:** ${item.category}\n- **Fonte oficial:** ${item.officialUrl}\n\n## Sobre este material\n\n${item.description}\n\n## Como usar no Gemini Notebook\n\nAdicione a URL original acima como fonte do notebook e use este arquivo Markdown como contexto de estudo.\n`;
+    downloadFile(`ia-academy-${item.id}-gemini-notebook.md`, markdown);
+    try {
+      await navigator.clipboard.writeText(item.officialUrl);
+      setNotification("Arquivo Markdown baixado e URL oficial copiada. Abra o Gemini Notebook e adicione ambos como fontes.");
+    } catch {
+      setNotification("Arquivo Markdown baixado. Copie a URL oficial do material e adicione-a como fonte no Gemini Notebook.");
+    }
+    window.open("https://notebooklm.google/", "_blank", "noopener,noreferrer");
+    setTimeout(() => setNotification(null), 6000);
+  };
+
   return (
     <div className="w-full">
       <section className="border-b border-border bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-16">
@@ -164,7 +190,7 @@ export default function Library() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-center">
+          <div className="flex flex-col gap-4 pt-2 md:flex-row md:items-end">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3.5 top-3 size-4 text-muted-foreground" />
               <Input
@@ -193,6 +219,12 @@ export default function Library() {
                 </Button>
               ))}
             </div>
+            <div className="flex flex-wrap gap-3">
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Formato<select aria-label="Filtrar por formato" value={selectedFormat} onChange={event => setSelectedFormat(event.target.value)} className="mt-1 block min-w-36 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>PDF</option><option>Notebook</option><option>Artigo</option><option>Repositório</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Provedor<select aria-label="Filtrar por provedor" value={selectedProvider} onChange={event => setSelectedProvider(event.target.value)} className="mt-1 block min-w-40 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>MIT Press</option><option>Google Research</option><option>scikit-learn</option><option>NIST</option><option>Hugging Face</option><option>Kaggle</option><option>Meta AI</option><option>OpenAI</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Dificuldade<select aria-label="Filtrar por dificuldade" value={selectedDifficulty} onChange={event => setSelectedDifficulty(event.target.value)} className="mt-1 block min-w-36 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option>Todos</option><option>Fundamental</option><option>Intermediário</option><option>Avançado</option></select></label>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Ordenar por<select aria-label="Ordenar Biblioteca" value={sortBy} onChange={event => setSortBy(event.target.value as typeof sortBy)} className="mt-1 block min-w-44 rounded-lg border border-border bg-card px-3 py-2 text-sm font-normal normal-case tracking-normal text-foreground"><option value="relevance">Relevância</option><option value="title-asc">Título A–Z</option><option value="year-desc">Mais recentes</option><option value="category">Categoria</option></select></label>
+            </div>
           </div>
         </div>
       </section>
@@ -205,7 +237,7 @@ export default function Library() {
         )}
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredItems.map(item => {
+          {sortedItems.map(item => {
             const isFav = favorites.includes(item.id);
             const isSelected = selectedItem?.id === item.id;
             return (
@@ -234,6 +266,7 @@ export default function Library() {
 
                 <h3 className="mt-4 text-xl font-bold leading-tight">{item.title}</h3>
                 <p className="mt-1 text-xs font-medium text-muted-foreground">Por {item.author} ({item.year})</p>
+                <div className="mt-2 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground"><span className="border border-primary/20 px-2 py-1 text-primary">{item.provider}</span><span className="border border-secondary/20 px-2 py-1 text-secondary">{item.difficulty}</span></div>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
 
                 <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground">
@@ -292,6 +325,10 @@ export default function Library() {
                       VS Code
                     </Button>
                   </div>
+                  <Button type="button" variant="outline" size="sm" onClick={() => void handlePrepareNotebookLm(item)} className="w-full gap-2 text-xs text-amber-300 border-amber-500/30 hover:bg-amber-500/10">
+                    <NotebookPen className="size-3.5" /> Preparar para Gemini Notebook
+                    <Copy className="ml-auto size-3.5" />
+                  </Button>
                 </div>
               </article>
             );

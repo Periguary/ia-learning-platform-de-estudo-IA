@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "12b312af-b6cf-4c19-a9f9-8e33ac889195",
-  "prevId": "71eadca6-8906-4b37-b228-c20cdedb4056",
+  "id": "2b155b9a-3612-45a6-9855-0f57bedc11d8",
+  "prevId": "016d4ffb-d823-43a6-b202-ed83a25086f6",
   "tables": {
     "ai_conversations": {
       "name": "ai_conversations",
@@ -250,8 +250,8 @@
       "uniqueConstraints": {},
       "checkConstraint": {}
     },
-    "user_ai_update_favorites": {
-      "name": "user_ai_update_favorites",
+    "saved_explanations": {
+      "name": "saved_explanations",
       "columns": {
         "id": {
           "name": "id",
@@ -267,9 +267,23 @@
           "notNull": true,
           "autoincrement": false
         },
-        "updateKey": {
-          "name": "updateKey",
-          "type": "varchar(200)",
+        "title": {
+          "name": "title",
+          "type": "varchar(300)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "moduleId": {
+          "name": "moduleId",
+          "type": "varchar(120)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -286,8 +300,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "user_ai_update_favorites_id": {
-          "name": "user_ai_update_favorites_id",
+        "saved_explanations_id": {
+          "name": "saved_explanations_id",
           "columns": [
             "id"
           ]
@@ -334,6 +348,108 @@
       "compositePrimaryKeys": {
         "user_library_favorites_id": {
           "name": "user_library_favorites_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "user_radar_favorites": {
+      "name": "user_radar_favorites",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "radarItemId": {
+          "name": "radarItemId",
+          "type": "varchar(180)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(300)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "varchar(80)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sourceName": {
+          "name": "sourceName",
+          "type": "varchar(160)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sourceUrl": {
+          "name": "sourceUrl",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "relatedModules": {
+          "name": "relatedModules",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "learningAction": {
+          "name": "learningAction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "publishedAt": {
+          "name": "publishedAt",
+          "type": "varchar(40)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "user_radar_favorites_id": {
+          "name": "user_radar_favorites_id",
           "columns": [
             "id"
           ]
@@ -500,9 +616,7 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {
-      "\"user_ai_update_favorites\".\"updateId\"": "\"user_ai_update_favorites\".\"updateKey\""
-    }
+    "columns": {}
   },
   "internal": {
     "tables": {},

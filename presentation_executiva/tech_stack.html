@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        header { margin-bottom: 40px; border-left: 6px solid #00f0ff; padding-left: 20px; }
+        .kicker { color: #00f0ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
+        h2 { font-size: 44px; font-weight: 900; text-transform: uppercase; }
+        
+        .stack-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        .stack-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            gap: 30px;
+        }
+        .stack-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: rgba(0, 240, 255, 0.05);
+            color: #00f0ff;
+            border-radius: 12px;
+        }
+        .stack-info h3 { font-size: 24px; font-weight: 800; margin-bottom: 4px; color: #fff; }
+        .stack-info p { font-size: 16px; color: #888; }
+        .tag { 
+            margin-left: auto; 
+            background: #7000ff; 
+            color: #fff; 
+            padding: 4px 12px; 
+            font-size: 12px; 
+            font-weight: 800; 
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <header>
+            <div class="kicker">Engineering // Stack</div>
+            <h2>Pilha Tecnológica de Ponta</h2>
+        </header>
+        
+        <div class="stack-list">
+            <div class="stack-item" style="border-left: 4px solid #61dafb;">
+                <div class="stack-icon"><i class="fab fa-react"></i></div>
+                <div class="stack-info">
+                    <h3>React 19 + Tailwind 4</h3>
+                    <p>Interface ultra-rápida, declarativa e com design system atômico de alta performance.</p>
+                </div>
+                <div class="tag">Frontend</div>
+            </div>
+            
+            <div class="stack-item" style="border-left: 4px solid #7000ff;">
+                <div class="stack-icon"><i class="fas fa-project-diagram"></i></div>
+                <div class="stack-info">
+                    <h3>tRPC 11 + Node.js</h3>
+                    <p>Tipagem estática ponta a ponta, eliminando erros de comunicação entre cliente e servidor.</p>
+                </div>
+                <div class="tag">Backend</div>
+            </div>
+            
+            <div class="stack-item" style="border-left: 4px solid #c5f74f;">
+                <div class="stack-icon"><i class="fas fa-database"></i></div>
+                <div class="stack-info">
+                    <h3>Drizzle ORM + MySQL</h3>
+                    <p>Modelagem relacional performática com migrações seguras e consultas type-safe.</p>
+                </div>
+                <div class="tag">Database</div>
+            </div>
+            
+            <div class="stack-item" style="border-left: 4px solid #ff0055;">
+                <div class="stack-icon"><i class="fas fa-vial"></i></div>
+                <div class="stack-info">
+                    <h3>Vitest Integration</h3>
+                    <p>Suíte de testes unitários e de regressão garantindo 100% de integridade funcional.</p>
+                </div>
+                <div class="tag">Quality</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

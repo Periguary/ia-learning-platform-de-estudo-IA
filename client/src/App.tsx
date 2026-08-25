@@ -18,8 +18,13 @@ import Curiosities from "./pages/Curiosities";
 import Library from "./pages/Library";
 import Videos from "./pages/Videos";
 import Specializations from "./pages/Specializations";
+import InteractiveCertifications from "./pages/InteractiveCertifications";
+import Profile from "./pages/Profile";
+import PublicProfile from "./pages/PublicProfile";
+import SavedExplanationsReview from "./pages/SavedExplanationsReview";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import PageTransitionLoader from "./components/PageTransitionLoader";
 
 function Router() {
   return (
@@ -38,6 +43,10 @@ function Router() {
       <Route path={"/library"} component={Library} />
       <Route path={"/videos"} component={Videos} />
       <Route path={"/specializations"} component={Specializations} />
+      <Route path={"/interactive-certifications"} component={InteractiveCertifications} />
+      <Route path={"/profile/public"} component={PublicProfile} />
+      <Route path={"/profile"} component={Profile} />
+      <Route path={"/saved-explanations"} component={SavedExplanationsReview} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -55,7 +64,8 @@ function App() {
           <Toaster />
           <div className="min-h-screen flex flex-col bg-background text-foreground">
             <Navigation />
-            <main className="flex-1">
+            <main className="flex-1 relative">
+              <PageTransitionLoader />
               <Router />
             </main>
             <Footer />

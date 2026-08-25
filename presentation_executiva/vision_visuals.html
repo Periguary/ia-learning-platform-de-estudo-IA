@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 240, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+        header { margin-bottom: 50px; }
+        .kicker { color: #00f0ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        h2 { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .feature-card {
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 35px;
+            min-height: 220px;
+        }
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(112, 0, 255, 0.1);
+            border: 1px solid #7000ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #7000ff;
+            margin-bottom: 20px;
+        }
+        h3 { font-size: 22px; font-weight: 800; color: #00f0ff; margin-bottom: 12px; text-transform: uppercase; }
+        p { font-size: 18px; color: #a0a0a0; line-height: 1.5; }
+        
+        .accent-line { position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: #00f0ff; }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="grid-overlay"></div>
+        <header>
+            <div class="kicker">Visual Identity // UX Design</div>
+            <h2>Identidade Visual Neon e UX Futurista</h2>
+        </header>
+        
+        <div class="main-grid">
+            <div class="feature-card" style="border-top: 4px solid #00f0ff;">
+                <div class="icon-box"><i class="fas fa-bolt"></i></div>
+                <h3>Neon High Contrast</h3>
+                <p>Paleta vibrante com pretos profundos e acentos ciano/violeta, otimizada para legibilidade e imersão técnica.</p>
+            </div>
+            <div class="feature-card" style="border-top: 4px solid #7000ff;">
+                <div class="icon-box"><i class="fas fa-window-restore"></i></div>
+                <h3>Glassmorphism</h3>
+                <p>Superfícies translúcidas e camadas de profundidade que criam uma hierarquia visual clara e moderna.</p>
+            </div>
+            <div class="feature-card" style="border-top: 4px solid #39ff14;">
+                <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+                <h3>HUD-Style Progress</h3>
+                <p>Barras de progresso e indicadores inspirados em interfaces de comando militar e ficção científica.</p>
+            </div>
+            <div class="feature-card" style="border-top: 4px solid #fff;">
+                <div class="icon-box"><i class="fas fa-fingerprint"></i></div>
+                <h3>Interatividade Fluida</h3>
+                <p>Micro-interações táteis e feedback visual instantâneo para cada ação do aluno na plataforma.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

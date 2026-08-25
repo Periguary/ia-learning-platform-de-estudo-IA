@@ -1,5 +1,5 @@
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { BookOpen, TrendingUp, Award, Clock, CheckCircle2, Target } from "lucide-react";
+import { Activity, BookOpen, TrendingUp, Award, Clock, CheckCircle2, Target, Crosshair } from "lucide-react";
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { coursesData } from "@/data/coursesData";
 import { learningPhases } from "@/data/learningCatalog";
 import { getCompletedCount, readProgress } from "@/data/progress";
 import { getPhaseEntryRoute } from "@/data/learningRoutes";
+import CategoryProgressPanel from "@/components/CategoryProgressPanel";
 
 export default function Dashboard() {
   const [, navigate] = useLocation();
@@ -59,6 +60,14 @@ export default function Dashboard() {
     return { phase: `Fase ${phase.id}`, completed, total };
   });
 
+  const categoryStats = progressData.map((phase) => ({
+    id: phases.find(item => item.id === Number(phase.phase.replace("Fase ", "")))?.id ?? 0,
+    title: learningPhases.find(item => item.id === Number(phase.phase.replace("Fase ", "")))?.title ?? phase.phase,
+    completed: phase.completed,
+    total: phase.total,
+    percentage: phase.total ? Math.round((phase.completed / phase.total) * 100) : 0,
+  }));
+
   const totalLessons = progressData.reduce((sum, phase) => sum + phase.total, 0);
   const completedLessons = progressData.reduce((sum, phase) => sum + phase.completed, 0);
   const overallProgress = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
@@ -89,11 +98,11 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full futurist-grid">
       {/* Header */}
-      <section className="py-8 border-b border-border bg-card/50">
+      <section className="py-10 border-b border-primary/20 bg-transparent futurist-scanline">
         <div className="container space-y-4">
-          <h1 className="text-4xl font-bold">Seu Dashboard</h1>
+          <><p className="futurist-kicker">IA ACADEMY // MISSION CONTROL</p><h1 className="mt-2 text-4xl font-black uppercase tracking-[-0.05em]">Seu Dashboard</h1></>
           <p className="text-lg text-muted-foreground">
             Bem-vindo, {user?.name || "Aluno"}! Acompanhe seu progresso na trilha de aprendizado.
           </p>
@@ -106,7 +115,7 @@ export default function Dashboard() {
           {/* Stats Grid */}
           <div className="grid md:grid-cols-4 gap-6">
             {stats.map((stat) => (
-              <div key={stat.label} className="p-6 border border-border rounded-xl bg-card hover:border-primary/50 transition-colors">
+              <div key={stat.label} className="futurist-panel rounded-none p-6 hover:border-primary/60 transition-colors">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-muted-foreground">{stat.label}</h3>
                   <stat.icon className={`w-6 h-6 ${stat.color}`} />
@@ -116,10 +125,28 @@ export default function Dashboard() {
             ))}
           </div>
 
+          {/* HUD Progress */}
+          <section className="futurist-panel relative overflow-hidden p-6 md:p-8" aria-labelledby="hud-progress-heading">
+            <div className="pointer-events-none absolute -right-20 -top-20 size-56 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
+            <div className="relative grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
+              <div className="flex items-center gap-6">
+                <div className="relative grid size-36 shrink-0 place-items-center rounded-full border border-primary/45 bg-[conic-gradient(hsl(var(--primary))_0%,hsl(var(--secondary))_55%,hsl(var(--muted))_55%)] shadow-[0_0_36px_hsla(var(--primary),0.3)]" style={{ background: `conic-gradient(hsl(var(--primary)) ${overallProgress}%, hsl(var(--muted)) 0)` }} aria-label={`Progresso geral: ${overallProgress}%`}>
+                  <div className="grid size-28 place-items-center rounded-full bg-[hsl(var(--background))] text-center"><span className="text-3xl font-black text-primary">{overallProgress}%</span></div>
+                </div>
+                <div><p className="futurist-kicker">LIVE PROGRESS</p><h2 id="hud-progress-heading" className="mt-2 text-2xl font-black uppercase tracking-tight">Núcleo de aprendizagem</h2><p className="mt-2 max-w-sm text-sm text-muted-foreground">Leitura operacional da sua trilha, atualizada a partir das aulas concluídas neste navegador.</p></div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {[{ label: "Aulas", value: `${completedLessons}/${totalLessons}`, percentage: overallProgress, icon: BookOpen }, { label: "Módulos", value: String(completedModules), percentage: coursesData ? Math.round((completedModules / Object.keys(coursesData).length) * 100) : 0, icon: Activity }, { label: "Fases", value: `${progressData.filter(item => item.completed >= item.total && item.total > 0).length}/${progressData.length}`, percentage: Math.round((progressData.filter(item => item.completed >= item.total && item.total > 0).length / Math.max(1, progressData.length)) * 100), icon: Crosshair }].map(metric => { const MetricIcon = metric.icon; return <div key={metric.label} className="border border-primary/20 bg-primary/5 p-4"><div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"><span>{metric.label}</span><MetricIcon className="size-4 text-primary" /></div><p className="mt-3 text-xl font-black text-foreground">{metric.value}</p><div className="mt-3 h-1.5 bg-muted"><div className="h-full bg-gradient-to-r from-primary via-secondary to-accent" style={{ width: `${Math.min(100, metric.percentage)}%` }} /></div></div>; })}
+              </div>
+            </div>
+          </section>
+
+          <CategoryProgressPanel categories={categoryStats} />
+
           {/* Charts Row */}
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Progress by Phase */}
-            <div className="p-6 border border-border rounded-xl bg-card">
+            <div className="futurist-panel rounded-none p-6">
               <h2 className="text-xl font-bold mb-6">Progresso por Fase</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={progressData}>
@@ -140,7 +167,7 @@ export default function Dashboard() {
             </div>
 
             {/* Study Time */}
-            <div className="p-6 border border-border rounded-xl bg-card">
+            <div className="futurist-panel rounded-none p-6">
               <h2 className="text-xl font-bold mb-6">Tempo de Estudo (Última Semana)</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={studyTimeData}>
@@ -168,7 +195,7 @@ export default function Dashboard() {
 
           {/* Skills Distribution */}
           <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1 p-6 border border-border rounded-xl bg-card">
+            <div className="lg:col-span-1 futurist-panel rounded-none p-6">
               <h2 className="text-xl font-bold mb-6">Distribuição de Habilidades</h2>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
@@ -198,7 +225,7 @@ export default function Dashboard() {
             </div>
 
             {/* Achievements */}
-            <div className="lg:col-span-2 p-6 border border-border rounded-xl bg-card">
+            <div className="lg:col-span-2 futurist-panel rounded-none p-6">
               <h2 className="text-xl font-bold mb-6">Conquistas</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {achievements.map((achievement) => (
@@ -220,7 +247,7 @@ export default function Dashboard() {
           </div>
 
           {/* Phases Progress */}
-          <div className="p-6 border border-border rounded-xl bg-card space-y-6">
+          <div className="futurist-panel rounded-none p-6 space-y-6">
             <h2 className="text-xl font-bold">Progresso das Fases</h2>
             <div className="space-y-4">
               {phases.map((phase) => {
@@ -233,7 +260,7 @@ export default function Dashboard() {
                 <button
                   key={phase.id}
                   onClick={() => navigate(getPhaseEntryRoute(phase.id))}
-                  className="group w-full p-4 border border-border rounded-lg bg-background hover:bg-card hover:border-primary/50 flex items-center justify-between text-left smooth-scale color-transition"
+                  className="group w-full p-4 border border-primary/25 rounded-none bg-background/60 hover:bg-primary/10 hover:border-primary/60 flex items-center justify-between text-left smooth-scale color-transition"
                 >
                   <div className="flex items-center gap-4 flex-1">
                     <div className="w-10 h-10 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">
@@ -263,7 +290,7 @@ export default function Dashboard() {
 
           {/* Recommendations */}
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-6 border border-border rounded-xl bg-card space-y-4">
+            <div className="futurist-panel rounded-none p-6 space-y-4">
               <h2 className="text-xl font-bold">Próximos Passos</h2>
               <div className="space-y-3">
                 <button
@@ -289,7 +316,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="p-6 border border-border rounded-xl bg-card space-y-4">
+            <div className="futurist-panel rounded-none p-6 space-y-4">
               <h2 className="text-xl font-bold">Dicas de Estudo</h2>
               <div className="space-y-3 text-sm text-muted-foreground">
                 <p>✓ Estude regularmente: 1-2 horas por dia é ideal</p>
@@ -301,12 +328,12 @@ export default function Dashboard() {
           </div>
 
           {/* CTA */}
-          <div className="p-8 border border-border rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10 text-center space-y-4">
+          <div className="futurist-panel p-8 text-center space-y-4">
             <h2 className="text-2xl font-bold">Pronto para Começar?</h2>
             <p className="text-muted-foreground">Comece sua jornada de aprendizado em IA hoje mesmo.</p>
             <button
               onClick={() => navigate("/learning-path")}
-              className="btn-primary inline-flex items-center gap-2 button-lift"
+              className="futurist-button inline-flex items-center gap-2 rounded-none px-5 py-3 font-bold button-lift"
             >
               Ir para Trilha de Aprendizado
             </button>

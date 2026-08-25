@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -204,42 +204,52 @@ export async function clearAIConversationsForUserAndModule(userId: number, modul
 
 import {
   userLibraryFavorites,
+  UserRadarFavorite,
+  InsertUserRadarFavorite,
+  userRadarFavorites,
   UserLibraryFavorite,
   InsertUserLibraryFavorite,
-  userAIUpdateFavorites,
   libraryReviews,
   LibraryReview,
   InsertLibraryReview,
 } from "../drizzle/schema";
 
-export async function getUserAIUpdateFavorites(userId: number): Promise<string[]> {
+export async function getUserRadarFavorites(userId: number): Promise<UserRadarFavorite[]> {
   const db = await getDb();
   if (!db) return [];
   try {
-    const rows = await db.select().from(userAIUpdateFavorites).where(eq(userAIUpdateFavorites.userId, userId));
-    return rows.map(row => row.updateKey);
+    return await db
+      .select()
+      .from(userRadarFavorites)
+      .where(eq(userRadarFavorites.userId, userId))
+      .orderBy(desc(userRadarFavorites.createdAt));
   } catch (error) {
-    console.warn("[Database] Failed to fetch AI update favorites:", error);
+    console.warn("[Database] Failed to fetch Radar favorites:", error);
     return [];
   }
 }
 
-export async function toggleAIUpdateFavorite(userId: number, updateKey: string): Promise<boolean> {
+export async function toggleUserRadarFavorite(userId: number, data: InsertUserRadarFavorite): Promise<boolean> {
   const db = await getDb();
   if (!db) return false;
   try {
-    const existing = await db.select().from(userAIUpdateFavorites)
-      .where(and(eq(userAIUpdateFavorites.userId, userId), eq(userAIUpdateFavorites.updateKey, updateKey)))
+    const existing = await db
+      .select()
+      .from(userRadarFavorites)
+      .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, data.radarItemId)))
       .limit(1);
+
     if (existing.length > 0) {
-      await db.delete(userAIUpdateFavorites)
-        .where(and(eq(userAIUpdateFavorites.userId, userId), eq(userAIUpdateFavorites.updateKey, updateKey)));
+      await db
+        .delete(userRadarFavorites)
+        .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, data.radarItemId)));
       return false;
     }
-    await db.insert(userAIUpdateFavorites).values({ userId, updateKey });
+
+    await db.insert(userRadarFavorites).values({ ...data, userId });
     return true;
   } catch (error) {
-    console.warn("[Database] Failed to toggle AI update favorite:", error);
+    console.warn("[Database] Failed to toggle Radar favorite:", error);
     return false;
   }
 }
@@ -317,6 +327,12 @@ export async function getVideoNotes(userId: number, videoId: string) {
   return db.select().from(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.videoId, videoId)));
 }
 
+export async function getAllVideoNotes(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(videoNotes).where(eq(videoNotes.userId, userId));
+}
+
 export async function addVideoNote(userId: number, videoId: string, timestampSeconds: number, noteText: string) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
@@ -335,4 +351,131 @@ export async function deleteVideoNote(userId: number, noteId: number, videoId: s
   if (!db) throw new Error("Database not available");
   await db.delete(videoNotes).where(and(eq(videoNotes.userId, userId), eq(videoNotes.id, noteId)));
   return getVideoNotes(userId, videoId);
+}
+
+export async function saveExplanation(userId: number, title: string, content: string, moduleId: string, category: string = "Geral") {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(savedExplanations).values({
+    userId,
+    title,
+    content,
+    moduleId,
+    category,
+  });
+}
+
+export async function getSavedExplanations(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(savedExplanations).where(eq(savedExplanations.userId, userId)).orderBy(desc(savedExplanations.createdAt));
+}
+
+export async function upsertStudentMemory(userId: number, topic: string, summary: string, category: string = "Geral") {
+  const db = await getDb();
+  if (!db) return;
+  // Check if memory for this topic exists
+  const existing = await db.select().from(studentMemories).where(and(eq(studentMemories.userId, userId), eq(studentMemories.topic, topic)));
+  if (existing.length > 0) {
+    await db.update(studentMemories).set({ summary, category, updatedAt: new Date() }).where(eq(studentMemories.id, existing[0].id));
+  } else {
+    await db.insert(studentMemories).values({ userId, topic, summary, category });
+  }
+}
+
+export async function getStudentMemories(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(studentMemories).where(eq(studentMemories.userId, userId)).orderBy(desc(studentMemories.updatedAt));
+}
+
+export async function saveStudyPlan(userId: number, title: string, content: string, focusArea: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(studyPlans).values({ userId, title, content, focusArea });
+}
+
+export async function getStudyPlans(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(studyPlans).where(eq(studyPlans.userId, userId)).orderBy(desc(studyPlans.createdAt));
+}
+
+export async function updateStudyPlanProgress(userId: number, planId: number, progressPercent: number, isCompleted: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(studyPlans)
+    .set({ progressPercent, isCompleted })
+    .where(and(eq(studyPlans.id, planId), eq(studyPlans.userId, userId)));
+}
+
+export async function deleteStudyPlan(userId: number, planId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .delete(studyPlans)
+    .where(and(eq(studyPlans.id, planId), eq(studyPlans.userId, userId)));
+}
+
+export async function deleteStudentMemory(userId: number, memoryId: number) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .delete(studentMemories)
+    .where(and(eq(studentMemories.id, memoryId), eq(studentMemories.userId, userId)));
+}
+
+export async function updateStudentMemory(userId: number, memoryId: number, topic: string, summary: string, category: string) {
+  const db = await getDb();
+  if (!db) return;
+  await db
+    .update(studentMemories)
+    .set({ topic, summary, category, updatedAt: new Date() })
+    .where(and(eq(studentMemories.id, memoryId), eq(studentMemories.userId, userId)));
+}
+
+export async function upsertNotionSync(userId: number, studyPlanId: number, notionPageId: string) {
+  const db = await getDb();
+  if (!db) return;
+  const existing = await db
+    .select()
+    .from(notionSyncConfigs)
+    .where(and(eq(notionSyncConfigs.userId, userId), eq(notionSyncConfigs.studyPlanId, studyPlanId)))
+    .limit(1);
+  if (existing.length > 0) {
+    await db
+      .update(notionSyncConfigs)
+      .set({ notionPageId, lastSyncedAt: new Date() })
+      .where(eq(notionSyncConfigs.id, existing[0].id));
+  } else {
+    await db.insert(notionSyncConfigs).values({ userId, studyPlanId, notionPageId });
+  }
+}
+
+export async function getNotionSync(userId: number, studyPlanId: number) {
+  const db = await getDb();
+  if (!db) return null;
+  const res = await db
+    .select()
+    .from(notionSyncConfigs)
+    .where(and(eq(notionSyncConfigs.userId, userId), eq(notionSyncConfigs.studyPlanId, studyPlanId)))
+    .limit(1);
+  return res[0] || null;
+}
+
+export async function addCalendarEvent(userId: number, eventTitle: string, eventDate: string, source: string = "google_calendar") {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(externalCalendarEvents).values({ userId, eventTitle, eventDate, source });
+}
+
+export async function getCalendarEvents(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return db
+    .select()
+    .from(externalCalendarEvents)
+    .where(eq(externalCalendarEvents.userId, userId))
+    .orderBy(desc(externalCalendarEvents.createdAt));
 }

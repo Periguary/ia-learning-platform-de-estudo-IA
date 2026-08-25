@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "title": "IA Academy: Mentoria de IA em Larga Escala",
+    "created": 1787238922.934,
+    "last_updated": 1787239102.046,
+    "total_slides": 10
+  },
+  "slides": [
+    {
+      "id": "title_slide",
+      "state": "edited",
+      "pageNum": 1
+    },
+    {
+      "id": "vision_visuals",
+      "state": "edited",
+      "pageNum": 2
+    },
+    {
+      "id": "tech_stack",
+      "state": "edited",
+      "pageNum": 3
+    },
+    {
+      "id": "database_architecture",
+      "state": "edited",
+      "pageNum": 4
+    },
+    {
+      "id": "virtual_professor",
+      "state": "edited",
+      "pageNum": 5
+    },
+    {
+      "id": "study_plans_gamification",
+      "state": "edited",
+      "pageNum": 6
+    },
+    {
+      "id": "local_ia_ollama",
+      "state": "edited",
+      "pageNum": 7
+    },
+    {
+      "id": "ecosystem_connectivity",
+      "state": "edited",
+      "pageNum": 8
+    },
+    {
+      "id": "master_prompt_reusability",
+      "state": "edited",
+      "pageNum": 9
+    },
+    {
+      "id": "conclusion_next_steps",
+      "state": "edited",
+      "pageNum": 10
+    }
+  ],
+  "outline": [
+    {
+      "id": "title_slide",
+      "title": "IA Academy: Mentoria de IA em Larga Escala",
+      "summary": "Capa da apresentação com título, subtítulo e visão geral da plataforma futurista.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "vision_visuals",
+      "title": "Identidade Visual Neon e UX Futurista",
+      "summary": "Explicação do design system 'Elevify-inspired', modo alto contraste e interatividade fluida.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "tech_stack",
+      "title": "Pilha Tecnológica e Engenharia de Ponta",
+      "summary": "Detalhamento do uso de React 19, Tailwind 4, tRPC, Drizzle e Vitest para alta performance e estabilidade.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "database_architecture",
+      "title": "Arquitetura de Dados Relacional Persistente",
+      "summary": "Visão técnica do schema MySQL para gestão de memórias, planos de estudo e progresso do aluno.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "virtual_professor",
+      "title": "O Professor Virtual: Pedagogia Adaptativa",
+      "summary": "Funcionalidades do tutor de IA: personalidades, quizzes sob demanda, TTS e memória de longo prazo.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "study_plans_gamification",
+      "title": "Planos de Estudo e Gamificação Inteligente",
+      "summary": "Geração de roteiros personalizados, barra de progresso interativa e sistema de medalhas automáticas.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "local_ia_ollama",
+      "title": "Privacidade e Execução Local com Ollama",
+      "summary": "Guia de adaptação para rodar o motor de IA localmente, garantindo soberania de dados.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "ecosystem_connectivity",
+      "title": "Ecossistema Conectado: Colab, VS Code e Obsidian",
+      "summary": "Integração profunda com ferramentas externas para prática imediata e exportação de conhecimento.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "master_prompt_reusability",
+      "title": "Prompt Mestre: O Blueprint da IA Academy",
+      "summary": "Apresentação do documento de reuso para replicação do sistema em qualquer plataforma de IA.",
+      "image_plan": "Use a suitable image if needed"
+    },
+    {
+      "id": "conclusion_next_steps",
+      "title": "Conclusão e Próximos Passos da Evolução",
+      "summary": "Resumo dos marcos alcançados e visão para notificações inteligentes e colaboração social.",
+      "image_plan": "Use a suitable image if needed"
+    }
+  ]
+}

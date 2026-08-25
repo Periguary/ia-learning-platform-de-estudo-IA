@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+        .slide-container { 
+            width: 1280px; 
+            min-height: 720px; 
+            background: #050505;
+            position: relative;
+            padding-top: 60px;
+            padding-left: 80px;
+            padding-right: 80px;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(112, 0, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(112, 0, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        header { margin-bottom: 50px; }
+        .kicker { color: #7000ff; font-size: 12px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        h2 { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+        
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .benefit-list { display: flex; flex-direction: column; gap: 20px; }
+        .benefit-item {
+            background: rgba(112, 0, 255, 0.05);
+            border: 1px solid rgba(112, 0, 255, 0.2);
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .benefit-icon { font-size: 24px; color: #7000ff; margin-top: 4px; }
+        .benefit-text h3 { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .benefit-text p { font-size: 16px; color: #888; line-height: 1.4; }
+        
+        .setup-guide {
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            padding: 30px;
+            position: relative;
+        }
+        .setup-guide h3 { font-size: 22px; font-weight: 800; color: #00f0ff; margin-bottom: 20px; text-transform: uppercase; }
+        .step { margin-bottom: 20px; display: flex; gap: 15px; }
+        .step-num { 
+            width: 28px; height: 28px; background: #00f0ff; color: #000; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 14px; flex-shrink: 0;
+        }
+        .step-content p { font-size: 17px; color: #ccc; }
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #00f0ff;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="grid-overlay"></div>
+        <header>
+            <div class="kicker">Data Sovereignty // Local AI</div>
+            <h2>Privacidade e Execução Local com Ollama</h2>
+        </header>
+        
+        <div class="content-layout">
+            <div class="benefit-list">
+                <div class="benefit-item">
+                    <i class="fas fa-shield-alt benefit-icon"></i>
+                    <div class="benefit-text">
+                        <h3>Soberania de Dados</h3>
+                        <p>Processamento local completo, garantindo que conversas e memórias nunca saiam da infraestrutura do aluno.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-tachometer-alt benefit-icon"></i>
+                    <div class="benefit-text">
+                        <h3>Latência Reduzida</h3>
+                        <p>Respostas instantâneas sem dependência de conexões externas ou filas de provedores de nuvem.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-coins benefit-icon"></i>
+                    <div class="benefit-text">
+                        <h3>Custo Zero de API</h3>
+                        <p>Utilização ilimitada de modelos como Llama 3 e Mistral sem taxas por token ou assinaturas mensais.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setup-guide">
+                <h3>Guia de Implementação</h3>
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <p>Instalação do Ollama e download do modelo alvo:</p>
+                        <div class="code-block">ollama run llama3</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <p>Configuração do endpoint REST local no backend:</p>
+                        <div class="code-block">http://localhost:11434/api/chat</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <p>Adaptação do helper LLM para o formato Ollama:</p>
+                        <div class="code-block">
+                            // server/_core/llm.ts<br>
+                            invokeLocalLLM({ model: "llama3", ... })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

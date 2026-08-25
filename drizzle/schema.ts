@@ -61,15 +61,23 @@ export const aiUpdateCandidates = mysqlTable("ai_update_candidates", {
 export type AIUpdateCandidate = typeof aiUpdateCandidates.$inferSelect;
 export type InsertAIUpdateCandidate = typeof aiUpdateCandidates.$inferInsert;
 
-export const userAIUpdateFavorites = mysqlTable("user_ai_update_favorites", {
+export const userRadarFavorites = mysqlTable("user_radar_favorites", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  updateKey: varchar("updateKey", { length: 200 }).notNull(),
+  radarItemId: varchar("radarItemId", { length: 180 }).notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  summary: text("summary").notNull(),
+  category: varchar("category", { length: 80 }).notNull(),
+  sourceName: varchar("sourceName", { length: 160 }).notNull(),
+  sourceUrl: varchar("sourceUrl", { length: 500 }).notNull(),
+  relatedModules: text("relatedModules").notNull(),
+  learningAction: text("learningAction").notNull(),
+  publishedAt: varchar("publishedAt", { length: 40 }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type UserAIUpdateFavorite = typeof userAIUpdateFavorites.$inferSelect;
-export type InsertUserAIUpdateFavorite = typeof userAIUpdateFavorites.$inferInsert;
+export type UserRadarFavorite = typeof userRadarFavorites.$inferSelect;
+export type InsertUserRadarFavorite = typeof userRadarFavorites.$inferInsert;
 
 
 export const userLibraryFavorites = mysqlTable("user_library_favorites", {
@@ -81,6 +89,45 @@ export const userLibraryFavorites = mysqlTable("user_library_favorites", {
 
 export type UserLibraryFavorite = typeof userLibraryFavorites.$inferSelect;
 export type InsertUserLibraryFavorite = typeof userLibraryFavorites.$inferInsert;
+
+export const savedExplanations = mysqlTable("saved_explanations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 300 }).notNull(),
+  content: text("content").notNull(),
+  moduleId: varchar("moduleId", { length: 120 }).notNull(),
+  category: varchar("category", { length: 80 }).default("Geral").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type SavedExplanation = typeof savedExplanations.$inferSelect;
+export type InsertSavedExplanation = typeof savedExplanations.$inferInsert;
+
+export const studentMemories = mysqlTable("student_memories", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  topic: varchar("topic", { length: 255 }).notNull(),
+  summary: text("summary").notNull(),
+  category: varchar("category", { length: 80 }).default("Geral").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export type StudentMemory = typeof studentMemories.$inferSelect;
+export type InsertStudentMemory = typeof studentMemories.$inferInsert;
+
+export const studyPlans = mysqlTable("study_plans", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+  focusArea: varchar("focusArea", { length: 120 }).notNull(),
+  isCompleted: int("isCompleted").default(0).notNull(), // 0 ou 1
+  progressPercent: int("progressPercent").default(0).notNull(), // 0 a 100
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type StudyPlan = typeof studyPlans.$inferSelect;
+export type InsertStudyPlan = typeof studyPlans.$inferInsert;
 
 export const libraryReviews = mysqlTable("library_reviews", {
   id: int("id").autoincrement().primaryKey(),
@@ -102,5 +149,22 @@ export const videoNotes = mysqlTable("video_notes", {
   videoId: varchar("videoId", { length: 128 }).notNull(),
   timestampSeconds: int("timestampSeconds").notNull().default(0),
   noteText: text("noteText").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const notionSyncConfigs = mysqlTable("notion_sync_configs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  studyPlanId: int("studyPlanId").notNull(),
+  notionPageId: varchar("notionPageId", { length: 191 }).notNull(),
+  lastSyncedAt: timestamp("lastSyncedAt").defaultNow().notNull(),
+});
+
+export const externalCalendarEvents = mysqlTable("external_calendar_events", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  eventTitle: varchar("eventTitle", { length: 255 }).notNull(),
+  eventDate: varchar("eventDate", { length: 64 }).notNull(),
+  source: varchar("source", { length: 64 }).default("google_calendar").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

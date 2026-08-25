@@ -15,6 +15,7 @@ vi.mock("@/lib/trpc", () => ({
     },
     videoNotes: {
       list: { useQuery: () => ({ data: [] }) },
+      all: { useQuery: () => ({ data: [] }) },
       add: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
       remove: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
     },

@@ -57,6 +57,11 @@ export type AIChatBoxProps = {
    * Click to send directly
    */
   suggestedPrompts?: string[];
+
+  /**
+   * Callback when user wants to save an assistant response to reading list
+   */
+  onSaveExplanation?: (content: string, category: string) => void;
 };
 
 /**
@@ -119,7 +124,31 @@ export function AIChatBox({
   height = "600px",
   emptyStateMessage = "Start a conversation with AI",
   suggestedPrompts,
+  onSaveExplanation,
 }: AIChatBoxProps) {
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+  const [playbackRate, setPlaybackRate] = useState<number>(1.0);
+  const [selectedCategory, setSelectedCategory] = useState<string>("Conceitos");
+
+  const handleSpeak = (text: string, index: number) => {
+    if (!("speechSynthesis" in window)) {
+      alert("Seu navegador não suporta síntese de voz nativa (TTS).");
+      return;
+    }
+    if (speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "pt-BR";
+    utterance.rate = playbackRate;
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  };
   const [input, setInput] = useState("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -254,16 +283,62 @@ export function AIChatBox({
 
                     <div
                       className={cn(
-                        "max-w-[80%] rounded-lg px-4 py-2.5",
+                        "max-w-[85%] rounded-lg px-4 py-2.5 space-y-2",
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-foreground"
                       )}
                     >
                       {message.role === "assistant" ? (
-                        <div className="prose prose-sm dark:prose-invert max-w-none">
-                          <Streamdown>{message.content}</Streamdown>
-                        </div>
+                        <>
+                          <div className="prose prose-sm dark:prose-invert max-w-none">
+                            <Streamdown>{message.content}</Streamdown>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-border/40 text-xs">
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleSpeak(message.content, index)}
+                                className="flex items-center gap-1 text-primary hover:underline font-medium"
+                              >
+                                🔊 {speakingIndex === index ? "Parar Áudio" : "Ouvir"}
+                              </button>
+                              <select
+                                value={playbackRate}
+                                onChange={(e) => setPlaybackRate(Number(e.target.value))}
+                                className="bg-background text-foreground border border-border rounded px-1.5 py-0.5 text-[11px]"
+                                title="Velocidade da voz"
+                              >
+                                <option value={1.0}>1.0x</option>
+                                <option value={1.25}>1.25x</option>
+                                <option value={1.5}>1.5x</option>
+                              </select>
+                            </div>
+                            {onSaveExplanation && (
+                              <div className="flex items-center gap-1.5 ml-auto">
+                                <select
+                                  value={selectedCategory}
+                                  onChange={(e) => setSelectedCategory(e.target.value)}
+                                  className="bg-background text-foreground border border-border rounded px-1.5 py-0.5 text-[11px]"
+                                  title="Categoria / Tag"
+                                >
+                                  <option value="Conceitos">Conceitos</option>
+                                  <option value="Matemática">Matemática</option>
+                                  <option value="Código & Python">Código & Python</option>
+                                  <option value="Machine Learning">Machine Learning</option>
+                                  <option value="Arquitetura de IA">Arquitetura de IA</option>
+                                </select>
+                                <button
+                                  type="button"
+                                  onClick={() => onSaveExplanation(message.content, selectedCategory)}
+                                  className="flex items-center gap-1 text-emerald-400 hover:underline font-medium"
+                                >
+                                  📌 Salvar
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </>
                       ) : (
                         <p className="whitespace-pre-wrap text-sm">
                           {message.content}
