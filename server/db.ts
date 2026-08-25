@@ -206,10 +206,43 @@ import {
   userLibraryFavorites,
   UserLibraryFavorite,
   InsertUserLibraryFavorite,
+  userAIUpdateFavorites,
   libraryReviews,
   LibraryReview,
   InsertLibraryReview,
 } from "../drizzle/schema";
+
+export async function getUserAIUpdateFavorites(userId: number): Promise<string[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    const rows = await db.select().from(userAIUpdateFavorites).where(eq(userAIUpdateFavorites.userId, userId));
+    return rows.map(row => row.updateKey);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch AI update favorites:", error);
+    return [];
+  }
+}
+
+export async function toggleAIUpdateFavorite(userId: number, updateKey: string): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  try {
+    const existing = await db.select().from(userAIUpdateFavorites)
+      .where(and(eq(userAIUpdateFavorites.userId, userId), eq(userAIUpdateFavorites.updateKey, updateKey)))
+      .limit(1);
+    if (existing.length > 0) {
+      await db.delete(userAIUpdateFavorites)
+        .where(and(eq(userAIUpdateFavorites.userId, userId), eq(userAIUpdateFavorites.updateKey, updateKey)));
+      return false;
+    }
+    await db.insert(userAIUpdateFavorites).values({ userId, updateKey });
+    return true;
+  } catch (error) {
+    console.warn("[Database] Failed to toggle AI update favorite:", error);
+    return false;
+  }
+}
 
 export async function getUserLibraryFavorites(userId: number): Promise<string[]> {
   const db = await getDb();

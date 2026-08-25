@@ -13,6 +13,7 @@ describe("coursesData", () => {
       "pandas",
       "ml-fundamentals",
       "neural-networks",
+      "computer-vision",
       "llms",
       "software-engineering"
     ];
@@ -20,6 +21,13 @@ describe("coursesData", () => {
     expectedModules.forEach((module) => {
       expect(coursesData).toHaveProperty(module);
     });
+  });
+
+  it("should expose a complete computer vision module", () => {
+    const course = coursesData["computer-vision"];
+    expect(course.lessons).toBe(12);
+    expect(course.sections).toHaveLength(4);
+    expect(course.sections.flatMap((section: { lessons: unknown[] }) => section.lessons)).toHaveLength(12);
   });
 
   it("should have sql-basics module with correct structure", () => {
@@ -119,6 +127,7 @@ describe("learning path lesson availability", () => {
       "pandas",
       "ml-fundamentals",
       "neural-networks",
+      "computer-vision",
       "llms",
       "software-engineering",
     ];

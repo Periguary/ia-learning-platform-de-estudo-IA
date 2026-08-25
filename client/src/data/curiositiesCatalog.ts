@@ -1,4 +1,4 @@
-export type CuriosityCategory = "História" | "Algoritmos" | "Ética e Sociedade" | "Fronteira Tecnológica";
+export type CuriosityCategory = "História" | "Algoritmos" | "Ética e Sociedade" | "Fronteira Tecnológica" | "Visão Computacional";
 
 export type CuriosityItem = {
   id: string;
@@ -8,6 +8,8 @@ export type CuriosityItem = {
   content: string;
   funFact: string;
   readTime: string;
+  sourceName?: string;
+  sourceUrl?: string;
 };
 
 export const curiositiesCatalog: CuriosityItem[] = [
@@ -37,6 +39,28 @@ export const curiositiesCatalog: CuriosityItem[] = [
     content: "Modelos de linguagem não 'pensam' no sentido humano; eles calculam estatisticamente qual token (pedaço de palavra) deve vir em seguida com base em bilhões de exemplos de treinamento. Quando a pergunta exige um raciocínio lógico profundo ou carece de dados suficientes no contexto, o modelo prioriza a fluência gramatical e a coerência de tom em vez da verdade factual. Isso gera a chamada 'alucinação', onde uma resposta incorreta é redigida com extrema segurança.",
     funFact: "Técnicas modernas como RAG (Retrieval-Augmented Generation) injetam documentos reais no prompt para mitigar alucinações.",
     readTime: "6 min de leitura",
+  },
+  {
+    id: "opencv-real-time-vision",
+    title: "De Pixels a Percepção em Tempo Real",
+    category: "Visão Computacional",
+    teaser: "Como uma biblioteca open source transforma imagens e vídeo em operações úteis para máquinas.",
+    content: "O OpenCV reúne ferramentas para leitura, conversão, redimensionamento, filtragem e análise de imagens e vídeos. A curiosidade importante é que uma aplicação de visão raramente começa pelo modelo mais sofisticado: muitas soluções precisam primeiro corrigir iluminação, selecionar regiões de interesse, reduzir ruído e medir a qualidade da captura. Esse pipeline clássico continua sendo uma base valiosa para entender e depurar sistemas modernos.",
+    funFact: "A página oficial do OpenCV destaca documentação, tutoriais, fórum, cursos e um ecossistema open source para visão computacional.",
+    readTime: "4 min de leitura",
+    sourceName: "OpenCV",
+    sourceUrl: "https://opencv.org/",
+  },
+  {
+    id: "transfer-learning-vision",
+    title: "Por que Modelos Visuais Raramente Começam do Zero",
+    category: "Visão Computacional",
+    teaser: "Transfer learning reaproveita representações aprendidas para reduzir o custo de treinar um classificador visual.",
+    content: "Em visão computacional, um modelo pré-treinado já aprendeu padrões visuais gerais, como bordas, texturas e formas. O tutorial oficial do PyTorch apresenta dois caminhos: ajustar a rede inteira para a nova tarefa ou congelar a maior parte das camadas e treinar apenas o classificador final. A escolha depende do tamanho e da semelhança do dataset, e deve ser acompanhada de validação e análise dos erros.",
+    funFact: "O mesmo tutorial oficial demonstra classificação de imagens com uma CNN e separa fine-tuning de uso da CNN como extrator fixo de características.",
+    readTime: "5 min de leitura",
+    sourceName: "PyTorch Tutorials",
+    sourceUrl: "https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html",
   },
   {
     id: "bias-and-fairness",

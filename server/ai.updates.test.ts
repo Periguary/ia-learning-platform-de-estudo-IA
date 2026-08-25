@@ -7,6 +7,8 @@ const dbMock = vi.hoisted(() => ({
   saveAIConversation: vi.fn(),
   getAIConversationsForUserAndModule: vi.fn(),
   clearAIConversationsForUserAndModule: vi.fn(),
+  getUserAIUpdateFavorites: vi.fn(),
+  toggleAIUpdateFavorite: vi.fn(),
 }));
 
 const curatorMock = vi.hoisted(() => ({
@@ -32,6 +34,8 @@ describe("ai updates", () => {
     dbMock.getApprovedAIUpdateCandidates.mockResolvedValue([]);
     dbMock.getPendingAIUpdateCandidates.mockResolvedValue([]);
     dbMock.updateAIUpdateCandidateStatus.mockResolvedValue(undefined);
+    dbMock.getUserAIUpdateFavorites.mockResolvedValue([]);
+    dbMock.toggleAIUpdateFavorite.mockResolvedValue(true);
     curatorMock.curateAIUpdates.mockResolvedValue({ scanned: 4, created: 2, skipped: 1, failed: 1 });
   });
 
@@ -67,6 +71,28 @@ describe("ai updates", () => {
 
     await expect(caller.ai.pendingUpdates()).rejects.toThrow();
     expect(dbMock.getPendingAIUpdateCandidates).not.toHaveBeenCalled();
+  });
+
+  it("lista e alterna favoritos para um aluno autenticado", async () => {
+    dbMock.getUserAIUpdateFavorites.mockResolvedValue(["opencv-ai-competition-2026"]);
+    const caller = appRouter.createCaller(createContext({
+      id: 2,
+      openId: "student",
+      name: "Aluno",
+      email: "student@example.com",
+      loginMethod: "test",
+      role: "user",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastSignedIn: new Date(),
+    }));
+
+    const favorites = await caller.ai.updateFavorites();
+    const toggled = await caller.ai.toggleUpdateFavorite({ updateKey: "opencv-ai-competition-2026" });
+
+    expect(favorites).toEqual(["opencv-ai-competition-2026"]);
+    expect(toggled).toEqual({ isFavorited: true });
+    expect(dbMock.toggleAIUpdateFavorite).toHaveBeenCalledWith(2, "opencv-ai-competition-2026");
   });
 
   it("executa a curadoria e permite aprovação apenas ao administrador", async () => {

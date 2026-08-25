@@ -92,6 +92,22 @@ export const specializationsCatalog: AISpecialization[] = [
     recommendedModule: "transformers"
   },
   {
+    id: "ai-vision",
+    title: "Visão Computacional & Processamento de Imagens",
+    badge: "Vision & Imaging",
+    subtitle: "Pixels, OpenCV, CNNs, detecção, segmentação, OCR e visão multimodal.",
+    description: "A Visão Computacional transforma imagens e vídeos em sinais úteis para classificação, localização, medição e decisão. O percurso começa com pixels, cores e filtros clássicos, avança para redes convolucionais e transfer learning, e termina com sistemas de detecção, segmentação, OCR e visão multimodal.",
+    coreConcepts: [
+      "Representação de imagens como tensores, canais, histogramas e espaços de cor",
+      "Pré-processamento, filtros, bordas e transformações geométricas com OpenCV",
+      "CNNs, data augmentation, transfer learning e avaliação por matriz de confusão",
+      "Detecção, segmentação, OCR, visão multimodal e limites de confiabilidade"
+    ],
+    techStack: ["Python", "OpenCV", "PyTorch", "TorchVision", "Hugging Face", "Jupyter"],
+    careerImpact: "Profissionais de visão computacional atuam em inspeção industrial, documentos, varejo, robótica, saúde e produtos multimodais, sempre documentando dados, métricas e limitações.",
+    recommendedModule: "computer-vision"
+  },
+  {
     id: "ai-product",
     title: "Produto & Estratégia de IA (Agentes & Governança)",
     badge: "Product & Governance",

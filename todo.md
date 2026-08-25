@@ -317,8 +317,19 @@
 
 
 ## Evolução Recente: Radar Automatizado, Exportação em PDF e Áreas Detalhadas de IA
-- [ ] Atualizar o Radar de IA com fontes oficiais automatizadas (OpenAI, DeepMind, Hugging Face, arXiv) e painel editorial detalhado para aprovadores
-- [ ] Implementar exportação direta do guia de estudos e notas para PDF usando jsPDF ou print-friendly formatting com layout profissional
-- [ ] Criar a página de Especializações e Áreas de IA (`/specializations`) detalhando IA em Frontend, Backend, DevOps, Data Engineering, Research e Produto
-- [ ] Adicionar testes automatizados para ingestão, PDF e áreas de IA
-- [ ] Validar no preview, salvar checkpoint e entregar o resultado final
+- [x] Atualizar o Radar de IA com fontes oficiais automatizadas (OpenAI, DeepMind, Hugging Face, arXiv) e painel editorial detalhado para aprovadores
+- [x] Implementar exportação direta do guia de estudos e notas para PDF usando jsPDF ou print-friendly formatting com layout profissional
+- [x] Criar a página de Especializações e Áreas de IA (`/specializations`) detalhando IA em Frontend, Backend, DevOps, Data Engineering, Research e Produto
+- [x] Adicionar testes automatizados para ingestão, PDF e áreas de IA
+- [x] Validar no preview, salvar checkpoint e entregar o resultado final
+
+
+## Nova Evolução: Visão Computacional, Filtros e Favoritos do Radar
+- [x] Adicionar módulo completo de Visão Computacional e Processamento de Imagens à trilha de aprendizagem
+- [x] Criar aulas didáticas sobre imagens digitais, pré-processamento, OpenCV, CNNs, detecção, segmentação, OCR e avaliação
+- [x] Adicionar busca textual e filtros por área, nível e stack na página de Especializações
+- [x] Criar tabela e procedimentos tRPC para favoritos persistentes de itens do Radar de IA
+- [x] Integrar botão de favoritar e filtro de itens salvos no Radar
+- [x] Ampliar atualizações e curiosidades de visão computacional com fontes oficiais e links verificáveis
+- [x] Adicionar testes de regressão para o novo módulo, filtros e favoritos
+- [x] Validar no preview, revisar todo o backlog, salvar checkpoint e entregar a evolução

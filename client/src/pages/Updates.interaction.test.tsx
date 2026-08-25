@@ -17,7 +17,13 @@ vi.mock("@/lib/trpc", () => ({
   trpc: {
     ai: {
       updates: {
-        useQuery: () => ({ data: [], isLoading: false }),
+        useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
+      },
+      updateFavorites: {
+        useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
+      },
+      toggleUpdateFavorite: {
+        useMutation: () => ({ isPending: false, mutate: vi.fn() }),
       },
       pendingUpdates: {
         useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
@@ -39,7 +45,7 @@ describe("Updates interaction", () => {
     navigate.mockClear();
   });
 
-  it("renderiza o catálogo editorial com fonte oficial e ação de revisão", () => {
+  it("renderiza o catálogo editorial com fonte oficial, ação de revisão e favoritos", () => {
     render(<Updates />);
 
     expect(screen.getByRole("heading", { name: /Atualizações que viram aprendizado/i })).toBeTruthy();
@@ -47,6 +53,11 @@ describe("Updates interaction", () => {
     expect(openAiSource).toBeTruthy();
     expect(openAiSource.getAttribute("href")).toBe("https://openai.com/news/");
     expect(screen.getAllByRole("button", { name: /Revisar LLMs/i }).length).toBeGreaterThan(0);
+  });
+
+  it("permite identificar o controle de salvar para leitura posterior", () => {
+    render(<Updates />);
+    expect(screen.getAllByRole("button", { name: /Favoritar/i }).length).toBeGreaterThan(0);
   });
 
   it("mantém as novidades acessíveis sem ativar a fila de curadoria para aluno anônimo", () => {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
 import { ShareActions } from "@/components/ShareActions";
 
-const categories: CuriosityCategory[] = ["História", "Algoritmos", "Ética e Sociedade", "Fronteira Tecnológica"];
+const categories: CuriosityCategory[] = ["História", "Algoritmos", "Ética e Sociedade", "Fronteira Tecnológica", "Visão Computacional"];
 
 export default function Curiosities() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
@@ -71,6 +71,7 @@ export default function Curiosities() {
                   </span>
                   <div className="flex items-center gap-2">
                     <ShareActions title={item.title} text={`Confira esta curiosidade de IA na IA Academy: ${item.title}`} />
+                    {item.sourceUrl && <a href={item.sourceUrl} target="_blank" rel="noreferrer" onClick={event => event.stopPropagation()} className="text-xs text-primary underline-offset-4 hover:underline">Fonte: {item.sourceName}</a>}
                     <span className="text-xs text-muted-foreground">{item.readTime}</span>
                   </div>
                 </div>
