@@ -357,3 +357,14 @@
 - [x] Atualizar contratos, helpers e testes para operações em lote
 - [x] Transformar o processo em uma skill reutilizável usando skill-creator e validá-la
 - [x] Executar testes, validar preview, sincronizar alterações com GitHub e salvar checkpoint
+
+
+## Nova Evolução: IA Local WebAssembly e Tutor Open Source
+- [x] Auditar o Tutor IA e os playgrounds para definir pontos de integração local
+- [x] Adicionar runtime local ONNX/WebAssembly com carregamento sob demanda e cache
+- [x] Adicionar exemplo prático de inferência leve no navegador com modelo de licença aberta
+- [x] Aprimorar o Tutor IA com modo local gratuito, contexto da aula e notas do aluno
+- [x] Exibir estados de carregamento, limitações, licença e origem do modelo
+- [x] Documentar fontes, modelos e licenças open source usadas no projeto
+- [x] Criar testes de runtime, fallback local, tutor e estados de erro
+- [x] Validar desempenho, acessibilidade, preview, TypeScript e salvar checkpoint

@@ -3,6 +3,7 @@ import { Sparkles, History, BookMarked, Loader2, RotateCcw, Trash2, HelpCircle, 
 import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
+import { LocalTutorPanel } from "@/components/LocalTutorPanel";
 import { Streamdown } from "streamdown";
 
 type AIAssistantBoxProps = {
@@ -260,10 +261,10 @@ export function AIAssistantBox({
                 ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
                 : "bg-background text-muted-foreground border-border hover:border-primary/40"
             }`}
-            title="Alternar entre Nuvem Padrão e API Local do Ollama (llama3)"
+            title="Alternar entre Tutor Nuvem e Tutor Local open source via WebAssembly"
           >
             <span className={`size-2 rounded-full ${useLocalOllama ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground"}`} />
-            {useLocalOllama ? "Ollama Local (Ativo)" : "Nuvem (Padrão)"}
+            {useLocalOllama ? "Tutor Local (Ativo)" : "Nuvem (Padrão)"}
           </button>
           <div className="flex items-center gap-1.5 bg-background border border-border rounded-lg px-2 py-1">
             <span className="text-[11px] text-muted-foreground font-semibold">Estilo:</span>
@@ -364,6 +365,13 @@ export function AIAssistantBox({
             </p>
           )}
         </div>
+      ) : useLocalOllama ? (
+        <LocalTutorPanel
+          courseTitle={courseTitle}
+          lessonTitle={lessonTitle}
+          lessonContent={lessonContent}
+          studentNotes={studentNotes}
+        />
       ) : (
         <AIChatBox
           messages={
