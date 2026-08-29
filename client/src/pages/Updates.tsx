@@ -37,6 +37,8 @@ export default function Updates() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [tagFilter, setTagFilter] = useState("Todas as tags");
   const [tagDrafts, setTagDrafts] = useState<Record<string, string[]>>({});
+  const [selectedFavoriteIds, setSelectedFavoriteIds] = useState<string[]>([]);
+  const [batchTag, setBatchTag] = useState("");
   const approvedQuery = trpc.ai.updates.useQuery();
   const radarFavoritesQuery = trpc.ai.radarFavorites.useQuery();
   const pendingQuery = trpc.ai.pendingUpdates.useQuery(undefined, { enabled: isAdmin });
@@ -59,6 +61,13 @@ export default function Updates() {
   });
   const tagMutation = trpc.ai.updateRadarFavoriteTags.useMutation({
     onSuccess: () => {
+      void utils.ai.radarFavorites.invalidate();
+    },
+  });
+  const batchTagMutation = trpc.ai.batchUpdateRadarFavoriteTags.useMutation({
+    onSuccess: () => {
+      setSelectedFavoriteIds([]);
+      setBatchTag("");
       void utils.ai.radarFavorites.invalidate();
     },
   });
@@ -180,12 +189,29 @@ export default function Updates() {
             )}
           </div>
           {!user && <p className="text-xs text-muted-foreground">Entre na plataforma para salvar itens.</p>}
+          {showFavoritesOnly && (radarFavoritesQuery.data?.length ?? 0) > 0 && (
+            <div className="mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3">
+              <Button type="button" variant="outline" size="sm" onClick={() => setSelectedFavoriteIds(selectedFavoriteIds.length === savedUpdates.length ? [] : savedUpdates.map(update => update.id))}>
+                {selectedFavoriteIds.length === savedUpdates.length ? "Desmarcar todos" : "Selecionar todos"}
+              </Button>
+              <input value={batchTag} onChange={event => setBatchTag(event.target.value)} placeholder="Tag para seleção" aria-label="Tag para operação em lote" className="h-9 min-w-48 flex-1 rounded-lg border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary" />
+              <Button type="button" size="sm" onClick={() => batchTagMutation.mutate({ radarItemIds: selectedFavoriteIds, tag: batchTag, action: "add" })} disabled={!batchTag.trim() || selectedFavoriteIds.length === 0 || batchTagMutation.isPending}>Adicionar tag</Button>
+              <Button type="button" size="sm" variant="outline" onClick={() => batchTagMutation.mutate({ radarItemIds: selectedFavoriteIds, tag: batchTag, action: "remove" })} disabled={!batchTag.trim() || selectedFavoriteIds.length === 0 || batchTagMutation.isPending}>Remover tag</Button>
+              <span className="text-xs text-muted-foreground">{selectedFavoriteIds.length} selecionado(s)</span>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {displayUpdates.map(update => (
             <article key={update.id} className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
               <div className="flex items-start justify-between gap-4">
+                {showFavoritesOnly && (
+                  <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <input type="checkbox" checked={selectedFavoriteIds.includes(update.id)} onChange={event => setSelectedFavoriteIds(current => event.target.checked ? [...current, update.id] : current.filter(id => id !== update.id))} aria-label={`Selecionar ${update.title} para edição em lote`} className="size-4 accent-cyan-400" />
+                    Selecionar
+                  </label>
+                )}
                 <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${categoryStyles[update.category] ?? "bg-muted text-muted-foreground"}`}>
                   {update.category}
                 </span>

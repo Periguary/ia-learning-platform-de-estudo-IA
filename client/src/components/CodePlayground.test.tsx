@@ -1,10 +1,17 @@
 // @vitest-environment jsdom
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { CodePlayground } from "./CodePlayground";
 
 describe("CodePlayground", () => {
+  it("executa código Python local quando o runtime está disponível", async () => {
+    window.loadPyodide = vi.fn(async () => ({ runPythonAsync: async () => "ok" }));
+    render(<CodePlayground examples={[{ label: "Python", language: "python", code: "print('ok')" }]} />);
+    fireEvent.click(screen.getByRole("button", { name: /Executar no Navegador/i }));
+    await waitFor(() => expect(screen.getByRole("status").textContent).toContain("ok"));
+  });
+
   it("permite alternar exemplos e editar o código", () => {
     render(<CodePlayground examples={[{ label: "OpenCV", language: "python", code: "import cv2" }, { label: "PyTorch", language: "python", code: "import torch" }]} />);
     expect(screen.getByDisplayValue("import cv2")).toBeTruthy();

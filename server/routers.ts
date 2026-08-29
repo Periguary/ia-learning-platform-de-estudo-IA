@@ -13,6 +13,7 @@ import {
   getUserRadarFavorites,
   toggleUserRadarFavorite,
   updateUserRadarFavoriteTags,
+  batchUpdateUserRadarFavoriteTags,
   updateAIUpdateCandidateStatus,
   getUserLibraryFavorites,
   toggleUserLibraryFavorite,
@@ -456,6 +457,17 @@ export const appRouter = router({
       .mutation(async ({ input, ctx }) => {
         if (!ctx.user?.id) throw new Error("Faça login para organizar seus favoritos.");
         const updated = await updateUserRadarFavoriteTags(ctx.user.id, input.radarItemId, input.tags);
+        return { updated };
+      }),
+    batchUpdateRadarFavoriteTags: publicProcedure
+      .input(z.object({
+        radarItemIds: z.array(z.string().trim().min(1).max(180)).min(1).max(100),
+        tag: z.string().trim().min(1).max(40),
+        action: z.enum(["add", "remove"]),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para organizar seus favoritos.");
+        const updated = await batchUpdateUserRadarFavoriteTags(ctx.user.id, input.radarItemIds, input.tag, input.action);
         return { updated };
       }),
     favorites: publicProcedure.query(async ({ ctx }) => {

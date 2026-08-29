@@ -14,6 +14,7 @@ vi.mock("@/lib/trpc", () => ({
       radarFavorites: { useQuery: () => ({ data: [{ radarItemId: "opencv-ai-competition-2026", title: "OpenCV", summary: "Resumo", category: "Open Source", sourceName: "OpenCV", sourceUrl: "https://opencv.org/", relatedModules: JSON.stringify(["computer-vision"]), learningAction: "Revisar", publishedAt: "2026-08-12", tags: JSON.stringify(["revisar"]) }] }) },
       toggleRadarFavorite: { useMutation: () => ({ isPending: false, mutate: vi.fn() }) },
       updateRadarFavoriteTags: { useMutation: () => ({ isPending: false, mutate: mutateTags }) },
+      batchUpdateRadarFavoriteTags: { useMutation: () => ({ isPending: false, mutate: vi.fn() }) },
       pendingUpdates: { useQuery: () => ({ data: [], refetch: vi.fn() }) },
       refreshUpdates: { useMutation: () => ({ isPending: false, mutate: vi.fn() }) },
       reviewUpdate: { useMutation: () => ({ isPending: false, mutate: vi.fn() }) },

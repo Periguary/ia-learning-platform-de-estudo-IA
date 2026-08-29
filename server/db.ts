@@ -270,6 +270,39 @@ export async function updateUserRadarFavoriteTags(userId: number, radarItemId: s
   }
 }
 
+export async function batchUpdateUserRadarFavoriteTags(userId: number, radarItemIds: string[], tag: string, action: "add" | "remove"): Promise<number> {
+  const db = await getDb();
+  if (!db) return 0;
+  const normalizedTag = tag.trim().replace(/\s+/g, " ").slice(0, 40);
+  if (!normalizedTag) return 0;
+  try {
+    const rows = await getUserRadarFavorites(userId);
+    const selected = rows.filter(row => radarItemIds.includes(row.radarItemId));
+    for (const row of selected) {
+      const current = parseRadarFavoriteTags(row.tags);
+      const next = action === "add"
+        ? Array.from(new Set([...current, normalizedTag])).slice(0, 20)
+        : current.filter(existing => existing !== normalizedTag);
+      await db.update(userRadarFavorites)
+        .set({ tags: JSON.stringify(next) })
+        .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, row.radarItemId)));
+    }
+    return selected.length;
+  } catch (error) {
+    console.warn("[Database] Failed to batch update Radar favorite tags:", error);
+    return 0;
+  }
+}
+
+function parseRadarFavoriteTags(value: string | null | undefined): string[] {
+  try {
+    const parsed = JSON.parse(value ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter((tag): tag is string => typeof tag === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function getUserLibraryFavorites(userId: number): Promise<string[]> {
   const db = await getDb();
   if (!db) return [];

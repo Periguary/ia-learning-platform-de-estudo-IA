@@ -15,10 +15,10 @@ const moduleRoutes: Record<string, string> = {
 export default function Specializations() {
   const [, navigate] = useLocation();
   const [selectedSpec, setSelectedSpec] = useState<AISpecialization>(specializationsCatalog[0]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [areaFilter, setAreaFilter] = useState("Todas");
-  const [difficultyFilter, setDifficultyFilter] = useState("Todos os níveis");
-  const [stackFilter, setStackFilter] = useState("Todas as stacks");
+  const [searchTerm, setSearchTerm] = useState(() => new URLSearchParams(window.location.search).get("q") ?? "");
+  const [areaFilter, setAreaFilter] = useState(() => new URLSearchParams(window.location.search).get("area") ?? "Todas");
+  const [difficultyFilter, setDifficultyFilter] = useState(() => new URLSearchParams(window.location.search).get("difficulty") ?? "Todos os níveis");
+  const [stackFilter, setStackFilter] = useState(() => new URLSearchParams(window.location.search).get("stack") ?? "Todas as stacks");
   const areaOptions = ["Todas", ...Array.from(new Set(specializationsCatalog.map(spec => spec.badge)))];
   const difficultyOptions = ["Todos os níveis", ...Array.from(new Set(specializationsCatalog.map(spec => spec.difficulty ?? "Avançado")))];
   const stackOptions = ["Todas as stacks", ...Array.from(new Set(specializationsCatalog.flatMap(spec => spec.techStack))).sort((a, b) => a.localeCompare(b))];
@@ -31,6 +31,16 @@ export default function Specializations() {
       const searchableText = [spec.title, spec.badge, spec.subtitle, spec.description, ...spec.techStack, ...spec.coreConcepts].join(" ").toLocaleLowerCase("pt-BR");
       return matchesArea && matchesDifficulty && matchesStack && (!normalized || searchableText.includes(normalized));
     });
+  }, [areaFilter, difficultyFilter, searchTerm, stackFilter]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (searchTerm.trim()) params.set("q", searchTerm.trim());
+    if (areaFilter !== "Todas") params.set("area", areaFilter);
+    if (difficultyFilter !== "Todos os níveis") params.set("difficulty", difficultyFilter);
+    if (stackFilter !== "Todas as stacks") params.set("stack", stackFilter);
+    const query = params.toString();
+    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
   }, [areaFilter, difficultyFilter, searchTerm, stackFilter]);
 
   useEffect(() => {
