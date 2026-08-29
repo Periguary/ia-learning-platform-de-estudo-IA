@@ -349,11 +349,11 @@
 
 
 ## Nova Evolução: Execução Local, URLs Compartilháveis e Tags em Lote
-- [ ] Adicionar botão Executar no Navegador aos exemplos visuais com runtime local seguro
-- [ ] Exibir estado de carregamento, saída e limitações da execução local
-- [ ] Sincronizar filtros de Especializações com parâmetros da URL e hidratar filtros ao abrir link
-- [ ] Implementar seleção múltipla e edição em lote de tags dos favoritos do Radar
-- [ ] Implementar exclusão em lote de tags dos favoritos do Radar
-- [ ] Atualizar contratos, helpers e testes para operações em lote
-- [ ] Transformar o processo em uma skill reutilizável usando skill-creator e validá-la
-- [ ] Executar testes, validar preview, sincronizar alterações com GitHub e salvar checkpoint
+- [x] Adicionar botão Executar no Navegador aos exemplos visuais com runtime local seguro
+- [x] Exibir estado de carregamento, saída e limitações da execução local
+- [x] Sincronizar filtros de Especializações com parâmetros da URL e hidratar filtros ao abrir link
+- [x] Implementar seleção múltipla e edição em lote de tags dos favoritos do Radar
+- [x] Implementar exclusão em lote de tags dos favoritos do Radar
+- [x] Atualizar contratos, helpers e testes para operações em lote
+- [x] Transformar o processo em uma skill reutilizável usando skill-creator e validá-la
+- [x] Executar testes, validar preview, sincronizar alterações com GitHub e salvar checkpoint
