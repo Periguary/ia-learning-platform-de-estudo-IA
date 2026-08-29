@@ -335,3 +335,14 @@
 - [x] Validar no preview, revisar todo o backlog, salvar checkpoint e entregar a evolução
 
 - [x] Corrigir a regressão do teste de skill adicionada pela sincronização remota e revalidar a suíte completa
+
+
+## Nova Evolução: Tags, Playgrounds e Filtros Avançados
+- [x] Adicionar tags personalizadas aos favoritos do Radar de IA
+- [x] Criar edição, remoção e filtro por tags nos artigos salvos
+- [x] Atualizar schema, migração, helpers e procedimentos tRPC das tags
+- [x] Adicionar exemplos práticos interativos de OpenCV nas aulas de Visão Computacional
+- [x] Adicionar exemplos práticos interativos de PyTorch nas aulas de Visão Computacional
+- [x] Adicionar filtros por dificuldade e stack tecnológica nas Especializações
+- [x] Criar testes de regressão para tags, playgrounds e filtros avançados
+- [x] Validar TypeScript, testes, acessibilidade e preview; salvar checkpoint

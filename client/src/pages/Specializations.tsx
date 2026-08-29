@@ -17,15 +17,21 @@ export default function Specializations() {
   const [selectedSpec, setSelectedSpec] = useState<AISpecialization>(specializationsCatalog[0]);
   const [searchTerm, setSearchTerm] = useState("");
   const [areaFilter, setAreaFilter] = useState("Todas");
+  const [difficultyFilter, setDifficultyFilter] = useState("Todos os níveis");
+  const [stackFilter, setStackFilter] = useState("Todas as stacks");
   const areaOptions = ["Todas", ...Array.from(new Set(specializationsCatalog.map(spec => spec.badge)))];
+  const difficultyOptions = ["Todos os níveis", ...Array.from(new Set(specializationsCatalog.map(spec => spec.difficulty ?? "Avançado")))];
+  const stackOptions = ["Todas as stacks", ...Array.from(new Set(specializationsCatalog.flatMap(spec => spec.techStack))).sort((a, b) => a.localeCompare(b))];
   const filteredSpecializations = useMemo(() => {
     const normalized = searchTerm.trim().toLocaleLowerCase("pt-BR");
     return specializationsCatalog.filter(spec => {
       const matchesArea = areaFilter === "Todas" || spec.badge === areaFilter;
+      const matchesDifficulty = difficultyFilter === "Todos os níveis" || (spec.difficulty ?? "Avançado") === difficultyFilter;
+      const matchesStack = stackFilter === "Todas as stacks" || spec.techStack.includes(stackFilter);
       const searchableText = [spec.title, spec.badge, spec.subtitle, spec.description, ...spec.techStack, ...spec.coreConcepts].join(" ").toLocaleLowerCase("pt-BR");
-      return matchesArea && (!normalized || searchableText.includes(normalized));
+      return matchesArea && matchesDifficulty && matchesStack && (!normalized || searchableText.includes(normalized));
     });
-  }, [areaFilter, searchTerm]);
+  }, [areaFilter, difficultyFilter, searchTerm, stackFilter]);
 
   useEffect(() => {
     if (filteredSpecializations.length > 0 && !filteredSpecializations.some(spec => spec.id === selectedSpec.id)) {
@@ -55,7 +61,7 @@ export default function Specializations() {
       </section>
 
       <section className="container py-12 space-y-12">
-        <div className="grid gap-4 rounded-2xl border border-border bg-card/70 p-4 md:grid-cols-[1fr_auto]">
+        <div className="grid gap-4 rounded-2xl border border-border bg-card/70 p-4 md:grid-cols-2 xl:grid-cols-4">
           <label className="relative block">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -69,8 +75,20 @@ export default function Specializations() {
           </label>
           <label className="flex items-center gap-3 text-sm text-muted-foreground">
             <span className="whitespace-nowrap">Filtrar por área</span>
-            <select value={areaFilter} onChange={event => setAreaFilter(event.target.value)} aria-label="Filtrar especializações por área" className="h-11 rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary">
+            <select value={areaFilter} onChange={event => setAreaFilter(event.target.value)} aria-label="Filtrar especializações por área" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary">
               {areaOptions.map(area => <option key={area} value={area}>{area}</option>)}
+            </select>
+          </label>
+          <label className="flex items-center gap-3 text-sm text-muted-foreground">
+            <span className="whitespace-nowrap">Dificuldade</span>
+            <select value={difficultyFilter} onChange={event => setDifficultyFilter(event.target.value)} aria-label="Filtrar especializações por dificuldade" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary">
+              {difficultyOptions.map(level => <option key={level} value={level}>{level}</option>)}
+            </select>
+          </label>
+          <label className="flex items-center gap-3 text-sm text-muted-foreground">
+            <span className="whitespace-nowrap">Stack</span>
+            <select value={stackFilter} onChange={event => setStackFilter(event.target.value)} aria-label="Filtrar especializações por stack tecnológica" className="h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground outline-none focus:border-primary">
+              {stackOptions.map(stack => <option key={stack} value={stack}>{stack}</option>)}
             </select>
           </label>
         </div>

@@ -12,6 +12,7 @@ import {
   getPendingAIUpdateCandidates,
   getUserRadarFavorites,
   toggleUserRadarFavorite,
+  updateUserRadarFavoriteTags,
   updateAIUpdateCandidateStatus,
   getUserLibraryFavorites,
   toggleUserLibraryFavorite,
@@ -443,8 +444,19 @@ export const appRouter = router({
           relatedModules: JSON.stringify(input.relatedModules),
           learningAction: input.learningAction,
           publishedAt: input.publishedAt ?? null,
+          tags: "[]",
         });
         return { isFavorited };
+      }),
+    updateRadarFavoriteTags: publicProcedure
+      .input(z.object({
+        radarItemId: z.string().trim().min(1).max(180),
+        tags: z.array(z.string().trim().min(1).max(40)).max(20),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para organizar seus favoritos.");
+        const updated = await updateUserRadarFavoriteTags(ctx.user.id, input.radarItemId, input.tags);
+        return { updated };
       }),
     favorites: publicProcedure.query(async ({ ctx }) => {
       if (!ctx.user?.id) return [];

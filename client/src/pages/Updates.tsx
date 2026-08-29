@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowUpRight, BookOpen, Bookmark, CalendarDays, CheckCircle2, RefreshCw, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowUpRight, BookOpen, Bookmark, CalendarDays, CheckCircle2, Hash, RefreshCw, Save, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { updatesCatalog, updatesLastReviewedAt, type AIUpdate } from "@/data/updatesCatalog";
@@ -21,11 +21,22 @@ const categoryStyles: Record<string, string> = {
   Pesquisa: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
 };
 
+function parseFavoriteTags(value: string | null | undefined): string[] {
+  try {
+    const parsed = JSON.parse(value ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter((tag): tag is string => typeof tag === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
 export default function Updates() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [tagFilter, setTagFilter] = useState("Todas as tags");
+  const [tagDrafts, setTagDrafts] = useState<Record<string, string[]>>({});
   const approvedQuery = trpc.ai.updates.useQuery();
   const radarFavoritesQuery = trpc.ai.radarFavorites.useQuery();
   const pendingQuery = trpc.ai.pendingUpdates.useQuery(undefined, { enabled: isAdmin });
@@ -46,6 +57,11 @@ export default function Updates() {
       void utils.ai.radarFavorites.invalidate();
     },
   });
+  const tagMutation = trpc.ai.updateRadarFavoriteTags.useMutation({
+    onSuccess: () => {
+      void utils.ai.radarFavorites.invalidate();
+    },
+  });
 
   const approvedUpdates: AIUpdate[] = (approvedQuery.data ?? []).map(item => ({
     id: `candidate-${item.id}`,
@@ -59,7 +75,9 @@ export default function Updates() {
     learningAction: item.learningAction,
   }));
   const visibleUpdates = [...updatesCatalog, ...approvedUpdates];
-  const favoriteIds = useMemo(() => new Set((radarFavoritesQuery.data ?? []).map(item => item.radarItemId)), [radarFavoritesQuery.data]);
+  const favoriteRowsById = useMemo(() => new Map((radarFavoritesQuery.data ?? []).map(item => [item.radarItemId, item])), [radarFavoritesQuery.data]);
+  const favoriteIds = useMemo(() => new Set(favoriteRowsById.keys()), [favoriteRowsById]);
+  const availableTags = useMemo(() => Array.from(new Set((radarFavoritesQuery.data ?? []).flatMap(item => parseFavoriteTags(item.tags)))).sort((a, b) => a.localeCompare(b)), [radarFavoritesQuery.data]);
   const savedUpdates: AIUpdate[] = (radarFavoritesQuery.data ?? []).map(item => ({
     id: item.radarItemId,
     title: item.title,
@@ -71,7 +89,9 @@ export default function Updates() {
     relatedModules: JSON.parse(item.relatedModules) as string[],
     learningAction: item.learningAction,
   }));
-  const displayUpdates = showFavoritesOnly ? savedUpdates : visibleUpdates;
+  const displayUpdates = showFavoritesOnly
+    ? savedUpdates.filter(update => tagFilter === "Todas as tags" || parseFavoriteTags(favoriteRowsById.get(update.id)?.tags).includes(tagFilter))
+    : visibleUpdates;
 
   return (
     <div className="w-full">
@@ -143,11 +163,21 @@ export default function Updates() {
         </div>
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2" role="tablist" aria-label="Filtro do Radar">
+          <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filtro do Radar">
             <Button type="button" size="sm" variant={!showFavoritesOnly ? "default" : "outline"} onClick={() => setShowFavoritesOnly(false)}>Todas as atualizações</Button>
             <Button type="button" size="sm" variant={showFavoritesOnly ? "default" : "outline"} onClick={() => setShowFavoritesOnly(true)} className="gap-2">
               <Bookmark className="size-4" /> Salvas ({radarFavoritesQuery.data?.length ?? 0})
             </Button>
+            {showFavoritesOnly && availableTags.length > 0 && (
+              <label className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
+                <Hash className="size-4" />
+                <span className="sr-only">Filtrar favoritos por tag</span>
+                <select aria-label="Filtrar favoritos por tag" value={tagFilter} onChange={event => setTagFilter(event.target.value)} className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground">
+                  <option>Todas as tags</option>
+                  {availableTags.map(tag => <option key={tag}>{tag}</option>)}
+                </select>
+              </label>
+            )}
           </div>
           {!user && <p className="text-xs text-muted-foreground">Entre na plataforma para salvar itens.</p>}
         </div>
@@ -191,7 +221,36 @@ export default function Updates() {
               <h3 className="mt-5 text-xl font-bold leading-tight">{update.title}</h3>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{update.summary}</p>
 
-              <div className="mt-5 rounded-xl bg-muted/30 p-4">
+                {favoriteIds.has(update.id) && (
+                  <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">Tags pessoais</p>
+                      <span className="text-xs text-muted-foreground">até 20 tags</span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {(tagDrafts[update.id] ?? parseFavoriteTags(favoriteRowsById.get(update.id)?.tags)).map(tag => (
+                        <button key={tag} type="button" className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs text-primary transition-colors hover:bg-primary/20" onClick={() => setTagDrafts(current => ({ ...current, [update.id]: (current[update.id] ?? parseFavoriteTags(favoriteRowsById.get(update.id)?.tags)).filter(item => item !== tag) }))} aria-label={`Remover tag ${tag}`}>
+                          {tag}<X className="size-3" />
+                        </button>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      <input aria-label={`Nova tag para ${update.title}`} placeholder="Ex.: revisar, pesquisa, projeto" className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground" onKeyDown={event => {
+                        if (event.key !== "Enter") return;
+                        event.preventDefault();
+                        const value = event.currentTarget.value.trim();
+                        if (!value) return;
+                        setTagDrafts(current => ({ ...current, [update.id]: Array.from(new Set([...(current[update.id] ?? parseFavoriteTags(favoriteRowsById.get(update.id)?.tags)), value])).slice(0, 20) }));
+                        event.currentTarget.value = "";
+                      }} />
+                      <Button type="button" size="sm" variant="outline" className="gap-1.5" onClick={() => tagMutation.mutate({ radarItemId: update.id, tags: tagDrafts[update.id] ?? parseFavoriteTags(favoriteRowsById.get(update.id)?.tags) })} disabled={tagMutation.isPending}>
+                        <Save className="size-3.5" /> Salvar
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-5 rounded-xl bg-muted/30 p-4">
                 <div className="flex items-start gap-3">
                   <BookOpen className="mt-0.5 size-4 shrink-0 text-primary" />
                   <div>

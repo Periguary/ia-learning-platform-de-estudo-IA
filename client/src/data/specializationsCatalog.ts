@@ -6,6 +6,7 @@ export type AISpecialization = {
   description: string;
   coreConcepts: string[];
   techStack: string[];
+  difficulty?: "Iniciante" | "Intermediário" | "Avançado";
   careerImpact: string;
   recommendedModule: string;
 };
@@ -24,6 +25,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Gestão de contexto local, histórico de conversas e persistência no navegador"
     ],
     techStack: ["React 19", "Tailwind CSS 4", "TypeScript", "Streamdown", "Zustand", "Wouter"],
+    difficulty: "Intermediário",
     careerImpact: "Profissionais que dominam IA no frontend lideram a criação de produtos que parecem mágicos, intuitivos e responsivos, elevando a retenção de usuários.",
     recommendedModule: "llms"
   },
@@ -40,6 +42,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Estratégias de fallback, circuit breakers e controle de taxa para chamadas a LLMs"
     ],
     techStack: ["Node.js", "Express", "tRPC", "Drizzle ORM", "MySQL / TiDB", "Python FastAPI"],
+    difficulty: "Avançado",
     careerImpact: "Engenheiros de backend especializados em IA são os arquitetos mais disputados do mercado para escalar soluções corporativas com segurança.",
     recommendedModule: "software-engineering"
   },
@@ -56,6 +59,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Gestão de segredos, variáveis de ambiente e conformidade em ambientes cloud"
     ],
     techStack: ["Docker", "GitHub Actions", "Linux", "Kubernetes", "AWS / GCP", "Prometheus"],
+    difficulty: "Avançado",
     careerImpact: "Especialistas em MLOps viabilizam que protótipos experimentais tornem-se produtos robustos com alta disponibilidade e custos otimizados.",
     recommendedModule: "software-engineering"
   },
@@ -72,6 +76,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Modelagem preditiva supervisionada e não supervisionada com Scikit-Learn"
     ],
     techStack: ["Python", "Pandas", "NumPy", "Scikit-Learn", "SQL", "Matplotlib / Seaborn"],
+    difficulty: "Intermediário",
     careerImpact: "A base de toda tomada de decisão inteligente nas empresas depende de dados íntegros e análises estatísticas rigorosas.",
     recommendedModule: "ml-fundamentals"
   },
@@ -88,6 +93,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Técnicas de fine-tuning, LoRA e adaptação eficiente de parâmetros"
     ],
     techStack: ["PyTorch", "Hugging Face Transformers", "Python", "CUDA", "Jupyter Notebook"],
+    difficulty: "Avançado",
     careerImpact: "Pesquisadores e cientistas de deep learning criam as inovações fundamentais que abrem novas fronteiras tecnológicas.",
     recommendedModule: "transformers"
   },
@@ -103,7 +109,8 @@ export const specializationsCatalog: AISpecialization[] = [
       "CNNs, data augmentation, transfer learning e avaliação por matriz de confusão",
       "Detecção, segmentação, OCR, visão multimodal e limites de confiabilidade"
     ],
-    techStack: ["Python", "OpenCV", "PyTorch", "TorchVision", "Hugging Face", "Jupyter"],
+    techStack: ["OpenCV", "PyTorch", "TorchVision", "Hugging Face", "Jupyter"],
+    difficulty: "Avançado",
     careerImpact: "Profissionais de visão computacional atuam em inspeção industrial, documentos, varejo, robótica, saúde e produtos multimodais, sempre documentando dados, métricas e limitações.",
     recommendedModule: "computer-vision"
   },
@@ -120,6 +127,7 @@ export const specializationsCatalog: AISpecialization[] = [
       "Design de agentes autônomos orientados a tarefas de negócios"
     ],
     techStack: ["Frameworks de Governança", "Prototipagem Rápida", "Product Discovery", "Métricas de IA"],
+    difficulty: "Intermediário",
     careerImpact: "Profissionais de produto com visão de IA direcionam equipes para construir soluções que geram valor real para os negócios e usuários.",
     recommendedModule: "rag-agents"
   }

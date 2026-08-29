@@ -1,0 +1,1 @@
+ALTER TABLE `user_radar_favorites` MODIFY COLUMN `tags` text NOT NULL;

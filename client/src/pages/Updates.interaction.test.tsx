@@ -27,6 +27,9 @@ vi.mock("@/lib/trpc", () => ({
       toggleRadarFavorite: {
         useMutation: () => ({ isPending: false, mutate: vi.fn() }),
       },
+      updateRadarFavoriteTags: {
+        useMutation: () => ({ isPending: false, mutate: vi.fn() }),
+      },
       pendingUpdates: {
         useQuery: () => ({ data: [], isLoading: false, refetch: vi.fn() }),
       },

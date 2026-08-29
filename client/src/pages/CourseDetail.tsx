@@ -6,6 +6,7 @@ import { coursesData, lessonsContentData } from "@/data/coursesData";
 import { markLessonComplete, readProgress, writeProgress } from "@/data/progress";
 import { recordStudyActivity } from "@/data/profile";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
+import { CodePlayground } from "@/components/CodePlayground";
 
 export default function CourseDetail() {
   const [, navigate] = useLocation();
@@ -234,6 +235,10 @@ export default function CourseDetail() {
                       ))}
                     </ul>
                   </div>
+                )}
+
+                {module === "computer-vision" && selectedContent.codeExamples && (
+                  <CodePlayground examples={selectedContent.codeExamples} />
                 )}
 
                 <div className="flex gap-3">

@@ -73,6 +73,7 @@ export const userRadarFavorites = mysqlTable("user_radar_favorites", {
   relatedModules: text("relatedModules").notNull(),
   learningAction: text("learningAction").notNull(),
   publishedAt: varchar("publishedAt", { length: 40 }),
+  tags: text("tags").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

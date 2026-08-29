@@ -254,6 +254,22 @@ export async function toggleUserRadarFavorite(userId: number, data: InsertUserRa
   }
 }
 
+export async function updateUserRadarFavoriteTags(userId: number, radarItemId: string, tags: string[]): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+  const normalizedTags = Array.from(new Set(tags.map(tag => tag.trim().replace(/\s+/g, " ").slice(0, 40)).filter(Boolean))).slice(0, 20);
+  try {
+    const result = await db
+      .update(userRadarFavorites)
+      .set({ tags: JSON.stringify(normalizedTags) })
+      .where(and(eq(userRadarFavorites.userId, userId), eq(userRadarFavorites.radarItemId, radarItemId)));
+    return Number(result[0]?.affectedRows ?? 0) > 0;
+  } catch (error) {
+    console.warn("[Database] Failed to update Radar favorite tags:", error);
+    return false;
+  }
+}
+
 export async function getUserLibraryFavorites(userId: number): Promise<string[]> {
   const db = await getDb();
   if (!db) return [];
