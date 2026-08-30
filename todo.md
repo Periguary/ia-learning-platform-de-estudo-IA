@@ -406,3 +406,9 @@
 - [x] Corrigir falha de conexão WebSocket do Vite/HMR atrás do proxy do preview
 - [x] Validar configuração Vite, logs do servidor, TypeScript, testes e preview
 - [x] Salvar checkpoint da correção de HMR
+
+## Verificação HMR e manutenção de dependências
+- [x] Adicionar teste automatizado de contrato para a configuração HMR atrás do proxy HTTPS
+- [x] Fazer pequena alteração visual controlada na homepage para validar hot reload no preview
+- [x] Atualizar baseline-browser-mapping e lockfile
+- [x] Validar hot reload, TypeScript, testes e salvar checkpoint

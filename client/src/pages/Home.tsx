@@ -44,7 +44,7 @@ export default function Home() {
       {/* Top Banner */}
       <div className="border-b border-primary/30 bg-[linear-gradient(90deg,#06111a,#111827,#180b2b)] text-white text-center py-2.5 px-4 text-xs font-semibold uppercase tracking-[0.18em] flex items-center justify-center gap-2">
         <Sparkles className="w-4 h-4" />
-        <span>Nova Trilha de IA Generativa e LLMs Disponível!</span>
+        <span>Nova Trilha de IA Generativa e LLMs Disponível!</span><span data-hmr-probe className="border border-cyan-300/30 px-2 py-0.5 text-[10px] tracking-[0.12em] text-cyan-200/80">HMR PREVIEW</span>
         <button onClick={() => navigate("/learning-path")} className="underline hover:text-blue-200 ml-2 font-bold cursor-pointer">
           Explorar &rarr;
         </button>

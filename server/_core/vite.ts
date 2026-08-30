@@ -6,16 +6,20 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
 
+export function getViteHmrOptions(server: Server) {
+  return {
+    server,
+    protocol: "wss" as const,
+    clientPort: 443,
+  };
+}
+
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
     // O preview é publicado por um proxy HTTPS; sem clientPort o cliente do Vite
     // pode montar ws://localhost:5173 e registrar uma falha mesmo com HTTP funcionando.
-    hmr: {
-      server,
-      protocol: "wss",
-      clientPort: 443,
-    },
+    hmr: getViteHmrOptions(server),
     allowedHosts: true as const,
   };
 
