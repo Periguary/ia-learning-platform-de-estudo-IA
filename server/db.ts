@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents, challengeSubmissions, ChallengeSubmission, InsertChallengeSubmission } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -527,4 +527,43 @@ export async function getCalendarEvents(userId: number) {
     .from(externalCalendarEvents)
     .where(eq(externalCalendarEvents.userId, userId))
     .orderBy(desc(externalCalendarEvents.createdAt));
+}
+
+
+export async function createChallengeSubmission(data: InsertChallengeSubmission): Promise<ChallengeSubmission | null> {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    const result = await db.insert(challengeSubmissions).values(data);
+    const id = Number(result[0]?.insertId);
+    const rows = await db.select().from(challengeSubmissions).where(and(eq(challengeSubmissions.userId, data.userId), eq(challengeSubmissions.challengeId, data.challengeId))).orderBy(desc(challengeSubmissions.createdAt)).limit(1);
+    return rows[0] ?? (id ? { ...data, id } as ChallengeSubmission : null);
+  } catch (error) {
+    console.warn("[Database] Failed to create challenge submission:", error);
+    return null;
+  }
+}
+
+export async function getChallengeSubmissionsForUser(userId: number): Promise<ChallengeSubmission[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db.select().from(challengeSubmissions).where(eq(challengeSubmissions.userId, userId)).orderBy(desc(challengeSubmissions.createdAt)).limit(100);
+  } catch (error) {
+    console.warn("[Database] Failed to fetch challenge submissions:", error);
+    return [];
+  }
+}
+
+export async function updateChallengeSubmissionEvaluation(userId: number, submissionId: number, data: { status: "evaluated" | "needs_review"; score: number; feedback: string }): Promise<ChallengeSubmission | null> {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    await db.update(challengeSubmissions).set(data).where(and(eq(challengeSubmissions.id, submissionId), eq(challengeSubmissions.userId, userId)));
+    const rows = await db.select().from(challengeSubmissions).where(and(eq(challengeSubmissions.id, submissionId), eq(challengeSubmissions.userId, userId))).limit(1);
+    return rows[0] ?? null;
+  } catch (error) {
+    console.warn("[Database] Failed to evaluate challenge submission:", error);
+    return null;
+  }
 }

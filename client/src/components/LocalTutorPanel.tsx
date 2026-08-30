@@ -57,6 +57,16 @@ async function removeModelCache(modelId: string) {
 }
 const buildPrompt = ({ courseTitle, lessonTitle, lessonContent, studentNotes, selectedCode, question }: LocalTutorPanelProps & { question: string }) => [`Curso: ${courseTitle}`, lessonTitle ? `Aula: ${lessonTitle}` : "", lessonContent ? `Conteúdo autorizado: ${lessonContent.slice(0, 1800)}` : "", studentNotes ? `Notas do estudante: ${studentNotes.slice(0, 900)}` : "", selectedCode ? `Trecho de código selecionado pelo estudante:\n${selectedCode.slice(0, 1600)}` : "", `Dúvida: ${question.slice(0, 600)}`].filter(Boolean).join("\n\n");
 
+export async function evaluateLocally(input: { modelId?: string; courseTitle: string; challengeTitle: string; scenario: string; objective: string; acceptanceCriteria: string[]; responseText: string; notebookContent?: string }) {
+  const modelId = input.modelId ?? MODEL_OPTIONS[1].id;
+  const control = controls.get(modelId) ?? { paused: false };
+  controls.set(modelId, control);
+  const generator = await getGenerator(modelId, () => undefined, control);
+  const prompt = `Você é um avaliador pedagógico local e open source. Responda em português do Brasil. Avalie uma solução de desafio empresarial usando apenas os dados fornecidos. Retorne Markdown com: nota orientativa de 0 a 100, pontos fortes, lacunas técnicas, riscos, próximos passos e uma pergunta de reflexão. Não invente requisitos.\n\nDesafio: ${input.challengeTitle}\nCenário: ${input.scenario}\nObjetivo: ${input.objective}\nCritérios: ${input.acceptanceCriteria.join("; ")}\nResposta do estudante: ${input.responseText.slice(0, 12000)}\nNotebook: ${(input.notebookContent || "não enviado").slice(0, 30000)}`;
+  const result = await generator(prompt, { max_new_tokens: 260, temperature: 0.2, do_sample: false, return_full_text: false });
+  return result[0]?.generated_text?.trim() || "O modelo local não retornou feedback. Faça uma revisão manual dos critérios de aceite.";
+}
+
 export function LocalTutorPanel(props: LocalTutorPanelProps) {
   const [modelId, setModelId] = useState(MODEL_OPTIONS[1].id); const [question, setQuestion] = useState(""); const [answer, setAnswer] = useState(""); const [loading, setLoading] = useState(false); const [error, setError] = useState(""); const [progress, setProgress] = useState<DownloadProgress>({}); const [isCached, setIsCached] = useState(false); const [paused, setPaused] = useState(false); const [storage, setStorage] = useState<StorageSummary>({}); const [modelBytes, setModelBytes] = useState<number>();
   const model = useMemo(() => MODEL_OPTIONS.find(option => option.id === modelId) ?? MODEL_OPTIONS[1], [modelId]); const control = controls.get(modelId) ?? { paused: false }; controls.set(modelId, control);

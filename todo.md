@@ -390,3 +390,14 @@
 - [x] Adicionar rota e navegação para o laboratório de desafios práticos
 - [x] Criar testes de regressão para armazenamento, download, tutor e desafios
 - [x] Validar acessibilidade, desempenho, TypeScript, preview e salvar checkpoint
+
+
+## Nova Evolução: Laboratório Avaliável e OpenCV
+- [x] Criar modelo persistente de submissões, avaliações e histórico de desafios
+- [x] Implementar editor de resposta e upload de notebooks com validação de tipo e tamanho
+- [x] Integrar avaliação local pelo Tutor IA com nota orientativa, pontos fortes, lacunas e próximos passos
+- [x] Exibir aviso de limites da avaliação local e opção de revisão pelo Tutor Nuvem
+- [x] Adicionar desafios práticos de processamento de imagens e OpenCV com dados sintéticos
+- [x] Criar painel visual de progresso, status, tentativas e histórico de feedback
+- [x] Adicionar testes de submissão, avaliação, painel, OpenCV e estados de erro
+- [x] Validar acessibilidade, segurança, TypeScript, preview e salvar checkpoint

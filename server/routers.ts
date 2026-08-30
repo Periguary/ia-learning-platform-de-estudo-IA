@@ -36,6 +36,9 @@ import {
   upsertNotionSync,
   addCalendarEvent,
   getCalendarEvents,
+  createChallengeSubmission,
+  getChallengeSubmissionsForUser,
+  updateChallengeSubmissionEvaluation,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -502,6 +505,39 @@ export const appRouter = router({
           comment: input.comment,
         });
         return { success: true };
+      }),
+  }),
+
+  challenges: router({
+    submissions: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return getChallengeSubmissionsForUser(ctx.user.id);
+    }),
+    submit: publicProcedure
+      .input(z.object({
+        challengeId: z.string().trim().min(1).max(160),
+        responseText: z.string().trim().min(10, "Descreva uma solução com pelo menos 10 caracteres.").max(30_000),
+        notebookName: z.string().trim().max(255).optional(),
+        notebookContent: z.string().max(150_000).optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para enviar uma solução.");
+        const submission = await createChallengeSubmission({ ...input, userId: ctx.user.id, notebookName: input.notebookName ?? null, notebookContent: input.notebookContent ?? null });
+        if (!submission) throw new Error("Não foi possível salvar a submissão agora.");
+        return submission;
+      }),
+    saveEvaluation: publicProcedure
+      .input(z.object({
+        submissionId: z.number().int().positive(),
+        score: z.number().int().min(0).max(100),
+        feedback: z.string().trim().min(20).max(20_000),
+        needsReview: z.boolean().default(false),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para salvar a avaliação.");
+        const submission = await updateChallengeSubmissionEvaluation(ctx.user.id, input.submissionId, { status: input.needsReview ? "needs_review" : "evaluated", score: input.score, feedback: input.feedback });
+        if (!submission) throw new Error("Não foi possível salvar a avaliação.");
+        return submission;
       }),
   }),
 

@@ -153,6 +153,24 @@ export const videoNotes = mysqlTable("video_notes", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const challengeSubmissions = mysqlTable("challenge_submissions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  challengeId: varchar("challengeId", { length: 160 }).notNull(),
+  responseText: text("responseText").notNull(),
+  notebookName: varchar("notebookName", { length: 255 }),
+  notebookContent: text("notebookContent"),
+  status: mysqlEnum("status", ["submitted", "evaluated", "needs_review"]).default("submitted").notNull(),
+  score: int("score"),
+  feedback: text("feedback"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ChallengeSubmission = typeof challengeSubmissions.$inferSelect;
+export type InsertChallengeSubmission = typeof challengeSubmissions.$inferInsert;
+
+
 export const notionSyncConfigs = mysqlTable("notion_sync_configs", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
