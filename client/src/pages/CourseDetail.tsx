@@ -12,6 +12,7 @@ export default function CourseDetail() {
   const [, navigate] = useLocation();
   const [match, params] = useRoute("/course/:phase/:module");
   const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1);
+  const [selectedCode, setSelectedCode] = useState("");
   const [progressState, setProgressState] = useState(() => readProgress());
 
   if (!match) return null;
@@ -238,7 +239,7 @@ export default function CourseDetail() {
                 )}
 
                 {module === "computer-vision" && selectedContent.codeExamples && (
-                  <CodePlayground examples={selectedContent.codeExamples} />
+                  <CodePlayground examples={selectedContent.codeExamples} onExplainSelection={setSelectedCode} />
                 )}
 
                 <div className="flex gap-3">
@@ -357,6 +358,7 @@ export default function CourseDetail() {
               lessonContent={selectedContent
                 ? `${selectedContent.content}${selectedContent.examples?.length ? `\n\nExemplos:\n${selectedContent.examples.join("\n")}` : ""}`
                 : undefined}
+              selectedCode={selectedCode}
             />
           </div>
 

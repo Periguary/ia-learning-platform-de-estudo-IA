@@ -12,6 +12,17 @@ describe("CodePlayground", () => {
     await waitFor(() => expect(screen.getByRole("status").textContent).toContain("ok"));
   });
 
+  it("envia o trecho selecionado para o Tutor Local", () => {
+    const onExplainSelection = vi.fn();
+    render(<CodePlayground onExplainSelection={onExplainSelection} examples={[{ label: "OpenCV", language: "python", code: "import cv2\nimg = cv2.imread('foto.png')" }]} />);
+    const editor = screen.getByRole("textbox", { name: /Código OpenCV/i }) as HTMLTextAreaElement;
+    editor.focus();
+    editor.setSelectionRange(0, 10);
+    fireEvent.select(editor);
+    fireEvent.click(screen.getByRole("button", { name: /Explicar seleção/i }));
+    expect(onExplainSelection).toHaveBeenCalledWith("import cv2");
+  });
+
   it("permite alternar exemplos e editar o código", () => {
     render(<CodePlayground examples={[{ label: "OpenCV", language: "python", code: "import cv2" }, { label: "PyTorch", language: "python", code: "import torch" }]} />);
     expect(screen.getByDisplayValue("import cv2")).toBeTruthy();

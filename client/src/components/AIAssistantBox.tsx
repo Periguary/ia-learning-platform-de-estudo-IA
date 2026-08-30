@@ -13,6 +13,7 @@ type AIAssistantBoxProps = {
   lessonTitle?: string;
   lessonContent?: string;
   studentNotes?: string;
+  selectedCode?: string;
 };
 
 const defaultPrompts = [
@@ -29,6 +30,7 @@ export function AIAssistantBox({
   lessonTitle,
   lessonContent,
   studentNotes,
+  selectedCode,
 }: AIAssistantBoxProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showHistory, setShowHistory] = useState(false);
@@ -371,6 +373,7 @@ export function AIAssistantBox({
           lessonTitle={lessonTitle}
           lessonContent={lessonContent}
           studentNotes={studentNotes}
+          selectedCode={selectedCode}
         />
       ) : (
         <AIChatBox

@@ -378,3 +378,15 @@
 - [x] Documentar modelos, fontes, licenças e limites de estimativa
 - [x] Criar testes para progresso, seleção multilíngue, cache e remoção
 - [x] Validar TypeScript, testes, acessibilidade e preview; salvar checkpoint
+
+
+## Nova Evolução: Laboratório Profissional e Desafios Empresariais
+- [x] Adicionar painel visual com espaço usado por modelo e armazenamento disponível do navegador
+- [x] Implementar download pausável e retomável com progresso persistido
+- [x] Integrar explicação de trechos de código selecionados ao Tutor Local
+- [x] Criar catálogo de desafios empresariais por módulo, com empresa, contexto, problema e objetivos
+- [x] Criar entregáveis, critérios de aceite, dados de trabalho e feedback por desafio
+- [x] Conectar desbloqueio e progresso dos desafios à conclusão dos módulos
+- [x] Adicionar rota e navegação para o laboratório de desafios práticos
+- [x] Criar testes de regressão para armazenamento, download, tutor e desafios
+- [x] Validar acessibilidade, desempenho, TypeScript, preview e salvar checkpoint

@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, Clipboard, ExternalLink } from "lucide-react";
+import { Check, Clipboard, ExternalLink, MessageSquareText } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +11,7 @@ type CodeExample = {
 
 type CodePlaygroundProps = {
   examples: CodeExample[];
+  onExplainSelection?: (code: string) => void;
 };
 
 type PyodideInstance = {
@@ -41,12 +42,13 @@ function loadPyodideRuntime(): Promise<PyodideInstance> {
   return window.__iaAcademyPyodide;
 }
 
-export function CodePlayground({ examples }: CodePlaygroundProps) {
+export function CodePlayground({ examples, onExplainSelection }: CodePlaygroundProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [drafts, setDrafts] = useState<Record<number, string>>({});
   const [copied, setCopied] = useState(false);
   const [running, setRunning] = useState(false);
   const [output, setOutput] = useState("");
+  const [selectedCode, setSelectedCode] = useState("");
   const active = examples[activeIndex];
   if (!active) return null;
   const code = drafts[activeIndex] ?? active.code;
@@ -105,12 +107,13 @@ export function CodePlayground({ examples }: CodePlaygroundProps) {
       <div className="mt-3 overflow-hidden rounded-xl border border-slate-700 bg-slate-900">
         <div className="flex items-center justify-between border-b border-slate-700 px-3 py-2">
           <span className="text-xs font-mono text-slate-400">{active.language}</span>
-          <Button type="button" variant="ghost" size="sm" onClick={() => void copyCode()} className="h-7 gap-1.5 text-xs text-slate-300 hover:text-white">
+            {onExplainSelection && <Button type="button" variant="ghost" size="sm" onClick={() => onExplainSelection(selectedCode)} disabled={!selectedCode.trim()} className="h-7 gap-1.5 text-xs text-emerald-300 hover:text-emerald-200"><MessageSquareText className="size-3.5" /> Explicar seleção</Button>}
+            <Button type="button" variant="ghost" size="sm" onClick={() => void copyCode()} className="h-7 gap-1.5 text-xs text-slate-300 hover:text-white">
             {copied ? <Check className="size-3.5 text-emerald-300" /> : <Clipboard className="size-3.5" />}
             {copied ? "Copiado" : "Copiar código"}
           </Button>
         </div>
-        <textarea aria-label={`Código ${active.label}`} value={code} onChange={event => setDrafts(current => ({ ...current, [activeIndex]: event.target.value }))} spellCheck={false} className="min-h-56 w-full resize-y bg-transparent p-4 font-mono text-xs leading-6 text-cyan-50 outline-none focus:ring-2 focus:ring-cyan-400/50" />
+        <textarea aria-label={`Código ${active.label}`} value={code} onChange={event => { setDrafts(current => ({ ...current, [activeIndex]: event.target.value })); setSelectedCode(event.target.value.slice(event.target.selectionStart, event.target.selectionEnd)); }} onSelect={event => setSelectedCode(event.currentTarget.value.slice(event.currentTarget.selectionStart, event.currentTarget.selectionEnd))} spellCheck={false} className="min-h-56 w-full resize-y bg-transparent p-4 font-mono text-xs leading-6 text-cyan-50 outline-none focus:ring-2 focus:ring-cyan-400/50" />
       </div>
       {output && <pre role="status" className="mt-3 whitespace-pre-wrap rounded-xl border border-slate-700 bg-slate-950 p-3 font-mono text-xs leading-5 text-emerald-200">{output}</pre>}
     </section>
