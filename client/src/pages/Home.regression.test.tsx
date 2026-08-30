@@ -286,3 +286,21 @@ describe('Home Component - Futuristic Visual Direction', () => {
     expect(source).not.toMatch(/<a[^>]*>\s*<Button/);
   });
 });
+
+
+describe('Home Component - Accessibility and free catalog regressions', () => {
+  it('keeps the explicit theme control and loading status accessible', () => {
+    const source = readFileSync(new URL('./Home.tsx', import.meta.url), 'utf8');
+    expect(source).toContain('toggleTheme');
+    expect(source).toContain('aria-label={`Ativar tema');
+    expect(source).toContain('role="status"');
+    expect(source).toContain('aria-live="polite"');
+  });
+
+  it('uses the official free learning catalog instead of hardcoded claims', () => {
+    const source = readFileSync(new URL('./Home.tsx', import.meta.url), 'utf8');
+    expect(source).toContain('freeCourses');
+    expect(source).toContain('freeCredentials');
+    expect(source).toContain('Curadoria oficial');
+  });
+});

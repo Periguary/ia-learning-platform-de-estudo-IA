@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { AIGlossary } from "@/components/AIGlossary";
+import { UserProfileSummary } from "@/components/UserProfileSummary";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -104,6 +105,7 @@ export default function Navigation() {
           {/* Auth Button */}
           {user ? (
             <div className="flex items-center gap-3">
+              <UserProfileSummary name={user.name} email={user.email} onOpen={() => navigate("/profile")} />
               <button
                 onClick={() => navigate("/dashboard")}
                 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground bg-transparent border-none cursor-pointer futurist-nav-item"

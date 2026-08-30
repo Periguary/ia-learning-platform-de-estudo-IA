@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowRight, Award, Clock, DollarSign, CheckCircle2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { certificationCatalog } from "@/data/certificationCatalog";
+import { freeLearningCatalog } from "@/data/freeLearningCatalog";
 
 export default function Certifications() {
   const [, navigate] = useLocation();
@@ -16,6 +17,14 @@ export default function Certifications() {
           <p className="text-xl text-muted-foreground max-w-2xl">
             Explore certificações reconhecidas globalmente que aumentarão seu valor no mercado.
           </p>
+        </div>
+      </section>
+
+      {/* Free Official Learning */}
+      <section className="py-16 border-b border-border bg-primary/5">
+        <div className="container space-y-8">
+          <div className="space-y-3"><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Curadoria atualizada</p><h2 className="text-3xl font-bold">Cursos e credenciais gratuitas</h2><p className="max-w-3xl text-muted-foreground">Opções oficiais de Microsoft, Google Cloud, AWS, Kaggle e Hugging Face. Use os links para acessar a fonte original e confira as condições de conta, créditos e disponibilidade regional.</p></div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">{freeLearningCatalog.map((resource) => <article key={resource.id} className="flex flex-col rounded-xl border border-border bg-card p-5 transition hover:-translate-y-0.5 hover:border-primary/50"><div className={`mb-4 h-1.5 rounded-full bg-gradient-to-r ${resource.color}`} /><p className="text-xs font-semibold uppercase tracking-wider text-primary">{resource.kind}</p><h3 className="mt-2 text-lg font-bold">{resource.title}</h3><p className="mt-1 text-xs text-muted-foreground">{resource.provider} · {resource.level}</p><p className="mt-3 flex-1 text-sm leading-6 text-muted-foreground">{resource.description}</p><div className="mt-4 flex flex-wrap gap-2">{resource.topics.map(topic => <span key={`${resource.id}-${topic}`} className="rounded bg-muted px-2 py-1 text-[11px] text-muted-foreground">{topic}</span>)}</div><p className="mt-4 text-xs leading-5 text-muted-foreground"><strong className="text-foreground">Acesso:</strong> {resource.accessNote}</p><a href={resource.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center justify-center gap-2 rounded-md border border-primary/35 px-3 py-2 text-sm font-semibold text-primary transition hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Abrir fonte oficial <ArrowRight className="size-4" /></a></article>)}</div>
         </div>
       </section>
 

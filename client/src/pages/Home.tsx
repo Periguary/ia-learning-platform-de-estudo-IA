@@ -1,14 +1,17 @@
 'use client';
 
-import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, ShieldCheck, Zap, Compass, GraduationCap } from "lucide-react";
+import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, ShieldCheck, Zap, Compass, GraduationCap, Moon, Sun, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { useLocation } from "wouter";
 import { coursesData } from "@/data/coursesData";
+import { useTheme } from "@/contexts/ThemeContext";
+import { freeCourses, freeCredentials } from "@/data/freeLearningCatalog";
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const availableModuleCount = Object.keys(coursesData).length;
   const [, navigate] = useLocation();
 
@@ -50,6 +53,8 @@ export default function Home() {
         </button>
       </div>
 
+      {loading && <div className="flex items-center justify-center gap-2 border-b border-primary/20 bg-primary/5 py-2 text-xs text-muted-foreground" role="status" aria-live="polite"><LoaderCircle className="size-3.5 animate-spin text-primary" aria-hidden="true" /> Carregando seu espaço de aprendizagem…</div>}
+
       {/* Hero Section */}
       <section className="relative py-28 px-6 md:px-12 bg-transparent futurist-scanline border-b border-primary/20">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -68,6 +73,9 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Button type="button" onClick={toggleTheme} variant="outline" className="order-last sm:order-first border-primary/35 bg-card/60 hover:bg-primary/10 text-slate-200 h-12 px-5 rounded-none font-semibold flex items-center justify-center gap-2 text-sm transition-all cursor-pointer" aria-label={`Ativar tema ${theme === "dark" ? "claro" : "escuro"}`}>
+                {theme === "dark" ? <Sun className="size-4 text-amber-300" aria-hidden="true" /> : <Moon className="size-4 text-indigo-300" aria-hidden="true" />} {theme === "dark" ? "Tema claro" : "Tema escuro"}
+              </Button>
               {user ? (
                 <Button
                   onClick={() => navigate("/learning-path")}
@@ -168,6 +176,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="border-y border-primary/20 bg-primary/5 py-10 px-6 md:px-12" aria-labelledby="free-learning-title">
+        <div className="max-w-6xl mx-auto grid gap-6 md:grid-cols-[1fr_auto] items-center">
+          <div><p className="futurist-kicker">Curadoria oficial · acesso gratuito</p><h2 id="free-learning-title" className="mt-2 text-2xl font-bold">Mais caminhos para estudar e validar suas habilidades</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Explore cursos gratuitos, microcursos com certificado de conclusão e credenciais práticas de Microsoft, Google Cloud, AWS e Kaggle. A plataforma diferencia claramente conteúdo gratuito de exames profissionais pagos.</p></div>
+          <div className="flex gap-3"><div className="futurist-panel px-4 py-3 text-center"><strong className="block text-2xl text-primary">{freeCourses.length}</strong><span className="text-xs text-muted-foreground">cursos</span></div><div className="futurist-panel px-4 py-3 text-center"><strong className="block text-2xl text-secondary">{freeCredentials.length}</strong><span className="text-xs text-muted-foreground">credenciais</span></div></div>
         </div>
       </section>
 

@@ -412,3 +412,12 @@
 - [x] Fazer pequena alteração visual controlada na homepage para validar hot reload no preview
 - [x] Atualizar baseline-browser-mapping e lockfile
 - [x] Validar hot reload, TypeScript, testes e salvar checkpoint
+
+## Acessibilidade da homepage e catálogo gratuito ampliado
+- [x] Adicionar alternância de tema claro/escuro na homepage com estado persistente e foco acessível
+- [x] Criar perfil do usuário no cabeçalho com nome, e-mail e estado de sessão
+- [x] Adicionar carregamento suave e estados de carregamento na homepage
+- [x] Pesquisar e incluir cursos gratuitos de fontes oficiais renomadas, com links verificáveis
+- [x] Pesquisar e incluir certificações, badges ou exames gratuitos claramente identificados por modalidade
+- [x] Criar testes de regressão para tema, perfil, carregamento e catálogo ampliado
+- [x] Validar TypeScript, testes, preview responsivo e salvar checkpoint
