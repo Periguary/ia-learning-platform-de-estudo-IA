@@ -368,3 +368,13 @@
 - [x] Documentar fontes, modelos e licenças open source usadas no projeto
 - [x] Criar testes de runtime, fallback local, tutor e estados de erro
 - [x] Validar desempenho, acessibilidade, preview, TypeScript e salvar checkpoint
+
+
+## Nova Evolução: Download, Multilíngue e Cache do Tutor Local
+- [x] Adicionar progresso de download com tamanho transferido, tamanho total e tempo estimado
+- [x] Adicionar seleção de modelo multilíngue com prioridade para português
+- [x] Exibir status de modelo pronto, baixando, disponível em cache ou com erro
+- [x] Adicionar botão acessível para remover o modelo local e liberar cache
+- [x] Documentar modelos, fontes, licenças e limites de estimativa
+- [x] Criar testes para progresso, seleção multilíngue, cache e remoção
+- [x] Validar TypeScript, testes, acessibilidade e preview; salvar checkpoint

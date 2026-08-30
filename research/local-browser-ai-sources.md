@@ -19,3 +19,10 @@ Inferência local depende de memória, CPU/GPU, navegador e conexão inicial par
 - [SmolLM2-135M-Instruct — card oficial](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct): o metadado oficial declara `license: apache-2.0`, disponibiliza variantes ONNX quantizadas e identifica o modelo como text-generation. A variante usada no navegador é [onnx-community/SmolLM2-135M-Instruct-ONNX-MHA](https://huggingface.co/onnx-community/SmolLM2-135M-Instruct-ONNX-MHA), marcada para Transformers.js e ONNX.
 
 A interface deve citar o modelo base e a licença Apache-2.0, mas também orientar a leitura do card original e respeitar seus termos. A licença do modelo não transforma automaticamente todos os dados de entrada ou a resposta em conteúdo sem direitos; o aluno continua responsável por usar material próprio ou compatível.
+
+
+## Modelo multilíngue para português
+
+- [Granite 4.0 1B ONNX Web — card oficial](https://huggingface.co/onnx-community/granite-4.0-1b-ONNX-web): o card declara suporte a português, marca Transformers.js/ONNX e informa licença Apache-2.0. Por ser maior que o SmolLM2, deve ser uma opção avançada e carregada somente após consentimento, com estimativa de download e possibilidade de remoção do cache.
+
+A interface pode oferecer dois perfis: **Rápido**, usando SmolLM2 135M quantizado, e **Português multilíngue**, usando Granite 4.0 1B ONNX. O tamanho exato deve ser calculado a partir das respostas de rede/Cache Storage quando disponível, e não inventado no texto da interface.
