@@ -401,3 +401,8 @@
 - [x] Criar painel visual de progresso, status, tentativas e histórico de feedback
 - [x] Adicionar testes de submissão, avaliação, painel, OpenCV e estados de erro
 - [x] Validar acessibilidade, segurança, TypeScript, preview e salvar checkpoint
+
+## Correção de infraestrutura do preview
+- [x] Corrigir falha de conexão WebSocket do Vite/HMR atrás do proxy do preview
+- [x] Validar configuração Vite, logs do servidor, TypeScript, testes e preview
+- [x] Salvar checkpoint da correção de HMR

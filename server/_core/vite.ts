@@ -9,7 +9,13 @@ import viteConfig from "../../vite.config";
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,
-    hmr: { server },
+    // O preview é publicado por um proxy HTTPS; sem clientPort o cliente do Vite
+    // pode montar ws://localhost:5173 e registrar uma falha mesmo com HTTP funcionando.
+    hmr: {
+      server,
+      protocol: "wss",
+      clientPort: 443,
+    },
     allowedHosts: true as const,
   };
 
