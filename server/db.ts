@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents, challengeSubmissions, ChallengeSubmission, InsertChallengeSubmission } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents, challengeSubmissions, ChallengeSubmission, InsertChallengeSubmission, externalLearningProgress, ExternalLearningProgress } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -511,6 +511,47 @@ export async function getNotionSync(userId: number, studyPlanId: number) {
     .where(and(eq(notionSyncConfigs.userId, userId), eq(notionSyncConfigs.studyPlanId, studyPlanId)))
     .limit(1);
   return res[0] || null;
+}
+
+export async function getExternalLearningProgress(userId: number): Promise<ExternalLearningProgress[]> {
+  const db = await getDb();
+  if (!db) return [];
+  try {
+    return await db
+      .select()
+      .from(externalLearningProgress)
+      .where(eq(externalLearningProgress.userId, userId))
+      .orderBy(desc(externalLearningProgress.updatedAt));
+  } catch (error) {
+    console.warn("[Database] Failed to fetch external learning progress:", error);
+    return [];
+  }
+}
+
+export async function toggleExternalLearningProgress(userId: number, resourceId: string, resourceKind: string, completed: boolean): Promise<ExternalLearningProgress | null> {
+  const db = await getDb();
+  if (!db) return null;
+  const normalizedResourceId = resourceId.trim().slice(0, 160);
+  const normalizedResourceKind = resourceKind.trim().slice(0, 80);
+  try {
+    const existing = await db
+      .select()
+      .from(externalLearningProgress)
+      .where(and(eq(externalLearningProgress.userId, userId), eq(externalLearningProgress.resourceId, normalizedResourceId)))
+      .limit(1);
+    const values = { completed: completed ? 1 : 0, completedAt: completed ? new Date() : null, updatedAt: new Date() };
+    if (existing.length > 0) {
+      await db.update(externalLearningProgress).set(values).where(and(eq(externalLearningProgress.id, existing[0].id), eq(externalLearningProgress.userId, userId)));
+      const updated = await db.select().from(externalLearningProgress).where(eq(externalLearningProgress.id, existing[0].id)).limit(1);
+      return updated[0] ?? null;
+    }
+    await db.insert(externalLearningProgress).values({ userId, resourceId: normalizedResourceId, resourceKind: normalizedResourceKind, ...values });
+    const created = await db.select().from(externalLearningProgress).where(and(eq(externalLearningProgress.userId, userId), eq(externalLearningProgress.resourceId, normalizedResourceId))).limit(1);
+    return created[0] ?? null;
+  } catch (error) {
+    console.warn("[Database] Failed to toggle external learning progress:", error);
+    return null;
+  }
 }
 
 export async function addCalendarEvent(userId: number, eventTitle: string, eventDate: string, source: string = "google_calendar") {

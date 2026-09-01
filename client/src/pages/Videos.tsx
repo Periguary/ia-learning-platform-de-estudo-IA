@@ -7,7 +7,7 @@ import { AIAssistantBox } from "@/components/AIAssistantBox";
 import { trpc } from "@/lib/trpc";
 import { createObsidianVaultFiles, downloadObsidianVaultFiles } from "@/utils/obsidianVaultExport";
 
-const categories: VideoCategory[] = ["Fundamentos", "Machine Learning", "LLMs e Transformers", "IA Responsável"];
+const categories: VideoCategory[] = ["Fundamentos", "Machine Learning", "LLMs e Transformers", "IA Responsável", "Visão Computacional", "Redes Neurais", "Computação Cognitiva", "Redes Generativas"];
 
 const withStartTime = (url: string, seconds: number) => {
   if (!seconds) return url;
@@ -251,7 +251,7 @@ export default function Videos() {
           <div className="max-w-3xl space-y-4">
             <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Aprenda IA assistindo e praticando</h1>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Playlists e cursos oficiais gratuitos sobre fundamentos, Machine Learning, LLMs e IA responsável. Acompanhe seu progresso, anote com timestamps sincronizados e emparelhe seus estudos com o Obsidian.
+              Playlists, cursos e coleções oficiais gratuitos sobre fundamentos, Machine Learning, visão computacional, CNNs, computação cognitiva e redes generativas. Acompanhe seu progresso, anote com timestamps sincronizados e emparelhe seus estudos com o Obsidian. A plataforma aponta para as fontes originais e não copia nem redistribui vídeos de terceiros.
             </p>
           </div>
 

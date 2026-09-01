@@ -170,6 +170,19 @@ export const challengeSubmissions = mysqlTable("challenge_submissions", {
 export type ChallengeSubmission = typeof challengeSubmissions.$inferSelect;
 export type InsertChallengeSubmission = typeof challengeSubmissions.$inferInsert;
 
+export const externalLearningProgress = mysqlTable("external_learning_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  resourceId: varchar("resourceId", { length: 160 }).notNull(),
+  resourceKind: varchar("resourceKind", { length: 80 }).notNull(),
+  completed: int("completed").default(0).notNull(),
+  completedAt: timestamp("completedAt"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ExternalLearningProgress = typeof externalLearningProgress.$inferSelect;
+export type InsertExternalLearningProgress = typeof externalLearningProgress.$inferInsert;
+
 
 export const notionSyncConfigs = mysqlTable("notion_sync_configs", {
   id: int("id").autoincrement().primaryKey(),

@@ -39,6 +39,8 @@ import {
   createChallengeSubmission,
   getChallengeSubmissionsForUser,
   updateChallengeSubmissionEvaluation,
+  getExternalLearningProgress,
+  toggleExternalLearningProgress,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 
@@ -538,6 +540,25 @@ export const appRouter = router({
         const submission = await updateChallengeSubmissionEvaluation(ctx.user.id, input.submissionId, { status: input.needsReview ? "needs_review" : "evaluated", score: input.score, feedback: input.feedback });
         if (!submission) throw new Error("Não foi possível salvar a avaliação.");
         return submission;
+      }),
+  }),
+
+  externalLearning: router({
+    progress: publicProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) return [];
+      return getExternalLearningProgress(ctx.user.id);
+    }),
+    toggleProgress: publicProcedure
+      .input(z.object({
+        resourceId: z.string().trim().min(1).max(160),
+        resourceKind: z.string().trim().min(1).max(80),
+        completed: z.boolean(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para acompanhar seu progresso.");
+        const progress = await toggleExternalLearningProgress(ctx.user.id, input.resourceId, input.resourceKind, input.completed);
+        if (!progress) throw new Error("Não foi possível atualizar o progresso agora.");
+        return progress;
       }),
   }),
 

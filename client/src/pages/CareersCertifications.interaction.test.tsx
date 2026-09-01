@@ -10,6 +10,19 @@ vi.mock("wouter", () => ({
   useLocation: () => ["/careers", navigate],
 }));
 
+vi.mock("@/_core/hooks/useAuth", () => ({
+  useAuth: () => ({ user: null, loading: false }),
+}));
+
+vi.mock("@/lib/trpc", () => ({
+  trpc: {
+    externalLearning: {
+      progress: { useQuery: () => ({ data: [], refetch: vi.fn() }) },
+      toggleProgress: { useMutation: () => ({ mutate: vi.fn(), isPending: false }) },
+    },
+  },
+}));
+
 describe("Career and certification navigation", () => {
   beforeEach(() => {
     navigate.mockReset();

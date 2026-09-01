@@ -22,4 +22,11 @@ describe("learning catalog", () => {
       }
     }
   });
+
+  it("includes the new image, cognitive and generative learning modules", () => {
+    const requiredModules = ["image-processing", "convolutional-neural-networks", "cognitive-computing", "generative-neural-networks"];
+    const moduleIds = learningPhases.flatMap(phase => phase.modules.map(module => module.id));
+    expect(requiredModules.every(moduleId => moduleIds.includes(moduleId))).toBe(true);
+    expect(requiredModules.every(moduleId => coursesData[moduleId].lessons >= 4)).toBe(true);
+  });
 });

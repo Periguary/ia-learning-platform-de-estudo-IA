@@ -283,6 +283,54 @@ export const coursesData: Record<string, any> = {
       { title: "Cloud", lessons: [{ id: 7, title: "AWS", completed: false }, { id: 8, title: "GCP", completed: false }, { id: 9, title: "Azure", completed: false }] },
       { title: "Projeto", lessons: [{ id: 10, title: "Final", completed: false }] }
     ]
+  },
+  "image-processing": {
+    title: "Processamento de Imagens e Visão Computacional",
+    description: "Pixels, OpenCV, pipelines visuais e avaliação de sistemas de visão.",
+    phase: 6,
+    difficulty: "Intermediário",
+    duration: "32 horas",
+    lessons: 12,
+    sections: [
+      { title: "Imagem digital", lessons: [{ id: 1, title: "Fundamentos de Processamento de Imagens", completed: false }, { id: 2, title: "Filtros e Transformações com OpenCV", completed: false }, { id: 3, title: "Visão Computacional e Avaliação", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 4, title: "Projeto: Inspeção Visual", completed: false }] },
+    ],
+  },
+  "convolutional-neural-networks": {
+    title: "Redes Neurais Convolucionais",
+    description: "Convoluções, pooling, augmentation, treino e classificação visual.",
+    phase: 6,
+    difficulty: "Avançado",
+    duration: "28 horas",
+    lessons: 12,
+    sections: [
+      { title: "Arquitetura", lessons: [{ id: 1, title: "Por que CNNs funcionam em imagens", completed: false }, { id: 2, title: "Convolução, pooling e padding", completed: false }, { id: 3, title: "Treino, overfitting e augmentation", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 4, title: "Projeto: Classificação de Imagens", completed: false }] },
+    ],
+  },
+  "cognitive-computing": {
+    title: "Computação Cognitiva",
+    description: "Percepção, linguagem, raciocínio assistido e IA responsável.",
+    phase: 7,
+    difficulty: "Avançado",
+    duration: "24 horas",
+    lessons: 12,
+    sections: [
+      { title: "Sistemas cognitivos", lessons: [{ id: 1, title: "O que é Computação Cognitiva", completed: false }, { id: 2, title: "Percepção, linguagem e contexto", completed: false }, { id: 3, title: "Raciocínio assistido e IA responsável", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 4, title: "Projeto: Assistente de Operações", completed: false }] },
+    ],
+  },
+  "generative-neural-networks": {
+    title: "Redes Neurais Generativas",
+    description: "Autoencoders, GANs, difusão, avaliação e geração responsável.",
+    phase: 7,
+    difficulty: "Avançado",
+    duration: "30 horas",
+    lessons: 12,
+    sections: [
+      { title: "Modelos generativos", lessons: [{ id: 1, title: "Fundamentos de Redes Generativas", completed: false }, { id: 2, title: "Autoencoders e espaço latente", completed: false }, { id: 3, title: "GANs, difusão e avaliação", completed: false }] },
+      { title: "Projeto", lessons: [{ id: 4, title: "Projeto: Geração responsável", completed: false }] },
+    ],
   }
 };
 
@@ -348,6 +396,30 @@ export const lessonsContentData: Record<string, Record<number | string, any>> = 
     14: { title: "Debugging", content: "Encontrar e corrigir erros.\n\n**Técnicas:**\n1. print()\n2. pdb (debugger)\n3. Logging", examples: ["print(variavel)", "import pdb; pdb.set_trace()", "logging.debug()"] },
     15: { title: "Testes Unitários", content: "Verificar código.\n\n**Framework:**\nunittest\n\n**Conceito:**\nTestar funções isoladamente", examples: ["import unittest", "class TestCase(unittest.TestCase):", "self.assertEqual(resultado, esperado)"] },
     16: { title: "Projeto: Aplicação Python", content: "Integrar conceitos em projeto.\n\n**Etapas:**\n1. Planejamento\n2. Desenvolvimento\n3. Testes\n4. Documentação", examples: ["Calculadora", "Gerenciador de tarefas", "Analisador de dados"] }
+  },
+  "image-processing": {
+    1: { title: "Fundamentos de Processamento de Imagens", content: "Imagens digitais são matrizes de pixels. Nesta aula, você aprenderá resolução, canais, profundidade de cor, histogramas e os efeitos da compressão.\n\n**Prática:** carregue uma imagem autorizada, valide dimensões e compare RGB, escala de cinza e HSV.", examples: ["cv2.imread('imagem.jpg')", "cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)", "cv2.calcHist([gray], [0], None, [256], [0, 256])"] },
+    2: { title: "Filtros e Transformações com OpenCV", content: "Filtros reduzem ruído e realçam estruturas. Compare blur, mediana, nitidez, limiarização e detecção de bordas, documentando quando cada técnica falha.", examples: ["cv2.GaussianBlur(img, (5, 5), 0)", "cv2.threshold(gray, 120, 255, cv2.THRESH_BINARY)", "cv2.Canny(gray, 50, 150)"] },
+    3: { title: "Visão Computacional e Avaliação", content: "Visão computacional transforma pixels em decisões como classificação, detecção, segmentação e OCR. Defina uma métrica, separe validação e teste e examine falsos positivos antes de colocar o sistema em produção.", examples: ["accuracy = correct / total", "IoU = intersection / union", "matriz de confusão"] },
+    4: { title: "Projeto: Inspeção Visual", content: "Crie um pipeline para identificar defeitos em peças sintéticas. Inclua preparação, limiarização, contornos, relatório de erros e limites de uso.", examples: ["cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)", "cv2.contourArea(contour)", "relatorio = {'falsos_positivos': 0}"] }
+  },
+  "convolutional-neural-networks": {
+    1: { title: "Por que CNNs funcionam em imagens", content: "Redes neurais convolucionais usam filtros aprendidos, compartilhamento de pesos e campos receptivos para reconhecer padrões locais sem ignorar a estrutura espacial.", examples: ["Conv2d(in_channels=3, out_channels=16, kernel_size=3)", "feature_map = convolution(image, kernel)"] },
+    2: { title: "Convolução, pooling e padding", content: "Entenda stride, padding, pooling e como cada escolha altera o tamanho dos mapas de características. Faça os cálculos manualmente antes de usar uma biblioteca.", examples: ["output = floor((W - K + 2P) / S) + 1", "MaxPool2d(kernel_size=2)"] },
+    3: { title: "Treino, overfitting e augmentation", content: "Treine uma CNN com separação entre treino, validação e teste. Use augmentation apenas quando fizer sentido para o domínio e monitore curvas de perda e métricas.", examples: ["loss.backward()", "optimizer.step()", "RandomHorizontalFlip()"] },
+    4: { title: "Projeto: Classificação de Imagens", content: "Implemente um classificador pequeno, compare uma baseline com transfer learning e escreva uma análise de erros por classe.", examples: ["model = torchvision.models.resnet18(weights='DEFAULT')", "classification_report(y_true, y_pred)"] }
+  },
+  "cognitive-computing": {
+    1: { title: "O que é Computação Cognitiva", content: "Computação cognitiva combina percepção, linguagem, raciocínio e interação para apoiar decisões humanas. Diferencie automação determinística, sistemas probabilísticos e agentes com ferramentas.", examples: ["entrada -> contexto -> hipótese -> ação", "confidence = 0.82"] },
+    2: { title: "Percepção, linguagem e contexto", content: "Integre texto, imagem e sinais estruturados com um contrato de dados claro. Identifique ambiguidades, dados sensíveis e situações em que o sistema deve pedir revisão humana.", examples: ["context = {'documento': text, 'imagem': image}", "if confidence < threshold: request_review()"] },
+    3: { title: "Raciocínio assistido e IA responsável", content: "Avalie explicabilidade, viés, privacidade, segurança e rastreabilidade. Uma resposta plausível não é prova de correção: registre fontes, evidências e incerteza.", examples: ["evidence = [source_a, source_b]", "audit_log.append({'decision': decision})"] },
+    4: { title: "Projeto: Assistente de Operações", content: "Modele um assistente que classifica solicitações, recupera procedimentos e encaminha casos de risco para uma pessoa responsável.", examples: ["route = classifier.predict(ticket)", "if route == 'high_risk': escalate()"] }
+  },
+  "generative-neural-networks": {
+    1: { title: "Fundamentos de Redes Generativas", content: "Modelos generativos aprendem a representar uma distribuição para produzir novas amostras. Compare autoencoders, GANs e modelos de difusão sem confundir geração com cópia literal.", examples: ["latent = encoder(x)", "sample = generator(latent)"] },
+    2: { title: "Autoencoders e espaço latente", content: "Use um encoder e um decoder para aprender uma representação compacta. Analise reconstrução, perda, capacidade do gargalo e os riscos de perder detalhes relevantes.", examples: ["reconstruction = decoder(encoder(x))", "loss = mse(x, reconstruction)"] },
+    3: { title: "GANs, difusão e avaliação", content: "Entenda o jogo entre gerador e discriminador e a geração iterativa por difusão. Avalie qualidade, diversidade, memorization e segurança do conteúdo produzido.", examples: ["discriminator(real)", "generator(noise)", "denoised = diffusion_step(noisy)"] },
+    4: { title: "Projeto: Geração responsável", content: "Construa um experimento com dados sintéticos ou licenciados, documente a origem dos dados e compare qualidade e diversidade com uma baseline.", examples: ["dataset_license = 'CC BY 4.0'", "metrics = {'diversity': score}"] }
   }
 };
 

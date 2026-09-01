@@ -421,3 +421,14 @@
 - [x] Pesquisar e incluir certificações, badges ou exames gratuitos claramente identificados por modalidade
 - [x] Criar testes de regressão para tema, perfil, carregamento e catálogo ampliado
 - [x] Validar TypeScript, testes, preview responsivo e salvar checkpoint
+
+## Expansão curricular, recursos externos e progresso
+- [x] Adicionar módulos de Processamento de Imagens e Visão Computacional, CNNs, Computação Cognitiva e Redes Neurais Generativas
+- [x] Incluir cursos e credenciais gratuitos de plataformas oficiais relacionados aos novos temas
+- [x] Criar seção de videoaulas gratuitas com embeds/links de fontes oficiais e uso compatível com direitos autorais
+- [x] Modelar tabela persistente de progresso dos recursos externos por usuário
+- [x] Criar helpers e procedimentos tRPC para listar e alternar conclusão de cursos e certificações
+- [x] Implementar filtros por provedor, nível e modalidade no catálogo gratuito
+- [x] Exibir progresso individual e resumo de concluídos no catálogo
+- [x] Criar testes de regressão para catálogo, filtros, progresso e videoteca
+- [x] Validar TypeScript, testes, acessibilidade, responsividade e salvar checkpoint
