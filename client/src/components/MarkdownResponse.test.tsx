@@ -4,8 +4,25 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("streamdown", () => ({
-  Streamdown: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="streamdown-content">{children}</div>
+  Streamdown: ({
+    children,
+    controls,
+    shikiTheme,
+    mermaidConfig,
+  }: {
+    children: React.ReactNode;
+    controls?: unknown;
+    shikiTheme?: unknown;
+    mermaidConfig?: unknown;
+  }) => (
+    <div
+      data-testid="streamdown-content"
+      data-controls={JSON.stringify(controls)}
+      data-shiki-theme={JSON.stringify(shikiTheme)}
+      data-mermaid-config={JSON.stringify(mermaidConfig)}
+    >
+      {children}
+    </div>
   ),
 }));
 
@@ -18,6 +35,10 @@ describe("MarkdownResponse", () => {
     render(<MarkdownResponse content={content} />);
 
     expect(screen.getByTestId("streamdown-content").textContent).toBe(content);
-    expect(screen.getByTestId("streamdown-content").parentElement?.classList.contains("ai-markdown")).toBe(true);
+    const renderer = screen.getByTestId("streamdown-content");
+    expect(renderer.parentElement?.classList.contains("ai-markdown")).toBe(true);
+    expect(renderer.dataset.controls).toBe(JSON.stringify({ code: true, mermaid: true, table: true }));
+    expect(renderer.dataset.shikiTheme).toBe(JSON.stringify(["github-light", "github-dark"]));
+    expect(renderer.dataset.mermaidConfig).toBe(JSON.stringify({ securityLevel: "strict", startOnLoad: false }));
   });
 });

@@ -14,7 +14,13 @@ type MarkdownResponseProps = {
 export function MarkdownResponse({ content, className }: MarkdownResponseProps) {
   return (
     <div className={cn("ai-markdown prose prose-sm dark:prose-invert max-w-none", className)}>
-      <Streamdown>{content}</Streamdown>
+      <Streamdown
+        controls={{ code: true, mermaid: true, table: true }}
+        shikiTheme={["github-light", "github-dark"]}
+        mermaidConfig={{ securityLevel: "strict", startOnLoad: false }}
+      >
+        {content}
+      </Streamdown>
     </div>
   );
 }

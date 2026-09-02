@@ -445,3 +445,10 @@
 - [x] Destacar blocos de código, listas, títulos, links e citações com estilos acessíveis
 - [x] Adicionar regressão para renderização de Markdown e conteúdo potencialmente inseguro
 - [x] Validar TypeScript, testes, preview e salvar checkpoint
+
+## Renderer Markdown avançado do Tutor IA
+- [x] Adicionar renderização segura de diagramas Mermaid em respostas Markdown
+- [x] Exibir linguagem e syntax highlighting nos blocos de código
+- [x] Adicionar botão acessível de copiar código em cada bloco
+- [x] Criar regressões para Mermaid, highlight, linguagem e clipboard
+- [x] Validar TypeScript, testes, preview e salvar checkpoint
