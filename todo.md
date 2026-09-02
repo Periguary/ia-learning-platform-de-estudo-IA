@@ -432,3 +432,10 @@
 - [x] Exibir progresso individual e resumo de concluídos no catálogo
 - [x] Criar testes de regressão para catálogo, filtros, progresso e videoteca
 - [x] Validar TypeScript, testes, acessibilidade, responsividade e salvar checkpoint
+
+## Correção do Tutor IA
+- [x] Reproduzir e diagnosticar por que o Tutor IA não responde
+- [x] Corrigir o fluxo cloud e/ou o fallback local WebAssembly sem expor credenciais
+- [x] Melhorar mensagens de erro, carregamento e recuperação da interface
+- [x] Adicionar regressões para envio de pergunta, resposta e falha de serviço
+- [x] Validar no preview, TypeScript, testes e salvar checkpoint

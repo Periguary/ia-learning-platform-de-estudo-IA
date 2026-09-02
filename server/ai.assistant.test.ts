@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from "vitest";
+import { readFileSync } from "node:fs";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 
@@ -74,6 +75,14 @@ describe("ai.ask", () => {
       mode: "summary",
     })).rejects.toThrow("Faça login para gerar um resumo personalizado.");
     expect(llmMock.invokeLLM).not.toHaveBeenCalled();
+  });
+
+  it("mantém uma migração não destrutiva para a memória contextual usada pelo Tutor", () => {
+    const migration = readFileSync(new URL("../drizzle/0011_restore_student_memories.sql", import.meta.url), "utf8");
+    expect(migration).toContain("CREATE TABLE IF NOT EXISTS `student_memories`");
+    expect(migration).toContain("`userId` int NOT NULL");
+    expect(migration).toContain("`topic` varchar(255) NOT NULL");
+    expect(migration).not.toMatch(/DROP TABLE|DROP COLUMN|TRUNCATE/i);
   });
 
   it("oculta falhas internas do provedor em uma mensagem pedagógica", async () => {
