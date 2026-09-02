@@ -4,7 +4,7 @@ import { AIChatBox, type Message } from "@/components/AIChatBox";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { LocalTutorPanel } from "@/components/LocalTutorPanel";
-import { Streamdown } from "streamdown";
+import { MarkdownResponse } from "@/components/MarkdownResponse";
 
 type AIAssistantBoxProps = {
   moduleId: string;
@@ -414,9 +414,7 @@ export function AIAssistantBox({
               <div className="space-y-4">
                 <div className="p-4 bg-muted/20 border border-border rounded-lg max-h-80 overflow-y-auto text-sm">
                   <h4 className="font-bold text-primary mb-2">{studyPlanResult.title}</h4>
-                  <div className="prose prose-sm dark:prose-invert">
-                    <Streamdown>{studyPlanResult.content}</Streamdown>
-                  </div>
+                  <MarkdownResponse content={studyPlanResult.content} />
                 </div>
                 <div className="flex justify-end gap-3 pt-2">
                   <Button variant="outline" onClick={() => setStudyPlanResult(null)}>

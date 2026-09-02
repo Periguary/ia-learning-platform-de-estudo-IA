@@ -439,3 +439,9 @@
 - [x] Melhorar mensagens de erro, carregamento e recuperação da interface
 - [x] Adicionar regressões para envio de pergunta, resposta e falha de serviço
 - [x] Validar no preview, TypeScript, testes e salvar checkpoint
+
+## Markdown no Tutor IA
+- [x] Renderizar respostas do Tutor IA com Markdown seguro e legível
+- [x] Destacar blocos de código, listas, títulos, links e citações com estilos acessíveis
+- [x] Adicionar regressão para renderização de Markdown e conteúdo potencialmente inseguro
+- [x] Validar TypeScript, testes, preview e salvar checkpoint
