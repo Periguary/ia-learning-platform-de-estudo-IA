@@ -452,3 +452,21 @@
 - [x] Adicionar botão acessível de copiar código em cada bloco
 - [x] Criar regressões para Mermaid, highlight, linguagem e clipboard
 - [x] Validar TypeScript, testes, preview e salvar checkpoint
+
+## Aulas de arquitetura e ações de código
+- [ ] Adicionar exemplos Mermaid práticos nas aulas de arquitetura de software
+- [ ] Implementar download de blocos de código com extensão automática por linguagem
+- [ ] Exibir feedback temporário “Copiado!” no botão de clipboard
+- [ ] Criar regressões para Mermaid, download, extensão e feedback temporizado
+- [ ] Validar TypeScript, testes, preview e salvar checkpoint
+
+## Preparação para monetização sem custo inicial
+- [x] Criar hub público de apoio e transparência da IA Academy
+- [x] Exibir oferta profissional opcional sem bloquear o conteúdo gratuito
+- [x] Adicionar formulário de interesse para mentoria, produtos e parcerias
+- [x] Persistir leads com consentimento mínimo e isolamento seguro
+- [x] Notificar o proprietário sobre novos interesses sem expor dados desnecessários
+- [x] Integrar CTAs na homepage, certificações e laboratório
+- [x] Adicionar transparência sobre links afiliados, apoio, preços e certificados próprios
+- [x] Criar regressões e validar acessibilidade, privacidade, TypeScript e preview
+- [x] Salvar checkpoint dos ajustes de monetização

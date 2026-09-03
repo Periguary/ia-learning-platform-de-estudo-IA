@@ -304,3 +304,12 @@ describe('Home Component - Accessibility and free catalog regressions', () => {
     expect(source).toContain('Curadoria oficial');
   });
 });
+
+
+describe("Home monetization CTA", () => {
+  it("keeps an explicit route to the optional support hub", () => {
+    const source = readFileSync(new URL("./Home.tsx", import.meta.url), "utf8");
+    expect(source).toContain('navigate("/support")');
+    expect(source).toContain("Apoie o projeto");
+  });
+});

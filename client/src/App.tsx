@@ -23,6 +23,7 @@ import InteractiveCertifications from "./pages/InteractiveCertifications";
 import Profile from "./pages/Profile";
 import PublicProfile from "./pages/PublicProfile";
 import SavedExplanationsReview from "./pages/SavedExplanationsReview";
+import Support from "./pages/Support";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import PageTransitionLoader from "./components/PageTransitionLoader";
@@ -49,6 +50,7 @@ function Router() {
       <Route path={"/profile/public"} component={PublicProfile} />
       <Route path={"/profile"} component={Profile} />
       <Route path={"/saved-explanations"} component={SavedExplanationsReview} />
+      <Route path={"/support"} component={Support} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

@@ -41,8 +41,10 @@ import {
   updateChallengeSubmissionEvaluation,
   getExternalLearningProgress,
   toggleExternalLearningProgress,
+  createMonetizationLead,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
+import { notifyOwner } from "./_core/notification";
 
 const assistantHistorySchema = z.array(
   z.object({
@@ -585,7 +587,25 @@ export const appRouter = router({
         if (!ctx.user?.id) throw new Error("Faça login para remover anotações.");
         return deleteVideoNote(ctx.user.id, input.noteId, input.videoId);
       }),
+    }),
+  monetization: router({
+    submitInterest: publicProcedure
+      .input(z.object({
+        name: z.string().trim().min(2).max(160),
+        email: z.string().trim().email().max(320),
+        interest: z.enum(["apoio", "mentoria", "produto", "parceria"]),
+        message: z.string().trim().max(2_000).optional(),
+        consent: z.literal(true),
+      }))
+      .mutation(async ({ input }) => {
+        const lead = await createMonetizationLead({ ...input, consent: input.consent ? 1 : 0 });
+        if (!lead) throw new Error("Não foi possível registrar seu interesse agora.");
+        await notifyOwner({
+          title: "Novo interesse na IA Academy",
+          content: `${lead.interest} | ${lead.name} | ${lead.email}`,
+        });
+        return { ok: true };
+      }),
   }),
 });
-
 export type AppRouter = typeof appRouter;

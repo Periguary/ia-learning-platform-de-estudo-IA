@@ -200,3 +200,17 @@ export const externalCalendarEvents = mysqlTable("external_calendar_events", {
   source: varchar("source", { length: 64 }).default("google_calendar").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
+
+
+export const monetizationLeads = mysqlTable("monetization_leads", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 160 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  interest: varchar("interest", { length: 80 }).notNull(),
+  message: text("message"),
+  consent: int("consent").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type MonetizationLead = typeof monetizationLeads.$inferSelect;
+export type InsertMonetizationLead = typeof monetizationLeads.$inferInsert;

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, ShieldCheck, Zap, Compass, GraduationCap, Moon, Sun, LoaderCircle } from "lucide-react";
+import { ArrowRight, Sparkles, BookOpen, Award, Users, CheckCircle, Play, ShieldCheck, Zap, Compass, GraduationCap, Moon, Sun, LoaderCircle, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
@@ -100,6 +100,13 @@ export default function Home() {
                 className="border-primary/35 bg-card/60 hover:bg-primary/10 text-slate-200 h-12 px-8 rounded-none font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
               >
                 <Compass className="w-5 h-5 text-blue-400" /> Explorar Trilha
+              </Button>
+              <Button
+                onClick={() => navigate("/support")}
+                variant="outline"
+                className="border-lime-400/35 bg-card/60 text-lime-200 hover:bg-lime-400/10 h-12 px-6 rounded-none font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
+              >
+                <HeartHandshake className="w-5 h-5" /> Apoie o projeto
               </Button>
             </div>
 

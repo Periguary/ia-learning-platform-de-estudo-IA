@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { eq, desc, and } from "drizzle-orm";
-import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents, challengeSubmissions, ChallengeSubmission, InsertChallengeSubmission, externalLearningProgress, ExternalLearningProgress } from "../drizzle/schema";
+import { InsertUser, users, aiConversations, AIConversation, InsertAIConversation, aiUpdateCandidates, AIUpdateCandidate, InsertAIUpdateCandidate, videoNotes, savedExplanations, studentMemories, studyPlans, notionSyncConfigs, externalCalendarEvents, challengeSubmissions, ChallengeSubmission, InsertChallengeSubmission, externalLearningProgress, ExternalLearningProgress, monetizationLeads, MonetizationLead, InsertMonetizationLead } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -605,6 +605,31 @@ export async function updateChallengeSubmissionEvaluation(userId: number, submis
     return rows[0] ?? null;
   } catch (error) {
     console.warn("[Database] Failed to evaluate challenge submission:", error);
+    return null;
+  }
+}
+
+
+export async function createMonetizationLead(data: InsertMonetizationLead): Promise<MonetizationLead | null> {
+  const db = await getDb();
+  if (!db) return null;
+
+  const values: InsertMonetizationLead = {
+    name: data.name.trim().slice(0, 160),
+    email: data.email.trim().toLowerCase().slice(0, 320),
+    interest: data.interest.trim().slice(0, 80),
+    message: data.message?.trim().slice(0, 2_000) || null,
+    consent: data.consent ? 1 : 0,
+  };
+
+  try {
+    const result = await db.insert(monetizationLeads).values(values);
+    const id = Number(result[0]?.insertId);
+    if (!id) return null;
+    const rows = await db.select().from(monetizationLeads).where(eq(monetizationLeads.id, id)).limit(1);
+    return rows[0] ?? null;
+  } catch (error) {
+    console.warn("[Database] Failed to create monetization lead:", error);
     return null;
   }
 }

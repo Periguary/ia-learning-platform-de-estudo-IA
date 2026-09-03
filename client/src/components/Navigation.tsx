@@ -28,6 +28,7 @@ export default function Navigation() {
     { label: "Especializações", href: "/specializations" },
     { label: "Laboratório", href: "/challenges" },
     { label: "Radar de IA", href: "/updates" },
+    { label: "Apoie", href: "/support" },
   ];
 
   return (

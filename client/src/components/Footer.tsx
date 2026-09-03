@@ -17,6 +17,7 @@ export default function Footer() {
       { label: "Documentação", href: "#" },
       { label: "FAQ", href: "#" },
       { label: "Comunidade", href: "#" },
+      { label: "Apoie a IA Academy", href: "/support" },
     ],
     Legal: [
       { label: "Privacidade", href: "#" },
