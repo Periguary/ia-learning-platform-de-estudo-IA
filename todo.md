@@ -454,11 +454,11 @@
 - [x] Validar TypeScript, testes, preview e salvar checkpoint
 
 ## Aulas de arquitetura e ações de código
-- [ ] Adicionar exemplos Mermaid práticos nas aulas de arquitetura de software
-- [ ] Implementar download de blocos de código com extensão automática por linguagem
-- [ ] Exibir feedback temporário “Copiado!” no botão de clipboard
-- [ ] Criar regressões para Mermaid, download, extensão e feedback temporizado
-- [ ] Validar TypeScript, testes, preview e salvar checkpoint
+- [x] Adicionar exemplos Mermaid práticos nas aulas de arquitetura de software
+- [x] Implementar download de blocos de código com extensão automática por linguagem
+- [x] Exibir feedback temporário “Copiado!” no botão de clipboard
+- [x] Criar regressões para Mermaid, download, extensão e feedback temporizado
+- [x] Validar TypeScript, testes, preview e salvar checkpoint
 
 ## Preparação para monetização sem custo inicial
 - [x] Criar hub público de apoio e transparência da IA Academy
