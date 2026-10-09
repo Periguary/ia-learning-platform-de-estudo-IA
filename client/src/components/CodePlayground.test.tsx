@@ -1,10 +1,35 @@
 // @vitest-environment jsdom
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CodePlayground } from "./CodePlayground";
 
 describe("CodePlayground", () => {
+  beforeEach(() => {
+    delete window.__iaAcademyPyodide;
+  });
+
+  afterEach(() => {
+    cleanup();
+    delete window.__iaAcademyPyodide;
+  });
+
+  it("oferece Baixar tudo e cria um arquivo Markdown com os snippets", () => {
+    const createObjectURL = vi.fn().mockReturnValue("blob:test");
+    const revokeObjectURL = vi.fn();
+    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: createObjectURL });
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => undefined);
+    render(<CodePlayground moduleTitle="Visão Computacional" lessonTitle="OpenCV" examples={[{ label: "Python", language: "python", code: "print('ok')" }, { label: "SQL", language: "sql", code: "select 1;" }]} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Baixar tudo/i }));
+
+    expect(createObjectURL).toHaveBeenCalledOnce();
+    expect(click).toHaveBeenCalledOnce();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:test");
+    click.mockRestore();
+  });
+
   it("executa código Python local quando o runtime está disponível", async () => {
     window.loadPyodide = vi.fn(async () => ({ runPythonAsync: async () => "ok" }));
     render(<CodePlayground examples={[{ label: "Python", language: "python", code: "print('ok')" }]} />);

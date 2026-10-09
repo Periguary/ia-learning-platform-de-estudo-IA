@@ -470,3 +470,11 @@
 - [x] Adicionar transparência sobre links afiliados, apoio, preços e certificados próprios
 - [x] Criar regressões e validar acessibilidade, privacidade, TypeScript e preview
 - [x] Salvar checkpoint dos ajustes de monetização
+
+
+## Etapa retomada — exportação de snippets
+- [x] Adicionar “Baixar tudo” ao playground de código.
+- [x] Exportar todos os snippets atuais em Markdown com nome seguro.
+- [x] Passar título do módulo e da aula a partir do CourseDetail.
+- [x] Adicionar regressão e isolamento de testes para a exportação.
+- [ ] Próxima etapa: contexto global de idioma PT-BR/English.

@@ -239,7 +239,12 @@ export default function CourseDetail() {
                 )}
 
                 {module === "computer-vision" && selectedContent.codeExamples && (
-                  <CodePlayground examples={selectedContent.codeExamples} onExplainSelection={setSelectedCode} />
+                  <CodePlayground
+                    examples={selectedContent.codeExamples}
+                    moduleTitle={courseData.title}
+                    lessonTitle={selectedContent.title}
+                    onExplainSelection={setSelectedCode}
+                  />
                 )}
 
                 <div className="flex gap-3">

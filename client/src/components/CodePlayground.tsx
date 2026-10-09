@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, Clipboard, ExternalLink, MessageSquareText } from "lucide-react";
+import { Check, Clipboard, Download, ExternalLink, MessageSquareText } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +12,8 @@ type CodeExample = {
 type CodePlaygroundProps = {
   examples: CodeExample[];
   onExplainSelection?: (code: string) => void;
+  moduleTitle?: string;
+  lessonTitle?: string;
 };
 
 type PyodideInstance = {
@@ -42,7 +44,16 @@ function loadPyodideRuntime(): Promise<PyodideInstance> {
   return window.__iaAcademyPyodide;
 }
 
-export function CodePlayground({ examples, onExplainSelection }: CodePlaygroundProps) {
+function slugify(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "") || "snippets";
+}
+
+export function CodePlayground({ examples, onExplainSelection, moduleTitle = "ia-academy", lessonTitle = "aula" }: CodePlaygroundProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [drafts, setDrafts] = useState<Record<number, string>>({});
   const [copied, setCopied] = useState(false);
@@ -81,6 +92,28 @@ export function CodePlayground({ examples, onExplainSelection }: CodePlaygroundP
     }
   };
 
+  const downloadAll = () => {
+    const markdown = [
+      `# Snippets — ${lessonTitle}`,
+      "",
+      `Módulo: ${moduleTitle}`,
+      "",
+      ...examples.map((example, index) => {
+        const exampleCode = drafts[index] ?? example.code;
+        return `## ${index + 1}. ${example.label}\n\n\`\`\`${example.language.split(/[ ·]/)[0]}\n${exampleCode}\n\`\`\``;
+      }),
+      "",
+      "> Exportado localmente pela IA Academy.",
+    ].join("\n");
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `${slugify(moduleTitle)}-${slugify(lessonTitle)}-snippets.md`;
+    link.click();
+    URL.revokeObjectURL(objectUrl);
+  };
+
   return (
     <section className="rounded-2xl border border-cyan-500/25 bg-slate-950/80 p-4 shadow-inner" aria-label="Playground de código">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -94,6 +127,9 @@ export function CodePlayground({ examples, onExplainSelection }: CodePlaygroundP
             </Button>
             <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")} className="gap-1.5 border-cyan-500/30 text-cyan-200 hover:bg-cyan-500/10">
               <ExternalLink className="size-3.5" /> Abrir no Colab
+            </Button>
+            <Button type="button" variant="outline" size="sm" onClick={downloadAll} className="gap-1.5 border-violet-500/30 text-violet-200 hover:bg-violet-500/10" aria-label="Baixar tudo">
+              <Download className="size-3.5" /> Baixar tudo
             </Button>
           </div>
       </div>
