@@ -477,4 +477,5 @@
 - [x] Exportar todos os snippets atuais em Markdown com nome seguro.
 - [x] Passar título do módulo e da aula a partir do CourseDetail.
 - [x] Adicionar regressão e isolamento de testes para a exportação.
-- [ ] Próxima etapa: contexto global de idioma PT-BR/English.
+- [x] Criar contexto global de idioma PT-BR/English e integrar primeiro na navegação.
+- [x] Persistir preferência de idioma no navegador.

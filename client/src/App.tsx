@@ -4,6 +4,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
 import LearningPath from "./pages/LearningPath";
 import CourseDetail from "./pages/CourseDetail";
@@ -64,17 +65,19 @@ function App() {
         defaultTheme="dark"
         switchable
       >
-        <TooltipProvider>
-          <Toaster />
-          <div className="min-h-screen flex flex-col bg-background text-foreground">
-            <Navigation />
-            <main className="flex-1 relative">
-              <PageTransitionLoader />
-              <Router />
-            </main>
-            <Footer />
-          </div>
-        </TooltipProvider>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <div className="min-h-screen flex flex-col bg-background text-foreground">
+              <Navigation />
+              <main className="flex-1 relative">
+                <PageTransitionLoader />
+                <Router />
+              </main>
+              <Footer />
+            </div>
+          </TooltipProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
