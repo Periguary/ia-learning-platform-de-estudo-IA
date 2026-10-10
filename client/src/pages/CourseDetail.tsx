@@ -7,6 +7,8 @@ import { markLessonComplete, readProgress, writeProgress } from "@/data/progress
 import { recordStudyActivity } from "@/data/profile";
 import { AIAssistantBox } from "@/components/AIAssistantBox";
 import { CodePlayground } from "@/components/CodePlayground";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { localizeCourse, localizeEducationalText } from "@/data/localizedContent";
 
 export default function CourseDetail() {
   const [, navigate] = useLocation();
@@ -14,11 +16,13 @@ export default function CourseDetail() {
   const [selectedLesson, setSelectedLesson] = useState<number | string | null>(1);
   const [selectedCode, setSelectedCode] = useState("");
   const [progressState, setProgressState] = useState(() => readProgress());
+  const { language, t } = useLanguage();
 
   if (!match) return null;
 
   const module = params?.module ? String(params.module).toLowerCase().trim() : "linear-algebra";
   const courseData = coursesData[module];
+  const localizedCourse = courseData ? localizeCourse(courseData, language) : courseData;
   const lessonsContent = lessonsContentData[module] || {};
   const completedLessonIds = progressState[module] ?? [];
 
@@ -26,7 +30,7 @@ export default function CourseDetail() {
     return (
       <div className="w-full min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold">Curso não encontrado</h1>
+          <h1 className="text-2xl font-bold">{t("common.courseNotFound")}</h1>
           <button
             onClick={() => navigate("/learning-path")}
             className="text-primary hover:text-primary/80 transition-colors"
@@ -100,6 +104,14 @@ export default function CourseDetail() {
   const selectedContent = selectedLesson != null
     ? lessonsContent[selectedLesson] ?? resourceContents[String(selectedLesson)]
     : null;
+  const displayedContent = selectedContent
+    ? {
+        ...selectedContent,
+        title: localizeEducationalText(selectedContent.title, language),
+        content: localizeEducationalText(selectedContent.content, language),
+        examples: selectedContent.examples?.map((example: string) => localizeEducationalText(example, language)),
+      }
+    : null;
 
   const lessonSequence = courseData.sections.flatMap((section: any) => section.lessons);
   const handleCompleteLesson = () => {
@@ -147,29 +159,29 @@ export default function CourseDetail() {
             className="futurist-kicker flex items-center gap-2 hover:text-accent transition-colors mb-6 bg-transparent border-none cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" />
-            Voltar para Trilha
+            {t("common.backToPath")}
           </button>
 
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="futurist-kicker border border-primary/35 bg-primary/10 px-3 py-1">
-                Fase {courseData.phase}
+                {language === "en" ? `Phase ${localizedCourse.phase}` : `Fase ${localizedCourse.phase}`}
               </span>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground border border-border bg-card px-2 py-1">
-                {courseData.difficulty}
+                {localizedCourse.difficulty}
               </span>
             </div>
-            <h1 className="text-4xl font-black uppercase tracking-[-0.05em]">{courseData.title}</h1>
-            <p className="text-lg text-muted-foreground">{courseData.description}</p>
+            <h1 className="text-4xl font-black uppercase tracking-[-0.05em]">{localizedCourse.title}</h1>
+            <p className="text-lg text-muted-foreground">{localizedCourse.description}</p>
 
             <div className="flex flex-wrap gap-6 pt-4 text-sm">
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-muted-foreground" />
-                <span>{courseData.duration}</span>
+                <span>{localizedCourse.duration}</span>
               </div>
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-muted-foreground" />
-                <span>{courseData.lessons} aulas</span>
+                <span>{localizedCourse.lessons} {language === "en" ? "lessons" : "aulas"}</span>
               </div>
             </div>
 
@@ -182,7 +194,7 @@ export default function CourseDetail() {
                 ></div>
               </div>
               <p className="text-sm text-muted-foreground">
-                {completedLessons} de {totalLessons} aulas completas
+                {language === "en" ? `${completedLessons} of ${totalLessons} lessons completed` : `${completedLessons} de ${totalLessons} aulas completas`}
               </p>
             </div>
           </div>
@@ -194,11 +206,11 @@ export default function CourseDetail() {
         <div className="container grid lg:grid-cols-3 gap-8">
           {/* Left: Lessons Content */}
           <div className="lg:col-span-2">
-            {selectedContent ? (
+            {displayedContent ? (
               // Show lesson content
               <div className="futurist-panel rounded-none p-6 space-y-6">
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
+                  <h2 className="text-2xl font-bold">{displayedContent.title}</h2>
                   <div className="flex flex-wrap items-center gap-2">
                     <Button type="button" variant="outline" size="sm" onClick={() => window.open("https://colab.research.google.com/", "_blank", "noopener,noreferrer")} className="gap-1.5 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/10">
                       <Code className="size-3.5" /> Google Colab
@@ -220,15 +232,15 @@ export default function CourseDetail() {
 
                 <div className="max-w-none">
                   <div className="text-foreground space-y-4 whitespace-pre-wrap text-sm leading-relaxed">
-                    {selectedContent.content}
+                    {displayedContent.content}
                   </div>
                 </div>
 
                 {selectedContent.examples && selectedContent.examples.length > 0 && (
                   <div className="border border-primary/20 bg-primary/5 p-4 rounded-none space-y-2">
-                    <h4 className="font-semibold text-sm">Exemplos Práticos:</h4>
+                    <h4 className="font-semibold text-sm">{t("lesson.examples")}</h4>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      {selectedContent.examples.map((example: string, idx: number) => (
+                      {displayedContent.examples.map((example: string, idx: number) => (
                         <li key={`example-${idx}`} className="flex gap-2">
                           <span className="text-primary">•</span>
                           <span>{example}</span>
@@ -242,7 +254,7 @@ export default function CourseDetail() {
                   <CodePlayground
                     examples={selectedContent.codeExamples}
                     moduleTitle={courseData.title}
-                    lessonTitle={selectedContent.title}
+                    lessonTitle={displayedContent.title}
                     onExplainSelection={setSelectedCode}
                   />
                 )}
@@ -250,11 +262,11 @@ export default function CourseDetail() {
                 <div className="flex gap-3">
                   <Button className="flex-1" variant="default" onClick={handleCompleteLesson}>
                     {typeof selectedLesson === "number" && completedLessonIds.includes(selectedLesson)
-                      ? "Aula Concluída"
-                      : "Marcar como Concluída"}
+                      ? t("common.completed")
+                      : t("common.markComplete")}
                   </Button>
                   <Button className="flex-1" variant="outline" onClick={handleNextLesson}>
-                    Próxima Aula
+                    {t("common.nextLesson")}
                   </Button>
                 </div>
               </div>

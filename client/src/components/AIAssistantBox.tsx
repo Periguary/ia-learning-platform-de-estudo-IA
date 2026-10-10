@@ -5,6 +5,7 @@ import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { LocalTutorPanel } from "@/components/LocalTutorPanel";
 import { MarkdownResponse } from "@/components/MarkdownResponse";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type AIAssistantBoxProps = {
   moduleId: string;
@@ -50,13 +51,14 @@ export function AIAssistantBox({
   const [studyPlanModalOpen, setStudyPlanModalOpen] = useState(false);
   const [studyPlanGoal, setStudyPlanGoal] = useState("");
   const [studyPlanResult, setStudyPlanResult] = useState<{ title: string; content: string } | null>(null);
+  const { language, t } = useLanguage();
 
   const studyPlanMutation = trpc.ai.generateStudyPlan.useMutation({
     onSuccess: (data) => {
       setStudyPlanResult(data);
     },
     onError: (err) => {
-      alert(err.message || "Erro ao gerar plano de estudos.");
+      alert(err.message || t("tutor.error"));
     }
   });
 
@@ -68,7 +70,7 @@ export function AIAssistantBox({
       setQuizModalOpen(true);
     },
     onError: (err) => {
-      alert(err.message || "Erro ao gerar quiz.");
+      alert(err.message || t("tutor.error"));
     }
   });
 
@@ -85,10 +87,10 @@ export function AIAssistantBox({
 
   const saveExplanationMutation = trpc.ai.saveExplanation.useMutation({
     onSuccess: () => {
-      alert("Explicação salva na sua Lista de Leitura com sucesso!");
+      alert(t("tutor.saved"));
     },
     onError: (err) => {
-      alert(err.message || "Faça login para salvar na Lista de Leitura.");
+      alert(err.message || t("tutor.error"));
     },
   });
 
@@ -180,7 +182,7 @@ export function AIAssistantBox({
         ...previous,
         {
           role: "assistant",
-          content: error.message || "Não consegui responder agora. Tente novamente em instantes.",
+          content: error.message || t("tutor.error"),
         },
       ]);
     },
@@ -208,8 +210,9 @@ export function AIAssistantBox({
       lessonContent,
       studentNotes,
       question: content,
-      history: previousConversation,
-      personality,
+          history: previousConversation,
+          personality,
+          language,
     });
   };
 
@@ -246,10 +249,10 @@ export function AIAssistantBox({
           </div>
           <div>
             <h2 id="ai-assistant-title" className="text-xl font-bold">
-              Professor Virtual de IA
+              {t("tutor.title")}
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Seu mentor dedicado para aulas particulares, explicações passo a passo e exercícios guiados sobre {lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`}.
+              {language === "en" ? `Your dedicated mentor for step-by-step explanations and guided exercises about ${lessonTitle ? `“${lessonTitle}”` : `the ${courseTitle} module`}.` : `Seu mentor dedicado para aulas particulares, explicações passo a passo e exercícios guiados sobre ${lessonTitle ? `“${lessonTitle}”` : `o módulo ${courseTitle}`}.`}
             </p>
           </div>
         </div>
@@ -289,7 +292,7 @@ export function AIAssistantBox({
             onClick={() => setStudyPlanModalOpen(true)}
             title="Criar plano de estudos semanal personalizado com IA"
           >
-            🎯 Plano de Estudos
+            🎯 {t("tutor.studyPlan")}
           </Button>
           <Button
             variant="outline"
@@ -300,7 +303,7 @@ export function AIAssistantBox({
             title="Gerar quiz interativo sob demanda com base nesta aula"
           >
             {quizMutation.isPending ? <Loader2 className="size-3.5 animate-spin" /> : <HelpCircle className="size-3.5" />}
-            Gerar Quiz
+            {t("tutor.generateQuiz")}
           </Button>
           <Button
             variant="outline"
@@ -309,7 +312,7 @@ export function AIAssistantBox({
             onClick={exportChatPdf}
             title="Exportar conversa em PDF"
           >
-            📥 Exportar PDF
+            📥 {t("tutor.exportPdf")}
           </Button>
           <Button
             variant="outline"
@@ -320,7 +323,7 @@ export function AIAssistantBox({
             title="Limpar Histórico"
           >
             {clearHistoryMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
-            Limpar Histórico
+            {t("tutor.clearHistory")}
           </Button>
           <Button
             variant="outline"
@@ -330,7 +333,7 @@ export function AIAssistantBox({
             title="Começar um novo tópico sem apagar o histórico salvo"
           >
             <RotateCcw className="size-4" />
-            Novo Tópico
+            {t("tutor.newTopic")}
           </Button>
         </div>
       </div>
@@ -363,7 +366,7 @@ export function AIAssistantBox({
             </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-8">
-              Nenhuma conversa salva ainda. Tire dúvidas para construirmos seu histórico de revisão.
+              {t("tutor.historyEmpty")}
             </p>
           )}
         </div>
@@ -384,7 +387,7 @@ export function AIAssistantBox({
           }
           onSendMessage={handleSendMessage}
           isLoading={askMutation.isPending && !isStreaming}
-          placeholder="Digite sua dúvida sobre esta aula..."
+          placeholder={t("tutor.placeholder")}
           height="420px"
           emptyStateMessage="Pergunte ao tutor e receba explicações e links de materiais complementares."
           suggestedPrompts={defaultPrompts}

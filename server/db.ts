@@ -89,6 +89,19 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+export async function updateUserLanguage(userId: number, language: "pt-BR" | "en") {
+  const db = await getDb();
+  if (!db) return null;
+  try {
+    await db.update(users).set({ language, updatedAt: new Date() }).where(eq(users.id, userId));
+    const rows = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    return rows[0] ?? null;
+  } catch (error) {
+    console.warn("[Database] Failed to update user language:", error);
+    return null;
+  }
+}
+
 // TODO: add feature queries here as your schema grows.
 
 

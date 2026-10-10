@@ -8,10 +8,12 @@ import { useLocation } from "wouter";
 import { coursesData } from "@/data/coursesData";
 import { useTheme } from "@/contexts/ThemeContext";
 import { freeCourses, freeCredentials } from "@/data/freeLearningCatalog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Home() {
   const { user, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { language, t } = useLanguage();
   const availableModuleCount = Object.keys(coursesData).length;
   const [, navigate] = useLocation();
 
@@ -47,13 +49,13 @@ export default function Home() {
       {/* Top Banner */}
       <div className="border-b border-primary/30 bg-[linear-gradient(90deg,#06111a,#111827,#180b2b)] text-white text-center py-2.5 px-4 text-xs font-semibold uppercase tracking-[0.18em] flex items-center justify-center gap-2">
         <Sparkles className="w-4 h-4" />
-        <span>Nova Trilha de IA Generativa e LLMs Disponível!</span><span data-hmr-probe className="border border-cyan-300/30 px-2 py-0.5 text-[10px] tracking-[0.12em] text-cyan-200/80">HMR PREVIEW</span>
+        <span>{t("home.banner")}</span><span data-hmr-probe className="border border-cyan-300/30 px-2 py-0.5 text-[10px] tracking-[0.12em] text-cyan-200/80">HMR PREVIEW</span>
         <button onClick={() => navigate("/learning-path")} className="underline hover:text-blue-200 ml-2 font-bold cursor-pointer">
-          Explorar &rarr;
+          {t("home.explore")}
         </button>
       </div>
 
-      {loading && <div className="flex items-center justify-center gap-2 border-b border-primary/20 bg-primary/5 py-2 text-xs text-muted-foreground" role="status" aria-live="polite"><LoaderCircle className="size-3.5 animate-spin text-primary" aria-hidden="true" /> Carregando seu espaço de aprendizagem…</div>}
+      {loading && <div className="flex items-center justify-center gap-2 border-b border-primary/20 bg-primary/5 py-2 text-xs text-muted-foreground" role="status" aria-live="polite"><LoaderCircle className="size-3.5 animate-spin text-primary" aria-hidden="true" /> {language === "en" ? "Loading your learning space…" : "Carregando seu espaço de aprendizagem…"}</div>}
 
       {/* Hero Section */}
       <section className="relative py-28 px-6 md:px-12 bg-transparent futurist-scanline border-b border-primary/20">
@@ -61,15 +63,15 @@ export default function Home() {
           <div className="space-y-6">
             <div className="futurist-kicker inline-flex items-center gap-2 border border-primary/35 bg-primary/10 px-3 py-2">
               <GraduationCap className="w-4 h-4" />
-              <span>Plataforma Líder em Educação de IA</span>
+              <span>{t("home.platformKicker")}</span>
             </div>
             
             <h1 className="text-4xl md:text-7xl font-black uppercase tracking-[-0.06em] leading-[0.94]">
-              Aprenda o que importa para <span className="futurist-mark text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">acelerar sua carreira</span>
+              {t("home.headline")} <span className="futurist-mark text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">{t("home.headlineAccent")}</span>
             </h1>
 
             <p className="max-w-xl text-lg text-slate-300 leading-relaxed">
-              Domine Inteligência Artificial, Machine Learning, Deep Learning e Ciência de Dados do zero ao nível profissional com trilhas estruturadas e projetos reais.
+              {t("home.description")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -81,7 +83,7 @@ export default function Home() {
                   onClick={() => navigate("/learning-path")}
                   className="futurist-button h-12 px-8 rounded-none font-bold flex items-center justify-center gap-2 text-base cursor-pointer"
                 >
-                  Continuar Trilha <ArrowRight className="w-5 h-5" />
+                  {t("home.continuePath")} <ArrowRight className="w-5 h-5" />
                 </Button>
               ) : (
                 <Button
@@ -89,7 +91,7 @@ export default function Home() {
                   className="futurist-button h-12 px-8 rounded-none font-bold flex items-center justify-center gap-2 text-base cursor-pointer"
                 >
                   <a href={getLoginUrl()}>
-                    Começar Gratuitamente <ArrowRight className="w-5 h-5" />
+                    {t("home.startFree")} <ArrowRight className="w-5 h-5" />
                   </a>
                 </Button>
               )}
@@ -99,14 +101,15 @@ export default function Home() {
                 variant="outline"
                 className="border-primary/35 bg-card/60 hover:bg-primary/10 text-slate-200 h-12 px-8 rounded-none font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
               >
-                <Compass className="w-5 h-5 text-blue-400" /> Explorar Trilha
+                <Compass className="w-5 h-5 text-blue-400" /> {t("home.explorePath")}
               </Button>
-              <Button
-                onClick={() => navigate("/support")}
-                variant="outline"
+               <Button
+                 onClick={() => navigate("/support")}
+                 aria-label={language === "en" ? "Support the project" : "Apoie o projeto"}
+                 variant="outline"
                 className="border-lime-400/35 bg-card/60 text-lime-200 hover:bg-lime-400/10 h-12 px-6 rounded-none font-semibold flex items-center justify-center gap-2 text-base transition-all cursor-pointer"
               >
-                <HeartHandshake className="w-5 h-5" /> Apoie o projeto
+                <HeartHandshake className="w-5 h-5" /> {t("home.support")}
               </Button>
             </div>
 
@@ -114,15 +117,15 @@ export default function Home() {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-primary/20">
               <div>
                 <p className="text-2xl font-black text-primary futurist-mark">200+</p>
-                <p className="text-xs text-slate-400">Horas de Conteúdo</p>
+                <p className="text-xs text-slate-400">{t("home.contentHours")}</p>
               </div>
               <div>
                 <p className="text-2xl font-black text-secondary futurist-mark">8 Fases</p>
-                <p className="text-xs text-slate-400">Trilha Completa</p>
+                <p className="text-xs text-slate-400">{t("home.completePath")}</p>
               </div>
               <div>
                 <p className="text-2xl font-black text-accent futurist-mark">{availableModuleCount}</p>
-                <p className="text-xs text-slate-400">Módulos disponíveis</p>
+                <p className="text-xs text-slate-400">{t("home.availableModules")}</p>
               </div>
             </div>
           </div>
@@ -188,7 +191,7 @@ export default function Home() {
 
       <section className="border-y border-primary/20 bg-primary/5 py-10 px-6 md:px-12" aria-labelledby="free-learning-title">
         <div className="max-w-6xl mx-auto grid gap-6 md:grid-cols-[1fr_auto] items-center">
-          <div><p className="futurist-kicker">Curadoria oficial · acesso gratuito</p><h2 id="free-learning-title" className="mt-2 text-2xl font-bold">Mais caminhos para estudar e validar suas habilidades</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Explore cursos gratuitos, microcursos com certificado de conclusão e credenciais práticas de Microsoft, Google Cloud, AWS e Kaggle. A plataforma diferencia claramente conteúdo gratuito de exames profissionais pagos.</p></div>
+          <div><p className="futurist-kicker">{language === "en" ? "Official curation · free access" : "Curadoria oficial · acesso gratuito"}</p><h2 id="free-learning-title" className="mt-2 text-2xl font-bold">{t("home.curatedTitle")}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{t("home.curatedDescription")}</p></div>
           <div className="flex gap-3"><div className="futurist-panel px-4 py-3 text-center"><strong className="block text-2xl text-primary">{freeCourses.length}</strong><span className="text-xs text-muted-foreground">cursos</span></div><div className="futurist-panel px-4 py-3 text-center"><strong className="block text-2xl text-secondary">{freeCredentials.length}</strong><span className="text-xs text-muted-foreground">credenciais</span></div></div>
         </div>
       </section>
@@ -197,8 +200,8 @@ export default function Home() {
       <section className="py-24 px-6 md:px-12 bg-transparent">
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold">Explore por Categoria</h2>
-            <p className="text-slate-400 max-w-xl mx-auto">Encontre exatamente o que você precisa para dominar a tecnologia do futuro.</p>
+            <h2 className="text-3xl md:text-4xl font-bold">{t("home.categories")}</h2>
+            <p className="text-slate-400 max-w-xl mx-auto">{t("home.categoriesDescription")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -224,8 +227,8 @@ export default function Home() {
       <section className="py-24 px-6 md:px-12 bg-card/20 border-t border-primary/15">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold">Por que escolher a IA Academy?</h2>
-            <p className="text-slate-400 max-w-xl mx-auto">Desenvolvido por especialistas para garantir o seu sucesso profissional.</p>
+            <h2 className="text-3xl md:text-4xl font-bold">{t("home.whyTitle")}</h2>
+            <p className="text-slate-400 max-w-xl mx-auto">{t("home.whyDescription")}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">

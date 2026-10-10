@@ -42,6 +42,7 @@ import {
   getExternalLearningProgress,
   toggleExternalLearningProgress,
   createMonetizationLead,
+  updateUserLanguage,
 } from "./db";
 import { curateAIUpdates } from "./aiUpdates";
 import { notifyOwner } from "./_core/notification";
@@ -73,6 +74,14 @@ export const appRouter = router({
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
+    updateLanguage: publicProcedure
+      .input(z.object({ language: z.enum(["pt-BR", "en"]) }))
+      .mutation(async ({ input, ctx }) => {
+        if (!ctx.user?.id) throw new Error("Faça login para guardar a preferência de idioma.");
+        const user = await updateUserLanguage(ctx.user.id, input.language);
+        if (!user) throw new Error("Não foi possível guardar o idioma agora.");
+        return user;
+      }),
     logout: publicProcedure.mutation(({ ctx }) => {
       const cookieOptions = getSessionCookieOptions(ctx.req);
       ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
@@ -93,6 +102,7 @@ export const appRouter = router({
         question: z.string().trim().min(1, "Escreva uma dúvida antes de enviar.").max(2_000),
         history: assistantHistorySchema.default([]),
         personality: z.string().trim().optional(),
+        language: z.enum(["pt-BR", "en"]).default("pt-BR"),
       }))
       .mutation(async ({ input, ctx }) => {
         const userId = ctx.user?.id;
@@ -118,7 +128,7 @@ export const appRouter = router({
         ].join("\n\n");
 
         const promptKey = input.personality && personalityPrompts[input.personality] ? input.personality : "padrao";
-        const systemPrompt = personalityPrompts[promptKey];
+        const systemPrompt = `${personalityPrompts[promptKey]}\n\nIdioma obrigatório da resposta: ${input.language === "en" ? "English" : "Português do Brasil"}. Não misture idiomas e traduza o feedback, títulos e exemplos quando forem explicativos.`;
 
         let customQuestion = input.question;
         if (customQuestion.trim().toLowerCase().startsWith("/quiz")) {
